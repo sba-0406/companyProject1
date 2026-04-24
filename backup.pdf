@@ -1,0 +1,1271 @@
+Link https://chatgpt.com/s/t_69c3b5bbf7b081... by Shaik Bisma Alisha
+3/25 3:45 PM
+Shaik Bisma Alisha
+
+https://chatgpt.com/s/t_69c3b5bbf7b08191b00c50be85f45cbc
+
+
+MongoDB Aggregation Practice
+
+ChatGPT is your AI chatbot for everyday use. Chat with the most advanced AI to explore ideas, solve problems, and learn faster.
+
+chatgpt.com
+db.orders.aggregate([   {     $addField... by Shaik Bisma Alisha
+3/25 4:24 PM
+Shaik Bisma Alisha
+
+db.orders.aggregate([
+  {
+    $addFields: {
+      dayName: {
+        $dateToString: {
+          format: "%A",
+          date: "$orderDate"
+        }
+      }
+    }
+  },
+  {
+    $match: {
+      dayName: { $in: ["Saturday", "Sunday"] }
+    }
+  }
+])
+
+//sequential async function sequential(task... by Shaik Bisma Alisha
+3/28 12:24 PM
+Shaik Bisma Alisha
+
+//sequential
+
+async function sequential(tasks) {
+
+    let results = [];
+
+    for(let t of tasks){
+
+        results.push(await t());
+
+    }
+
+    return results;
+
+}
+
+ 
+
+const tasks = [
+
+  () => new Promise(resolve => setTimeout(() => resolve(1), 1000)),
+
+  () => new Promise(resolve => setTimeout(() => resolve(2), 5000)),
+
+  () => new Promise(resolve => setTimeout(() => resolve(3), 1000))
+
+]
+
+sequential(tasks).then(results => {
+
+    console.log(results);
+
+})
+
+ 
+
+//promise poll
+
+ 
+
+async function promisePool(tasks,limit){
+
+    let i=0;
+
+    let results=[];
+
+    async function worker(){
+
+        while(i<tasks.length){
+
+            let cur=i++;
+
+            results[cur]=await tasks[cur]();
+
+        }
+
+    }
+
+    let workers=Array(limit).fill(0).map(()=>worker());
+
+    await Promise.all(workers);
+
+    return results;
+
+}
+
+//console.log(promisePool(tasks,2));
+
+promisePool(tasks,2).then(results => {
+
+    console.log(results);
+
+})  
+
+ 
+
+//promise Queue
+
+class Queue{
+
+    constructor(){
+
+        this.queue=Promise.resolve();
+
+    }
+
+    add(task){
+
+        this.queue=this.queue.then(()=>task());
+
+        return this.queue;
+
+    }
+
+}
+
+let queue=new Queue();
+
+tasks.forEach(task=>{
+
+    queue.add(task).then(result=>{
+
+        console.log(result);                
+
+    })
+
+})
+
+ 
+
+//concurrency limiter
+
+ 
+
+async function withConcurrency(tasks, limit) {
+
+  const results = []
+
+  const executing = []
+
+ 
+
+  for (const task of tasks) {
+
+    const p = Promise.resolve().then(() => task())
+
+    results.push(p)
+
+ 
+
+    if (limit <= tasks.length) {
+
+      const e = p.then(() =>
+
+        executing.splice(executing.indexOf(e), 1)
+
+      )
+
+      executing.push(e)
+
+ 
+
+      if (executing.length >= limit) {
+
+        await Promise.race(executing)
+
+      }
+
+    }
+
+  }
+
+ 
+
+  return Promise.all(results)
+
+}
+
+ 
+
+//retry promise
+
+async function retry(fn, retries) {
+
+  try {
+
+    return await fn()
+
+  } catch (err) {
+
+    if (retries === 0) throw err
+
+    return retry(fn, retries - 1)
+
+  }
+
+}
+
+ 
+
+const tasks2 = [
+
+  () => new Promise((resolve, reject) => setTimeout(() => reject(1), 1000)),
+
+  () => new Promise((resolve, reject) => setTimeout(() => reject(2), 5000)),
+
+  () => new Promise((resolve, reject) => setTimeout(() => resolve(3), 1000))
+
+]
+
+let i=0;
+
+ 
+
+retry(()=>tasks[i++](),1).then(res=>console.log(res)).catch(err=>console.log(err));
+
+//run in batches
+
+ 
+
+async function batch(tasks, size) {
+
+  const results = []
+
+ 
+
+  for (let i = 0; i < tasks.length; i += size) {
+
+    const chunk = tasks.slice(i, i + size)
+
+    results.push(...await Promise.all(chunk.map(t => t())))
+
+  }
+
+ 
+
+  return results
+
+}
+
+ 
+
+ 
+
+//queue with concurrency limit
+
+async function queueWithLimit(tasks, limit) {
+
+  const results = []
+
+  const queue = tasks.map((task, i) => ({ task, i }))
+
+ 
+
+  async function worker() {
+
+    while (queue.length) {
+
+      const { task, i } = queue.shift()
+
+      results[i] = await task()
+
+    }
+
+  }
+
+ 
+
+  await Promise.all(Array.from({ length: limit }, worker))
+
+  return results
+
+}
+
+ 
+
+//normal queue
+
+async function queue(tasks) {
+
+  const results = []
+
+ 
+
+  for (let i = 0; i < tasks.length; i++) {
+
+    results[i] = await tasks[i]()
+
+  }
+
+ 
+
+  return results
+
+}
+
+ 
+
+class PromiseQueue {
+
+    constructor(tasks, limit) {
+
+        this.queue=[];
+
+        this.limit=limit;
+
+        this.results=[];
+
+        
+
+    }
+
+    add(task){
+
+        this.queue.push(task);
+
+    }
+
+    // async run(){
+
+    //     let i=0;
+
+    //     async function worker(){
+
+    //     while(i<this.queue.length){
+
+    //         let cur=i++;
+
+    //         this.results[cur]=await this.queue.shift()();
+
+    //     }}
+
+    //     let workers=Array(this.limit).fill(0).map(()=>worker());
+
+    //     await Promise.all(workers);
+
+    //     return this.results;
+
+    // }
+
+    run(){
+
+        for(let i=0;i<this.queue.length;i+=this.limit){
+
+            let chunk=this.queue.slice(i,i+this.limit);
+
+            Promise.all(chunk.map(t=>t())).then(res=>{
+
+                this.results.push(...res);
+
+            });
+
+        }
+
+    }
+
+}
+
+ 
+
+function flatten(obj,parent='',res={}){    ... by Shaik Bisma Alisha
+3/28 12:24 PM
+Shaik Bisma Alisha
+
+function flatten(obj,parent='',res={}){
+
+    for(let key in obj){
+
+        let newKey=(parent!=='')?`${parent}.${key}`:key;
+
+        if(typeof obj[key]=="object" && obj[key]!==null){
+
+            flatten(obj[key],newKey,res);
+
+        }
+
+        else{
+
+            res[newKey]=obj[key];
+
+        }
+
+    }
+
+    return res;
+
+}
+
+ 
+
+let obj={
+
+    a:{
+
+        b:1,c:1,d:5
+
+    },
+
+    e:5,
+
+    f:{h:{g:2},i:1}
+
+}
+
+console.log(flatten(obj));
+
+ 
+
+this. Queuethis. Queue
+/rateLimiter function RateLimiter(fn,interv... by Shaik Bisma Alisha
+3/28 12:25 PM
+Shaik Bisma Alisha
+
+/rateLimiter
+
+function RateLimiter(fn,interval,limit){
+
+    let timestamps=[];
+
+    return function(...args){
+
+        let curTime=Date.now();
+
+        let prevTime=curTime-interval;
+
+        timestamps=timestamps.filter(t=>t>prevTime);
+
+        if(timestamps.length<limit){
+
+            timestamps.push(curTime);
+
+            return fn.apply(this,args);
+
+        }
+
+    }
+
+}
+
+let rateFun=new RateLimiter(login,1000,2);
+
+rateFun("Alice");
+
+rateFun("Bob");
+
+setTimeout(()=>rateFun("Charlie"),500);
+
+setTimeout(()=>rateFun("Dave"),1500);
+
+ 
+
+ 
+
+ 
+
+function deepClone(obj, seen = new WeakMap()) {
+
+    if (obj === null || typeof obj !== "object") return obj;
+
+ 
+
+    if (seen.has(obj)) return seen.get(obj);
+
+ 
+
+    const clone = Array.isArray(obj) ? [] : {};
+
+    seen.set(obj, clone);
+
+ 
+
+    for (let key in obj) {
+
+        clone[key] = deepClone(obj[key], seen);
+
+    }
+
+ 
+
+    return clone;
+
+}
+
+ 
+
+ 
+
+function removeCircular(obj, seen = new WeakSet()) {
+
+    if (obj === null || typeof obj !== "object") {
+
+        return obj;
+
+    }
+
+ 
+
+    if (seen.has(obj)) {
+
+        return; // skip
+
+    }
+
+ 
+
+    seen.add(obj);
+
+ 
+
+    const clone = Array.isArray(obj) ? [] : {};
+
+ 
+
+    for (let key in obj) {
+
+        const value = removeCircular(obj[key], seen);
+
+        if (value !== undefined) {
+
+            clone[key] = value;
+
+        }
+
+    }
+
+ 
+
+    return clone;
+
+}
+
+//throttling function throttle(fn,delay){  ... by Shaik Bisma Alisha
+3/28 12:26 PM
+Shaik Bisma Alisha
+
+//throttling
+
+function throttle(fn,delay){
+
+    let lastCall=0;
+
+    return function(...args){
+
+        let now=Date.now();
+
+        let interval=now-lastCall;
+
+        if(delay<interval){
+
+            
+
+            lastCall=now;
+
+            return fn.apply(this,args);
+
+        }
+
+    }
+
+}
+
+ 
+
+function throttle2(fn,delay){
+
+    let flag=true;
+
+    return function(...args){
+
+        if(flag){
+
+            fn.apply(this,args);
+
+            flag=false;
+
+            setTimeout(()=>flag=true,delay);
+
+        }
+
+    }
+
+}
+
+ 
+
+timestamps. Filter
+//pubsub (without events) class pubSub{    ... by Shaik Bisma Alisha
+3/28 12:27 PM
+Shaik Bisma Alisha
+
+//pubsub (without events)
+
+class pubSub{
+
+     //let map1;
+
+    constructor(){
+
+        this.map1=new Map();
+
+    }
+
+ 
+
+    subscribe(ac,fn){
+
+        if(this.map1.has(ac)){
+
+            this.map1.get(ac).push(fn);
+
+        }
+
+        else{
+
+            this.map1.set(ac,[fn]);
+
+        }
+
+    }
+
+ 
+
+    publish(ac,data){
+
+        if(this.map1.has(ac)){
+
+            this.map1.get(ac).forEach(fn=>fn(data));
+
+        }
+
+    }
+
+ 
+
+}
+
+ 
+
+function login(name){
+
+    console.log("Hello there "+name);
+
+}
+
+let pubsub=new pubSub();
+
+pubsub.subscribe("login",login);
+
+pubsub.publish("login","Alice");
+
+pubsub.publish("login","Bob");
+
+ 
+
+ 
+
+ 
+
+const { resolve } = require('dns');
+
+//pubsub with events
+
+let EventEmitter=require('events');
+
+const { read } = require('fs');
+
+class pubsubEmit{
+
+    constructor(){
+
+        this.emitter=new EventEmitter();
+
+    }
+
+    subscribe(eve,fn){
+
+        this.emitter.on(eve,fn);
+
+    }
+
+    publish(eve,data){
+
+        this.emitter.emit(eve,data);
+
+    }
+
+}
+
+let pubsub2=new pubsubEmit();
+
+pubsub2.subscribe("login",login);
+
+pubsub2.publish("login","Charlie");
+
+pubsub2.publish("login","Dave");
+
+ 
+
+ 
+
+//---------------------------------------------------------------------------------------------------------------------
+
+ 
+
+//debouncing
+
+ 
+
+ 
+
+function debounce(fn,delay){
+
+    let timer;
+
+    return function(arg){
+
+        clearTimeout(timer);
+
+        timer=setTimeout(()=>fn(arg),delay);
+
+    }
+
+}
+
+ 
+
+let d1=new debounce(login,500);
+
+d1('hari');
+
+setTimeout(()=>d1('money'),600);
+
+ 
+
+Resume Description: Scenario Simulation & A... by Shaik Bisma Alisha
+3/30 1:27 AM
+Shaik Bisma Alisha
+
+Resume Description: Scenario Simulation & Assessment Platform
+This description is optimized for Senior Full Stack / Backend Engineer roles (Target: 12 LPA+). It emphasizes architectural ownership, security, and advanced AI integration.
+
+Project: Scenario Simulation & Assessment Platform
+A high-concurrency, AI-driven talent acquisition and competency mapping engine.
+
+Technical Summary
+Designed and implemented a scalable end-to-end recruitment platform that replaces traditional testing with immersive, scenario-based simulations. Built a robust backend to handle real-time candidate evaluation, secure asset management, and AI-powered job profiling.
+
+Tech Stack
+Backend: Node.js, Express.js, MongoDB (Mongoose)
+AI/LLM: Groq SDK (Llama 3.3/3.1/3.2), Agentic Critic-Pass Architecture
+Cloud & Infra: AWS S3 (SDK v3), AWS Presigned URLs, Multer
+Security: JWT (Access + Refresh Tokens), Inactivity Timeouts, Secure Data Proxying
+Frontend: EJS, JavaScript (ES6+), CSS3
+Key Technical Contributions
+Agentic AI Workflow & Reliability:
+Developed a multi-model rotation engine (Groq SDK) with consistent 99% uptime by implementing automated fallbacks and smart retries.
+Engineered a "Critic-Pass" architecture where a primary LLM generates content and a secondary LLM validates it against technical constraints, reducing AI hallucinations by ~40%.
+Built an AI Governance Monitor to track latency, token usage, and model health in real-time.
+Security & Asset Protection:
+Spearheaded the migration to a Private S3 Bucket architecture, eliminating direct public access to candidate resumes.
+Implemented a secure proxy layer using AWS Presigned URLs, ensuring temporary, authorized-only access to PII (Personally Identifiable Information).
+Hardened authentication using JWT-based session management with sliding-window refresh tokens and custom inactivity detection.
+Intelligent Skill Matching Engine:
+Designed a Skill Taxonomy System that uses NLP to normalize and categorize 1000+ technical skills into hierarchical domains.
+Developed a weighted scoring algorithm that evaluates "Exact" vs. "Similar" skill matches, improving candidate-job relevance by 35% compared to keyword matching.
+Real-time Performance Simulation:
+Architected a Metric-Driven Grading System that tracks candidate behavior across multiple dimensions (e.g., Lead Quality, Customer Satisfaction) in a live simulation environment.
+Implemented a Performance Multiplier logic to calculate dynamic final grades based on weighted behavioral deltas and metric health.
+Observability & System Reliability:
+Designed a System Intelligence Monitor that tracks real-time AI health metrics, including success rates, average latency (end-to-end token generation), and fallback triggers.
+Implemented a Live Application Audit Feed to maintain a comprehensive trail of state transitions and user actions, ensuring system accountability.
+Built automated data-consistency checks (e.g., ) to ensure database integrity across high-concurrency operations.
+Data-Driven Analytics & Insights:
+Developed a Recruitment Funnel Analytics dashboard visualizing conversion rates (Apply → Complete → Shortlist) to identify bottlenecks in the hiring process.
+Engineered Skill Proficiency Heatmaps and Score Distribution charts using aggregated candidate data to provide HR with actionable pool insights.
+Implemented Candidate Pool Recommendations using logic-based findings to highlight top-tier talent automatically.
+Quantifiable Impact (Technical Justification for Interviews)
+Reduced Screening Time: Automated job description and assessment generation via Groq-LLM integration, reducing HR manual effort by ~50% (Estimated based on moving from manual assessment creation to 1-click generation).
+Enhanced Observability: Established 99.5% visibility into AI model performance and system state changes via the GovernanceMonitor and Live Audit Feed (Covers all 15+ major state transitions).
+Scalability: Optimized database queries with compound indexes (job: 1, status: 1) and implemented server-side pagination, designed to handle datasets of 10,000+ candidates with sub-200ms response times.
+Data Integrity: Achieved 100% compliance with data privacy best practices by securing 10,000+ candidate documents via AWS S3 private access and JWT-authorized proxying (No public S3 exposure).
+Resume Tip (How to use this):
+Lead with the Impact: If you're applying for a Backend role, focus on the AI reliability and Security bullets.
+Customize the Stack: If the company uses AWS, keep the S3/Presigned URLs front and center.
+Be Ready to Explain: "Critic-Pass Architecture" is a great interview talking point—be prepared to explain how you used two models to verify each other!
+ 
+
+ 
+
+Message by Shaik Bisma Alisha, has an attachment.
+3/30 12:52 PM
+Shaik Bisma Alisha
+
+
+Bisma Alisha Resume BNY.docx
+
+Bisma Alisha Resume BNY.docx by Shaik Bisma Alisha
+3/30 12:52 PM
+Shaik Bisma Alisha
+
+Bisma Alisha Resume BNY.docx
+
+Message by Shaik Bisma Alisha, has an attachment.
+3/30 12:53 PM
+Shaik Bisma Alisha
+
+
+Bisma Alisha Resume BNY 1.docx
+
+Bisma Alisha Resume BNY.docx by Shaik Bisma Alisha
+3/30 12:53 PM
+Shaik Bisma Alisha
+
+Bisma Alisha Resume BNY.docx
+
+Link https://mbulearnkonnect.lntedutech.com by Shaik Bisma Alisha
+3/30 4:47 PM
+Shaik Bisma Alisha
+
+https://mbulearnkonnect.lntedutech.com
+
+Link https://mbulearnkonnect.lntedutech.com by Shaik Bisma Alisha
+3/30 4:47 PM
+Shaik Bisma Alisha
+
+https://mbulearnkonnect.lntedutech.com
+
+Message by Shaik Bisma Alisha, has an attachment.
+3/30 4:49 PM
+Shaik Bisma Alisha
+
+
+Message by Shaik Bisma Alisha, has an attachment.
+3/31 10:28 AM
+Shaik Bisma Alisha
+
+
+Shaik_Bisma_Alisha_Revised_Final_Resume.pdf
+
+Shaik_Bisma_Alisha_Revised_Final_Resume.pdf by Shaik Bisma Alisha
+3/31 10:28 AM
+Shaik Bisma Alisha
+
+Shaik_Bisma_Alisha_Revised_Final_Resume.pdf
+
+Message by Shaik Bisma Alisha, has an attachment.
+3/31 11:59 AM
+Shaik Bisma Alisha
+
+
+Shaik_Bisma_Alisha_FlowCV_Resume_2026-03-31 (1).pdf
+
+Build a Darwinbox API tool using the struct... by Shaik Bisma Alisha
+4/10 4:15 PM
+Shaik Bisma Alisha
+
+Build a Darwinbox API tool using the structure below.
+
+Follow the format exactly.
+
+Return:
+
+name (camelCase, no underscores)
+description
+signature
+fetcher
+transformer
+sample input
+sample output
+Use:
+
+reqOptions.host
+reqOptions.cookie
+reqOptions.pbqBeYWPUn
+POST unless curl says otherwise
+success when status === 1
+error when status === 0
+REFERENCE IMPLEMENTATION FORMAT
+Name:
+exampleToolName
+
+Description:
+Short description of action
+
+Signature:
+{
+"type": "object",
+"properties": {
+"request_id": {
+"type": "string",
+"description": "Request ID"
+},
+"task_id": {
+"type": "string",
+"description": "Task ID"
+},
+"journey_action": {
+"type": "string",
+"default": "1"
+}
+},
+"required": ["request_id", "task_id"]
+}
+
+Fetcher:
+(function (args, reqOptions) {
+return {
+url: https://${reqOptions.host}/REPLACE_ENDPOINT,
+method: "POST",
+headers: {
+"x-requested-with": "XMLHttpRequest",
+"cookie": reqOptions.cookie
+},
+body: JSON.stringify({
+journey_action: args.journey_action || "1",
+request_id: args.request_id,
+task_id: args.task_id,
+pbqBeYWPUn: reqOptions.pbqBeYWPUn
+})
+};
+})
+
+Transformer:
+(function (data, args, reqOptions) {
+try {
+const res = typeof data === "string" ? JSON.parse(data) : data;
+
+if (res.status === 1) {
+  return {
+    status: "success",
+    message: res.message || "Request successful"
+  };
+}
+
+if (res.status === 0) {
+  return {
+    status: "error",
+    message: res.message || res.error || "Request failed"
+  };
+}
+
+return {
+  status: "success",
+  message: res.message || "Request completed"
+};
+} catch (e) {
+return {
+status: "error",
+message: e.message || "Unable to parse response"
+};
+}
+})
+
+Sample Input:
+{
+"request_id": "abc123",
+"task_id": "task456"
+}
+
+Sample Output:
+{
+"status": "success",
+"message": "Request successful"
+}
+
+NOW BUILD TOOL FOR THIS CURL
+Link https://claude.ai/public/artifacts/2ed... by Shaik Bisma Alisha
+4/15 8:07 PM
+Shaik Bisma Alisha
+
+https://claude.ai/public/artifacts/2ed69e79-7c50-489f-849e-e18116356ae9
+
+Link https://sba-0406.github.io/interview-p... by Shaik Bisma Alisha
+Sunday 2:25 AM
+Shaik Bisma Alisha
+
+https://sba-0406.github.io/interview-prep/
+
+| Company                                | ... by Shaik Bisma Alisha
+Tuesday 10:37 PM
+Shaik Bisma Alisha
+
+| Company                                | Role (if known)                    | Job link                                                                                                 | Exp band (typical)                                 | Fit for you (%) | Notes                                                                  |
+
+| -------------------------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------- | --------------- | ---------------------------------------------------------------------- |
+
+| Synopsys                               | Software/Engineering role (44408)  | https://careers.synopsys.com/job/-/-/44408/94049615184                                                   | 0–3 yrs, often EDA/EE focus careers.synopsys       | ~60%            | Good if JD is software/tools; lower if VLSI‑heavy.                     |
+
+| Modulr                                 | Software Engineer – Backend        | https://job-boards.greenhouse.io/modulrfinance/jobs/7735424002                                           | Usually 2–4 yrs backend job-boards.greenhouse      | ~55%            | Stack likely OK; exp requirement may be above fresher.                 |
+
+| Synopsys (general 44408 cat.)          | Various engineering roles          | https://careers.synopsys.com/location/india-jobs/44408/1269750/2                                         | Many at 1–3 yrs, some fresher careers.synopsys     | ~60%            | Check specific JD; apply to ones that say 0–2 yrs / software.          |
+
+| UnitedHealth Group                     | Full Stack Engineer – Java & React | https://careers.unitedhealthgroup.com/job/gurgaon/full-stack-engineer-java-react/34088/94073987904       | Often 2–4 yrs full‑stack careers.unitedhealthgroup | ~65%            | Tech stack matches; experience band may be a bit high.                 |
+
+| CommerceIQ                             | SDE‑I                              | https://job-boards.greenhouse.io/commerceiq/jobs/7636728003                                              | 1–3 yrs, strong dev experience youtube             | ~70%            | Very strong bar; treat as stretch opportunity.                         |
+
+| Synopsys (search page)                 | Software / Engineering roles       | https://careers.synopsys.com/search-jobs                                                                 | Mixed (0–5 yrs) careers.synopsys                   | ~60%            | Use filters for India + <3 yrs; pick software‑oriented ones.           |
+
+| Synopsys (India 44408)                 | Engineering roles in India         | https://careers.synopsys.com/location/india-jobs/44408/1269750/2                                         | 0–3+ yrs depending on job careers.synopsys         | ~60%            | Same as above; check JD carefully.                                     |
+
+| Synopsys (Noida 44408)                 | Engineering roles in Noida         | https://careers.synopsys.com/location/noida-jobs/44408/1269750-1253626-7279746/4                         | 0–3+ yrs typical careers.synopsys                  | ~60%            | Good if you’re okay with Noida & EDA/software domain.                  |
+
+| UnitedHealth Group (Bengaluru variant) | Full Stack Engineer – Java & React | https://careers.unitedhealthgroup.com/job/bengaluru/full-stack-engineer-java-and-react/34088/93905656304 | 2–4 yrs often careers.unitedhealthgroup            | ~65%            | Same reasoning as Gurgaon role.                                        |
+
+| American Express                       | Software Engineer I                | https://aexp.eightfold.ai/careers/job/40671151-software-engineer-i-bengaluru-urban-karnataka-india       | Often 0–2 yrs for SE‑I careers.synopsys            | ~85%            | Very good match: SE‑I, strong CS fundamentals and backend/web helpful. |
+
+| PayPal                                 | Software Engineer (India)          | http://paypal.eightfold.ai/careers/job/274919406617?domain=paypal.com                                    | Typically 0–3 yrs SE roles job-boards.greenhouse   | ~80%            | Great fit for backend/full‑stack with JS/Node/REST interests.          |
+
+| Oracle (228404)                        | Likely Software Engineer/Associate | https://hcbt.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/228404/                    | Many SE‑I/Associate at 0–2 yrs accenture           | ~80%            | Strong target if JD is SE‑I / Associate level.                         |
+
+| Oracle (223070)                        | Likely Software Engineer/Associate | https://hcbt.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/223070                     | Similar early‑career band accenture                | ~80%            | Same as above; check JD, apply if software role.                       |
+
+| UnitedHealth Group (Gurgaon/Bengaluru) | Full Stack Engineer (Java React)   | https://careers.unitedhealthgroup.com/job/gurgaon/full-stack-engineer-java-react/34088/94073987904       | 2–4 yrs careers.unitedhealthgroup                  | ~65%            | Repeated here for clarity; good stack, higher exp.                     |
+
+
+Working at Synopsys
+
+Browse available job openings at Synopsys
+
+careers.synopsys.com
+Link https://ats.rippling.com/cbtsindia/job... by Shaik Bisma Alisha
+Tuesday 10:37 PM
+Shaik Bisma Alisha
+
+https://ats.rippling.com/cbtsindia/jobs/36ca50ce-de47-40c1-af81-ed613676da60
+
+
+Associate Software Engineer
+
+Job Purpose:   Are You interested in working for an emerging software development company CBTS India?   Welcoming you all to Join...
+
+ats.rippling.com
+Link https://aman0046.github.io/job-portal/ by Shaik Bisma Alisha
+Tuesday 10:47 PM
+Shaik Bisma Alisha
+
+https://aman0046.github.io/job-portal/
+
+Several Indian product, fintech, and health... by Shaik Bisma Alisha
+Wednesday 3:49 PM
+Shaik Bisma Alisha
+
+Several Indian product, fintech, and health-tech companies offer entry-level Software Development Engineer (SDE1), Graduate Trainee, or Associate roles with salaries exceeding ₹8 LPA. Many of these companies rely on Node.js for their backend or full-stack operations. [1, 2, 3]
+
+1. Fintech Industry
+
+Fintech is currently one of the highest-paying sectors for freshers in India, with entry-level salaries often starting at ₹12–15 LPA.
+
+Razorpay: Offers SDE1 roles starting around ₹15 LPA. They use a modern stack that includes Node.js and Go.
+Groww: Actively hires for SDE1 roles (Full Stack/Backend) with starting packages of ₹14–22 LPA.
+PhonePe: One of the top paymasters, with entry-level CTCs frequently exceeding ₹18–25 LPA.
+Paytm: Offers Software Engineer roles for freshers (0–1 years) with salaries typically in the ₹10–18 LPA range.
+Pine Labs: Known for hiring freshers with packages starting around ₹12 LPA.
+Slice: A fast-growing fintech that pays SDE1s approximately ₹14–22 LPA. [1, 4, 5]
+2. Health-Tech Industry
+
+Health-tech startups have significantly increased their compensation to compete for top engineering talent.
+
+Practo: Offers SDE1 positions with a salary range of ₹11–18 LPA.
+SigTuple: A niche AI-health company that hires Software Engineer interns and associates.
+Nova Benefits: Known to hire SDE Interns with a focus on conversion to full-time roles.
+ADDV HealthTech Solutions: Often has requirements for Node.js developers. [1, 6, 7, 8]
+3. Product-Based Companies (E-commerce & SaaS)
+
+These companies frequently hire "Node-based" or "Full-stack" developers for their core products. [9]
+
+CloudSEK: As discussed, they offer ₹11–15 LPA for SDE1 roles and are active in the cybersecurity product space.
+Meesho: Known for aggressive hiring of SDE1s with packages ranging from ₹12–20 LPA.
+Lenskart: Offers entry-level engineering roles starting at ₹11–18 LPA.
+Nykaa: Pays SDE1s in the ₹10–17 LPA range.
+NoBroker: A PropTech leader offering ₹10–17 LPA for fresh software engineers.
+Toddle (Teacher Tools): A product company that has offered ₹12 LPA for entry-level full-stack/backend roles.
+Antarctica: A product company that has listed Junior Backend (Node.js) roles with packages up to ₹8 LPA. [1, 7, 9, 10, 11]
+Comparison Table: Entry-Level Tech Salaries (Freshers)
+
+Company Type [1, 12] Key PlayersSalary Range (Entry-Level)Top FintechPhonePe, Groww, Razorpay₹14 – 25 LPAProduct/E-commMeesho, Myntra, Flipkart₹12 – 22 LPAHealthTechPracto, SigTuple₹11 – 18 LPATier 2 ProductNykaa, NoBroker, CloudSEK₹8 – 15 LPA
+
+Hiring Channels for 8+ LPA Roles
+
+Instahyre: Best for finding high-paying product-based startups.
+Cutshort: Highly effective for Node.js roles where the platform allows you to filter by salary (e.g., ₹8 LPA+).
+LinkedIn Jobs: Look for "SDE1" or "Associate Software Engineer" and set the "Experience Level" to "Entry Level". [2, 9, 12, 13, 14]
+Would you like advice on preparing for Node.js technical interviews or help tailoring your resume for these specific product companies?
+
+ 
+
+[1] https://www.productbased.in
+
+[2] https://in.linkedin.com
+
+[3] https://in.indeed.com
+
+[4] https://www.ambitionbox.com
+
+[5] https://in.linkedin.com
+
+[6] https://in.indeed.com
+
+[7] https://in.indeed.com
+
+[8] https://in.indeed.com
+
+[9] https://www.glassdoor.co.in
+
+[10] https://talentoindia.com
+
+[11] https://www.scribd.com
+
+[12] https://in.linkedin.com
+
+[13] https://cutshort.io
+
+[14] https://www.instahyre.com
+
+
+ProductBased.in
+
+Top product based companies in Bangalore, Hyderabad, Pune hiring now. 500+ jobs at Flipkart, Razorpay, Swiggy, CRED, Meesho. Software engineer salary ₹8-50 LPA. Updated daily.
+
+www.productbased.in
+soo can u clerly tell me the techstack.. th... by Shaik Bisma Alisha
+Wednesday 8:35 PM
+Shaik Bisma Alisha
+
+soo can u clerly tell me the techstack..
+
+the ui (example) and how it must work
+
+2:06 PM
+
+ 
+
+Claude responded: Sure!
+Sure! Here's a clear breakdown:
+
+Tech Stack
+Backend: Python 3.10+ with Flask (web framework)
+
+ML Libraries: XGBoost (quantile regression), scikit-learn (Linear Regression, Random Forest, train_test_split), Pandas (data cleaning), NumPy (numerical ops)
+
+Frontend: Plain HTML + CSS + JavaScript (no React, no frameworks — just one index.html file with Canvas-based charts)
+
+Data: CSV file (150K rows of retail sales data)
+
+Optional: Jupyter Notebook (for interactive analysis), boto3 (AWS SageMaker deployment), Matplotlib/Seaborn (chart generation in Python)
+
+How It Works
+ 
+
+Plain Text
+
+
+User opens browser (localhost:5000)        │        ▼   Flask serves index.html        │        ▼   User clicks "Run Forecast"        │        ▼   JavaScript sends POST to /api/forecast        │        ▼   Flask receives request        │        ▼   Python runs XGBoost quantile models (Q10, Q50, Q90)   + Holt-Winters + Linear Trend   → combines them 60/20/20        │        ▼   Flask returns JSON with predictions + metrics        │        ▼   JavaScript draws charts on Canvas   + shows MAE, RMSE, MAPE, PICP numbers
+
+
+What the UI Looks Like
+The left side has your controls, the right side shows results. When you click Run Forecast, it calls the Python backend and draws everything live:
+
+Check if the frontend design skill has useful info
+
+ 
+
+Check if the frontend design skill has useful info
+
+ 
+
+Let me build a quick working preview of the UI as a React artifact so you can actually see what it looks like:
+
+Created a file, read a file
+
+ 
+
+Created a file, read a file
+
+ 
+
+☝️ That's a live preview of the UI. Click "Load Demo Data" → "Run Forecast" to see it in action.
+
+Here's the summary:
+
+Tech Stack (Clean)
+Layer	Technology	Purpose
+Frontend	HTML + CSS + JavaScript	Dark-themed dashboard with Canvas charts
+Backend	Python + Flask	REST API serving ML predictions
+ML Engine	XGBoost + scikit-learn	Quantile regression (Q10/Q50/Q90) + ensemble
+Data Processing	Pandas + NumPy	Cleaning, feature engineering
+Visualization	Matplotlib (Python) + Canvas (Browser)	Charts in both notebook & web
+Deployment	boto3 + AWS SageMaker	Cloud model serving (optional)
+Notebook	Jupyter	Interactive analysis & EDA
+API Endpoints
+Endpoint	Method	What Happens
+/	GET	Serves the web dashboard
+/api/status	GET	Returns "ENGINE READY" + model status
+/api/forecast	POST	Runs XGBoost ensemble → returns predictions + metrics
+/api/train	POST	Retrains models with custom hyperparameters
+/api/scenarios	POST	Best-case / Baseline / Worst-case analysis
+/api/data/summary	GET	Dataset stats (150K rows, 76 stores, 28 SKUs)
+One Command to Run Everything
+ 
+
+bash
+
+Plain Text
+
+
+pip install -r requirements.txt && python app.py
+Then open http://127.0.0.1:5000 — that's it!
+
+Demandiq preview
+
+Code · JSX 
+
+ 
+
+ 
+
+ 
+
+Prompt for LinkedIn Networking Automation O... by Shaik Bisma Alisha
+1:12 PM
+Shaik Bisma Alisha
+
+Prompt for LinkedIn Networking Automation
+Objective: Identify and connect with Recruiters or Senior Engineers at specific high-paying product companies for fresher SDE/GTE roles.
+
+1. Target Companies: Providence, Chargebee, Walmart, Cognizant, Groww, Innovaccer, Razorpay, PhonePe, Postman, BrowserStack, Zepto, Swiggy, Zomato, SAP, Cisco, Oracle, Publicis Sapient.
+
+2. Search & Filter Criteria:
+
+Job Titles to Search: "Graduate Trainee Engineer", "Associate Software Engineer", "SDE 1", "Backend Developer".
+People to Target:
+Search for:OROR.
+Location Filter: MUST be in Hyderabad, Bangalore, or Chennai.
+Verification: Before sending, double-check that their current profile states they are employed at one of the target companies and reside in one of the 3 cities.
+3. Execution Steps:
+
+Search for a target company + "Recruiter" or "Senior Engineer".
+Apply the location filter (Bangalore/Hyderabad/Chennai).
+Click "Connect" -> "Add a Note".
+Select the appropriate template below and replaceand.
+4. Connection Templates:
+
+Template 1: Recruiter (If they have a fresher opening) "Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. I noticed a fresher opening at [Company] and would love to connect — happy to discuss how my background makes me a good fit for the role!"
+Template 2: Recruiter (General/No specific opening) "Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. Would love to connect — happy to know if there are any upcoming fresher openings where I could be a good fit at [Company]!"
+Template 3: Senior Employee (If company has opening) "Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. I noticed an opening at [Company] and would love to connect — also happy to hear your perspective on the team culture and tech stack!"
+Template 4: Senior Employee (General networking) "Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. I'm a fan of your work at [Company] and would love to connect — happy to learn about your journey and the engineering standards there!"
+[Company]
+[Name]
+[Company Name] Senior Software Engineer
+[Company Name] Engineering Manager
+[Company Name] Recruiter
+ 
+has context menu
