@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisma — Part 4: System Design & DSA Theory</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0e17;
+      --surface: #1a1927;
+      --surface2: #232235;
+      --border: #2e2d45;
+      --text: #fffffe;
+      --muted: #a7a9be;
+      --muted2: #6b6d8a;
+      --accent: #ff8906;
+      --accent2: #f25f4c;
+      --green: #3eb489;
+      --purple: #a786df;
+      --blue: #6dc1e7;
+      --yellow: #ffd803;
+      --red: #f25f4c;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 265px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .sb-logo {
+      padding: 1.2rem 1.25rem .9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-logo h1 {
+      font-family: 'Fraunces', serif;
+      font-size: .95rem;
+      font-weight: 900;
+      line-height: 1.3;
+      color: var(--text);
+    }
+
+    .sb-logo p {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .part-link {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .sb-section {
+      padding: .55rem 0;
+    }
+
+    .sb-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted2);
+      padding: 0 1.25rem .3rem;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: .38rem 1.25rem;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+      border-left: 2px solid transparent;
+    }
+
+    .sb-item:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .sb-item.active {
+      border-left-color: var(--accent);
+      background: rgba(255, 137, 6, .07);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .sb-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sb-progress {
+      padding: .9rem 1.25rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .sb-prog-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .sb-prog-bar {
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .sb-prog-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    .sb-prog-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .main {
+      margin-left: 265px;
+      flex: 1;
+      padding: 2.5rem 3rem 4rem;
+      max-width: 920px;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .subject-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: .7rem;
+    }
+
+    .page-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: .4rem;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .topic-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: .9rem;
+      overflow: hidden;
+    }
+
+    .topic-head {
+      padding: .85rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .topic-head:hover {
+      background: var(--surface2);
+    }
+
+    .topic-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted2);
+      min-width: 24px;
+    }
+
+    .topic-title {
+      font-family: 'Fraunces', serif;
+      font-size: .93rem;
+      font-weight: 700;
+      flex: 1;
+      color: var(--text);
+    }
+
+    .topic-tags {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ttag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .t-must {
+      background: rgba(62, 180, 137, .15);
+      color: var(--green);
+    }
+
+    .t-freq {
+      background: rgba(255, 137, 6, .15);
+      color: var(--accent);
+    }
+
+    .t-dsa {
+      background: rgba(167, 134, 223, .15);
+      color: var(--purple);
+    }
+
+    .topic-chk {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+      color: transparent;
+    }
+
+    .topic-card.done .topic-chk {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000;
+    }
+
+    .topic-chevron {
+      font-size: 10px;
+      color: var(--muted2);
+      transition: transform .2s;
+      margin-left: 3px;
+    }
+
+    .topic-card.open .topic-chevron {
+      transform: rotate(180deg);
+    }
+
+    .topic-body {
+      display: none;
+      padding: 0 1.1rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .topic-card.open .topic-body {
+      display: block;
+    }
+
+    .def-box {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .8rem 1rem;
+      margin: .9rem 0;
+    }
+
+    .def-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .def-box p {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+
+    .section-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted2);
+      font-weight: 600;
+      margin: 1.1rem 0 .5rem;
+    }
+
+    .point-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .point {
+      display: flex;
+      gap: 9px;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    .point-bullet {
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .interview-box {
+      background: rgba(109, 193, 231, .06);
+      border: 1px solid rgba(109, 193, 231, .2);
+      border-radius: 9px;
+      padding: .8rem 1rem;
+      margin: .9rem 0;
+    }
+
+    .ib-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .iq {
+      font-size: 12px;
+      color: var(--text);
+      padding: .3rem 0;
+      border-bottom: 1px solid rgba(109, 193, 231, .1);
+      line-height: 1.55;
+    }
+
+    .iq:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .iq::before {
+      content: "Q: ";
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .say-box {
+      background: rgba(62, 180, 137, .06);
+      border: 1px solid rgba(62, 180, 137, .2);
+      border-radius: 9px;
+      padding: .8rem 1rem;
+      margin: .9rem 0;
+    }
+
+    .say-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--green);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .say-box p {
+      font-size: 12px;
+      color: #a8e6cf;
+      line-height: 1.65;
+      font-style: italic;
+    }
+
+    .key-box {
+      background: rgba(255, 216, 3, .05);
+      border: 1px solid rgba(255, 216, 3, .2);
+      border-radius: 9px;
+      padding: .8rem 1rem;
+      margin: .9rem 0;
+    }
+
+    .key-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--yellow);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .kp {
+      font-size: 12px;
+      padding: .22rem 0;
+      display: flex;
+      gap: 8px;
+      color: var(--text);
+    }
+
+    .kp::before {
+      content: "→";
+      color: var(--yellow);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .code-block {
+      background: #080810;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.1rem 1.2rem;
+      margin: .8rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'DM Mono', monospace;
+      font-size: 12.5px;
+      color: #e6edf3;
+      line-height: 2;
+      white-space: pre;
+      display: block;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .75rem 0;
+      font-size: 12px;
+    }
+
+    .compare-table th {
+      background: var(--surface2);
+      padding: .45rem .7rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .compare-table td {
+      padding: .45rem .7rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .compare-table tr:nth-child(even) td {
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .approach-box {
+      background: rgba(167, 134, 223, .06);
+      border: 1px solid rgba(167, 134, 223, .25);
+      border-radius: 9px;
+      padding: .8rem 1rem;
+      margin: .9rem 0;
+    }
+
+    .approach-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--purple);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .approach-box p,
+    .approach-box div {
+      font-size: 12.5px;
+      color: #d4b8ff;
+      line-height: 1.7;
+    }
+
+    .step {
+      display: flex;
+      gap: 10px;
+      padding: .3rem 0;
+      font-size: 12.5px;
+      color: var(--text);
+    }
+
+    .step-num {
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 10px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .content-page {
+      display: none;
+    }
+
+    .content-page.active {
+      display: block;
+    }
+
+    .mob-nav-btn {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 200;
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 1.5rem 1rem 5rem;
+      }
+
+      .mob-nav-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-logo">
+        <h1>Part 4 — System Design<br>& DSA Theory</h1>
+        <p>Concepts + How to answer</p>
+        <a class="part-link" href="bisma_interview_prep_stack.html">← Part 3: Your Stack</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#ff8906">System Design Concepts</div>
+        <div class="sb-item active" onclick="showPage('sd1',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>How to Answer SD Questions
+        </div>
+        <div class="sb-item" onclick="showPage('sd2',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Scalability — Vertical vs Horizontal
+        </div>
+        <div class="sb-item" onclick="showPage('sd3',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Load Balancing
+        </div>
+        <div class="sb-item" onclick="showPage('sd4',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Database Scaling — Replication & Sharding
+        </div>
+        <div class="sb-item" onclick="showPage('sd5',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Caching at Scale & CDN
+        </div>
+        <div class="sb-item" onclick="showPage('sd6',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Message Queues & Pub/Sub
+        </div>
+        <div class="sb-item" onclick="showPage('sd7',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Microservices vs Monolith
+        </div>
+        <div class="sb-item" onclick="showPage('sd8',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>API Gateway & Service Mesh
+        </div>
+        <div class="sb-item" onclick="showPage('sd9',this)">
+          <div class="sb-dot" style="background:#ff8906"></div>Consistent Hashing
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#6dc1e7">System Design Problems</div>
+        <div class="sb-item" onclick="showPage('sp1',this)">
+          <div class="sb-dot" style="background:#6dc1e7"></div>Design a URL Shortener
+        </div>
+        <div class="sb-item" onclick="showPage('sp2',this)">
+          <div class="sb-dot" style="background:#6dc1e7"></div>Design a Job Portal (Darwinbox)
+        </div>
+        <div class="sb-item" onclick="showPage('sp3',this)">
+          <div class="sb-dot" style="background:#6dc1e7"></div>Design a Notification System
+        </div>
+        <div class="sb-item" onclick="showPage('sp4',this)">
+          <div class="sb-dot" style="background:#6dc1e7"></div>Design a Rate Limiter
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#a786df">DSA Theory</div>
+        <div class="sb-item" onclick="showPage('dsa1',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Time & Space Complexity
+        </div>
+        <div class="sb-item" onclick="showPage('dsa2',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Arrays, LinkedLists & HashMaps
+        </div>
+        <div class="sb-item" onclick="showPage('dsa3',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Trees & BST
+        </div>
+        <div class="sb-item" onclick="showPage('dsa4',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Graphs — BFS vs DFS
+        </div>
+        <div class="sb-item" onclick="showPage('dsa5',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Sorting Algorithms
+        </div>
+        <div class="sb-item" onclick="showPage('dsa6',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Dynamic Programming
+        </div>
+        <div class="sb-item" onclick="showPage('dsa7',this)">
+          <div class="sb-dot" style="background:#a786df"></div>Stack, Queue & Heap
+        </div>
+      </div>
+      <div class="sb-progress">
+        <div class="sb-prog-label">Topics completed</div>
+        <div class="sb-prog-bar">
+          <div class="sb-prog-fill" id="progFill" style="width:0%"></div>
+        </div>
+        <div class="sb-prog-count" id="progCount">0 / 20</div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="content-page active" id="page-sd1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>How to Answer a System Design Question</h2>
+          <p>Interviewers don't expect a perfect system. They want to see how you think, ask clarifying questions, and
+            make tradeoffs consciously. Follow this framework every time.</p>
+        </div>
+        <div class="topic-card" id="tc-sd1-1">
+          <div class="topic-head" onclick="toggleTopic('sd1-1')">
+            <span class="topic-num">01</span><span class="topic-title">The 6-Step SD Framework</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                First</span></div>
+            <div class="topic-chk" onclick="markDone('sd1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="approach-box">
+              <div class="approach-label">The Framework — Follow This Every Time</div>
+              <div class="step"><span class="step-num">1</span>
+                <div><strong>Clarify requirements (2–3 min)</strong> — Ask before designing. "Is this read-heavy or
+                  write-heavy? How many users? What's the expected QPS? Do we need real-time or eventual consistency?"
+                  Shows senior thinking. Never jump straight to drawing boxes.</div>
+              </div>
+              <div class="step"><span class="step-num">2</span>
+                <div><strong>Estimate scale (1–2 min)</strong> — Back-of-envelope math. "1M users × 10 requests/day =
+                  10M requests/day = ~116 QPS. 1M users × 1KB profile = 1GB storage." Shows you think about scale.</div>
+              </div>
+              <div class="step"><span class="step-num">3</span>
+                <div><strong>Define the API (2 min)</strong> — What endpoints/functions does the system expose? This
+                  forces you to understand what the system actually needs to do.</div>
+              </div>
+              <div class="step"><span class="step-num">4</span>
+                <div><strong>High-level design (5–7 min)</strong> — Draw the major components: clients, API servers,
+                  databases, caches, queues. Don't go deep yet. Get the skeleton right.</div>
+              </div>
+              <div class="step"><span class="step-num">5</span>
+                <div><strong>Deep dive (10–15 min)</strong> — The interviewer will ask you to go deep on specific parts.
+                  Discuss tradeoffs: SQL vs NoSQL, cache strategy, sharding approach, handling failures.</div>
+              </div>
+              <div class="step"><span class="step-num">6</span>
+                <div><strong>Identify bottlenecks & scale (3–5 min)</strong> — Where will your system break at 10× load?
+                  "The DB will be the bottleneck at scale — I'd add read replicas and cache frequently accessed data in
+                  Redis."</div>
+              </div>
+            </div>
+            <div class="section-title">Clarifying Questions to Always Ask</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Scale</strong> — How many users? Requests
+                per second? Data size? Read/write ratio?</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Consistency</strong> — Strong consistency
+                (banking) or eventual consistency (social feed) acceptable?</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Availability</strong> — 99.9% or 99.99%
+                uptime? (99.99% = 52 min downtime/year)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Latency</strong> — What's the acceptable
+                response time? Real-time (chat) vs near-real-time (analytics)?</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Geography</strong> — Single region or
+                global? Affects CDN and database replication decisions.</div>
+            </div>
+            <div class="key-box">
+              <div class="key-label">What Interviewers Actually Evaluate</div>
+              <div class="kp">Problem clarification — do you ask smart questions or jump in?</div>
+              <div class="kp">Tradeoff awareness — do you know why you made each choice?</div>
+              <div class="kp">Breadth — can you name the right components (cache, queue, CDN)?</div>
+              <div class="kp">Depth — can you explain how one component works internally?</div>
+              <div class="kp">Communication — can you explain your thinking clearly while drawing?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Scalability — Vertical vs Horizontal</h2>
+          <p>The foundational question in every system design: how do you handle 10× more traffic?</p>
+        </div>
+        <div class="topic-card" id="tc-sd2-1">
+          <div class="topic-head" onclick="toggleTopic('sd2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Vertical vs Horizontal Scaling</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Vertical Scaling (Scale Up)</th>
+                <th>Horizontal Scaling (Scale Out)</th>
+              </tr>
+              <tr>
+                <td>What</td>
+                <td>Bigger machine — more CPU, RAM, SSD</td>
+                <td>More machines — distribute load</td>
+              </tr>
+              <tr>
+                <td>Limit</td>
+                <td>Hard ceiling — biggest server has limits</td>
+                <td>Theoretically unlimited</td>
+              </tr>
+              <tr>
+                <td>Cost</td>
+                <td>Exponentially expensive at top end</td>
+                <td>Linearly expensive — add commodity servers</td>
+              </tr>
+              <tr>
+                <td>Downtime</td>
+                <td>Requires restart to upgrade</td>
+                <td>Add servers without downtime</td>
+              </tr>
+              <tr>
+                <td>Complexity</td>
+                <td>Simple — same code, bigger box</td>
+                <td>Complex — distributed system problems</td>
+              </tr>
+              <tr>
+                <td>Single point of failure</td>
+                <td>Yes — one machine fails = down</td>
+                <td>No — one server fails, others handle it</td>
+              </tr>
+              <tr>
+                <td>Use for</td>
+                <td>Databases (initially), simple apps</td>
+                <td>Stateless web servers, microservices</td>
+              </tr>
+            </table>
+            <div class="section-title">Stateless vs Stateful — The Key to Horizontal Scaling</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Stateless servers</strong> — don't store any
+                user data locally. Any server can handle any request. Easy to horizontally scale — just add more.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Stateful servers</strong> — remember client
+                data (session info). User must always hit the same server (sticky sessions). Hard to scale — sessions
+                must be shared via Redis/DB.</div>
+              <div class="point"><span class="point-bullet">→</span>Your Express + JWT apps are stateless — any server
+                can verify the JWT. This is why JWT scales better than sessions.</div>
+              <div class="point"><span class="point-bullet">→</span>Databases are inherently stateful — harder to
+                horizontally scale (need sharding, replication).</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I'd start with vertical scaling because it's simple — no code changes needed. But vertical has a hard
+                ceiling and a single point of failure. For the web tier, I'd move to horizontal scaling behind a load
+                balancer since my Express app is stateless — any instance can handle any request. For the database, I'd
+                start with read replicas to scale reads, then consider sharding if writes become the bottleneck."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Load Balancing</h2>
+          <p>Distributes incoming traffic across multiple servers. Layer 4 vs Layer 7, algorithms, and health checks.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-sd3-1">
+          <div class="topic-head" onclick="toggleTopic('sd3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Load Balancer — Types & Algorithms</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Load Balancer</div>
+              <p>A server that sits in front of your application servers and routes incoming requests to one of them
+                based on an algorithm. Acts as traffic cop — prevents any single server from being overwhelmed.</p>
+            </div>
+            <div class="section-title">Layer 4 vs Layer 7</div>
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Layer 4 (Transport)</th>
+                <th>Layer 7 (Application)</th>
+              </tr>
+              <tr>
+                <td>Operates at</td>
+                <td>TCP/UDP level</td>
+                <td>HTTP/HTTPS level</td>
+              </tr>
+              <tr>
+                <td>Sees</td>
+                <td>IP addresses and ports only</td>
+                <td>Full HTTP request — URL, headers, cookies</td>
+              </tr>
+              <tr>
+                <td>Routing based on</td>
+                <td>IP + port</td>
+                <td>URL path, hostname, headers, cookies</td>
+              </tr>
+              <tr>
+                <td>Speed</td>
+                <td>Faster — less inspection</td>
+                <td>Slower — but smarter routing</td>
+              </tr>
+              <tr>
+                <td>Example</td>
+                <td>AWS NLB, HAProxy TCP mode</td>
+                <td>AWS ALB, Nginx, HAProxy HTTP mode</td>
+              </tr>
+              <tr>
+                <td>Use case</td>
+                <td>Simple TCP routing, gaming</td>
+                <td>Route /api to backend, /static to CDN</td>
+              </tr>
+            </table>
+            <div class="section-title">Load Balancing Algorithms</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Round Robin</strong> — requests distributed
+                in sequence: server 1, 2, 3, 1, 2, 3... Simple. Doesn't account for server load.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Weighted Round Robin</strong> — servers with
+                more capacity get more requests. Server A (4 cores) gets 2× requests vs Server B (2 cores).</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Least Connections</strong> — next request
+                goes to server with fewest active connections. Better for varying request durations.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>IP Hash</strong> — same client IP always
+                goes to same server (sticky sessions without actual sessions). Useful for WebSocket connections.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Least Response Time</strong> — combines
+                least connections + fastest response time. Most sophisticated.</div>
+            </div>
+            <div class="section-title">Health Checks</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Load balancer periodically pings each server (GET
+                /health) to check if it's alive</div>
+              <div class="point"><span class="point-bullet">→</span>If a server fails health check → removed from
+                rotation automatically</div>
+              <div class="point"><span class="point-bullet">→</span>When server recovers → added back to rotation</div>
+              <div class="point"><span class="point-bullet">→</span>Your /health endpoint should check DB connectivity,
+                not just return 200</div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between Layer 4 and Layer 7 load balancing?</div>
+              <div class="iq">What is sticky session? When would you need it?</div>
+              <div class="iq">What happens if the load balancer itself goes down?</div>
+              <div class="iq">How do you handle WebSocket connections with a load balancer?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Database Scaling — Replication & Sharding</h2>
+          <p>The database is almost always the bottleneck at scale. Know replication for reads and sharding for writes.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-sd4-1">
+          <div class="topic-head" onclick="toggleTopic('sd4-1')">
+            <span class="topic-num">01</span><span class="topic-title">Replication — Scale Reads</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Replication</div>
+              <p>Keep copies of the database on multiple servers. One primary (master) handles writes. One or more
+                replicas (slaves) handle reads. All writes to primary are asynchronously copied to replicas.</p>
+            </div>
+            <div class="code-block"><code>// Master-Slave Replication pattern
+
+Client → Write (INSERT/UPDATE/DELETE) → PRIMARY (Master)
+                                              ↓ async replication
+Client → Read (SELECT)               → REPLICA 1, REPLICA 2, REPLICA 3
+
+// Benefits:
+// - Read throughput scales linearly — add more replicas for more read capacity
+// - Primary is less loaded — only handles writes
+// - Replica can be used for backups without impacting primary
+
+// Problems:
+// - Replication lag — replica may be slightly behind primary (eventual consistency)
+//   "Read your own writes" problem: user writes, immediately reads — may get stale data
+// - Primary failure — need to promote a replica to primary (failover)
+// - Writes still bottleneck on primary</code></div>
+          </div>
+        </div>
+        <div class="topic-card" id="tc-sd4-2">
+          <div class="topic-head" onclick="toggleTopic('sd4-2')">
+            <span class="topic-num">02</span><span class="topic-title">Sharding — Scale Writes</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd4-2',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Sharding (Horizontal Partitioning)</div>
+              <p>Split your data across multiple database servers (shards). Each shard holds a subset of the data.
+                Queries only go to the relevant shard. Scales both reads and writes — each shard handles less load.</p>
+            </div>
+            <div class="code-block"><code>// Sharding example — users split across 4 shards by userId
+Shard 0: users where userId % 4 == 0  (user 0, 4, 8, 12...)
+Shard 1: users where userId % 4 == 1  (user 1, 5, 9, 13...)
+Shard 2: users where userId % 4 == 2
+Shard 3: users where userId % 4 == 3
+
+// Shard key choices:
+// userId  — good for user data, even distribution
+// geoHash — good for location-based data (users in same region together)
+// date    — bad! all current writes go to today's shard (hot spot)
+
+// Problems with sharding:
+// Cross-shard queries — JOIN across shards is expensive/impossible
+// Resharding — adding a new shard means moving data (painful)
+// Hotspots — popular shard gets overwhelmed (e.g., celeb's data on one shard)</code></div>
+            <div class="section-title">Sharding vs Partitioning</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Horizontal partitioning (sharding)</strong>
+                — split rows across multiple DBs. Different rows on different machines.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Vertical partitioning</strong> — split
+                columns across DBs. User's personal data in one DB, activity log in another.</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I'd start with replication — add read replicas to scale reads, since most apps are 80-90% reads. If
+                writes become the bottleneck, I'd add sharding. The shard key choice is critical — I'd use userId for
+                user data to ensure even distribution. Cross-shard queries become impossible so I'd design schemas to
+                avoid them — keeping all of a user's data on the same shard."</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between replication and sharding?</div>
+              <div class="iq">How do you choose a good shard key?</div>
+              <div class="iq">What is a hot spot in sharding? How do you prevent it?</div>
+              <div class="iq">What is replication lag and how does it affect consistency?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd5">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Caching at Scale & CDN</h2>
+          <p>Caching is the #1 performance tool in system design. Know the cache hierarchy, eviction policies, and CDN.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-sd5-1">
+          <div class="topic-head" onclick="toggleTopic('sd5-1')">
+            <span class="topic-num">01</span><span class="topic-title">Cache Hierarchy & Eviction Policies</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd5-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Cache hierarchy (fastest to slowest):
+L1 Cache (CPU)       — nanoseconds,  ~1MB
+L2 Cache (CPU)       — nanoseconds,  ~10MB
+RAM (In-memory)      — microseconds, ~GB  ← your Moodify in-memory cache
+Redis (Distributed)  — sub-millisec, ~TB  ← shared cache across servers
+CDN (Edge cache)     — milliseconds, ~TB  ← static files cached globally
+Database             — 1-100ms,      ~PB  ← source of truth</code></div>
+            <div class="section-title">Cache Eviction Policies</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>LRU (Least Recently Used)</strong> — evict
+                the item not accessed for the longest time. Most common. Good for temporal locality.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>LFU (Least Frequently Used)</strong> — evict
+                the item accessed fewest times overall. Good when popular items should stay forever.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>FIFO</strong> — evict the oldest item
+                regardless of access. Simplest. Often not ideal.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>TTL</strong> — evict after a fixed time.
+                Your Moodify cache uses this. Simple, prevents stale data.</div>
+            </div>
+            <div class="section-title">Cache Problems</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Cache stampede (thundering herd)</strong> —
+                popular cache entry expires. Thousands of requests hit DB simultaneously. Fix: use mutex/lock while
+                regenerating, or add jitter to TTL.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cache penetration</strong> — requests for
+                data that doesn't exist, bypassing cache every time. Fix: cache null results too (with short TTL).</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cache avalanche</strong> — many cache
+                entries expire at same time → DB overloaded. Fix: stagger TTL values (add random jitter).</div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-card" id="tc-sd5-2">
+          <div class="topic-head" onclick="toggleTopic('sd5-2')">
+            <span class="topic-num">02</span><span class="topic-title">CDN — Content Delivery Network</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd5-2',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">CDN</div>
+              <p>A network of geographically distributed edge servers that cache static content (images, JS, CSS,
+                videos) close to users. Instead of serving from one origin server in Hyderabad to a user in the US (high
+                latency), serve from an edge server in New York (low latency).</p>
+            </div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Static content</strong> — HTML, CSS, JS,
+                images, videos. Cached at edge for hours/days.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Dynamic content</strong> — personalised API
+                responses. Not cached (or cached very briefly).</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cache-Control headers</strong> — tell CDN
+                how long to cache: max-age=86400 (1 day)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cache invalidation</strong> — push update to
+                CDN when content changes. Use versioned filenames (main.v2.js) to avoid stale cache.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Examples</strong> — Cloudflare, AWS
+                CloudFront, Akamai, Fastly</div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is a CDN and how does it reduce latency?</div>
+              <div class="iq">What is cache stampede and how do you prevent it?</div>
+              <div class="iq">What is the difference between LRU and LFU eviction?</div>
+              <div class="iq">How do you invalidate CDN cache after a deployment?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd6">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Message Queues & Pub/Sub</h2>
+          <p>Decouple services, handle traffic spikes, enable async processing. Know Kafka vs RabbitMQ and when to use
+            queues.</p>
+        </div>
+        <div class="topic-card" id="tc-sd6-1">
+          <div class="topic-head" onclick="toggleTopic('sd6-1')">
+            <span class="topic-num">01</span><span class="topic-title">Message Queues — Why and How</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd6-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Message Queue</div>
+              <p>A component where producers send messages and consumers pick them up asynchronously. Producers and
+                consumers are decoupled — they don't need to be running at the same time, and producer doesn't wait for
+                consumer to finish.</p>
+            </div>
+            <div class="section-title">Why Use a Message Queue?</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Decouple services</strong> — email service
+                doesn't need to be available when user registers. Just put "send welcome email" in queue.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Handle traffic spikes</strong> — 10,000
+                users submit applications simultaneously. Queue absorbs the spike, workers process at their own pace.
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Retry failed tasks</strong> — if email
+                service is down, message stays in queue until it recovers.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Async processing</strong> — user gets
+                instant response, heavy work happens in background (AI assessment scoring).</div>
+            </div>
+            <div class="section-title">Kafka vs RabbitMQ</div>
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Kafka</th>
+                <th>RabbitMQ</th>
+              </tr>
+              <tr>
+                <td>Type</td>
+                <td>Distributed log / event streaming</td>
+                <td>Traditional message broker</td>
+              </tr>
+              <tr>
+                <td>Message retention</td>
+                <td>Keeps messages for days/weeks (configurable)</td>
+                <td>Deletes after consumption</td>
+              </tr>
+              <tr>
+                <td>Consumers</td>
+                <td>Multiple consumer groups — each gets all messages</td>
+                <td>One consumer gets each message</td>
+              </tr>
+              <tr>
+                <td>Throughput</td>
+                <td>Millions of messages/sec</td>
+                <td>Thousands of messages/sec</td>
+              </tr>
+              <tr>
+                <td>Use case</td>
+                <td>Event streaming, analytics, audit log, real-time pipelines</td>
+                <td>Task queues, job processing, RPC</td>
+              </tr>
+              <tr>
+                <td>Ordering</td>
+                <td>Guaranteed within a partition</td>
+                <td>FIFO per queue</td>
+              </tr>
+              <tr>
+                <td>Complexity</td>
+                <td>Higher — needs Zookeeper/KRaft</td>
+                <td>Simpler to set up</td>
+              </tr>
+            </table>
+            <div class="section-title">Pub/Sub vs Queue</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Queue</strong> — one message, one consumer.
+                Task is done once. Used for: job processing, email sending.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Pub/Sub</strong> — one message, many
+                subscribers all receive it. Used for: notifications, event broadcasting, cache invalidation across
+                services.</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"In the Darwinbox assessment platform, after a candidate submits their test, we could use a message
+                queue: the API immediately returns 'submission received' while a worker processes and scores the
+                assessment asynchronously. This decouples the submission API from the scoring logic. If the AI scoring
+                service goes down, submissions stay in the queue and are processed when it recovers — no data loss."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd7">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Microservices vs Monolith</h2>
+          <p>One of the most discussed architectural decisions. Know the tradeoffs — not just the benefits of
+            microservices.</p>
+        </div>
+        <div class="topic-card" id="tc-sd7-1">
+          <div class="topic-head" onclick="toggleTopic('sd7-1')">
+            <span class="topic-num">01</span><span class="topic-title">Monolith vs Microservices — Honest
+              Comparison</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('sd7-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Monolith</th>
+                <th>Microservices</th>
+              </tr>
+              <tr>
+                <td>Structure</td>
+                <td>Single deployable unit — all code together</td>
+                <td>Multiple independent services, each deployed separately</td>
+              </tr>
+              <tr>
+                <td>Development</td>
+                <td>Simple — one codebase, one deploy</td>
+                <td>Complex — multiple repos, multiple deploys, distributed debugging</td>
+              </tr>
+              <tr>
+                <td>Scaling</td>
+                <td>Scale entire app even if only one part is the bottleneck</td>
+                <td>Scale only the bottleneck service independently</td>
+              </tr>
+              <tr>
+                <td>Tech stack</td>
+                <td>Single language/framework</td>
+                <td>Each service can use different language (polyglot)</td>
+              </tr>
+              <tr>
+                <td>Failure</td>
+                <td>One bug can crash entire app</td>
+                <td>Service failure is isolated</td>
+              </tr>
+              <tr>
+                <td>Network calls</td>
+                <td>Function calls — fast, in-process</td>
+                <td>HTTP/gRPC calls — latency, failure points</td>
+              </tr>
+              <tr>
+                <td>Team size</td>
+                <td>Works well for small teams</td>
+                <td>Works well for large teams (Conway's Law)</td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>One shared database</td>
+                <td>Each service owns its own database</td>
+              </tr>
+            </table>
+            <div class="section-title">When to Use Each</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Start with monolith</strong> — faster to
+                build, easier to debug, no network overhead. Most startups and small teams should start here.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Move to microservices when</strong> — team
+                has grown too large for one codebase, specific parts need independent scaling, deploy cycles conflict.
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Common mistake</strong> — going
+                microservices too early. Premature optimisation. "We're not Google yet."</div>
+            </div>
+            <div class="section-title">Microservices Challenges</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Distributed tracing</strong> — one request
+                spans multiple services. Need tools like Jaeger, Zipkin to trace.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Service discovery</strong> — how does
+                Service A find Service B? Use service registry (Consul, Kubernetes DNS).</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Data consistency</strong> — each service has
+                its own DB. No cross-service transactions. Use Saga pattern.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Network failures</strong> — every
+                inter-service call can fail. Need retry logic, circuit breakers (like your ResilientAIService).</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"Darwinbox as an enterprise SaaS would likely be microservices — separate services for recruitment,
+                payroll, attendance, each scalable independently. My internship project was a monolith within the
+                recruitment module — one Node.js app with 8 controllers and 9 service modules. That's the right approach
+                for a bounded feature set. I'd move to microservices when different modules need independent deployment
+                cycles or scaling — for example, the AI assessment scoring service is CPU-intensive and should scale
+                independently from the job-posting service."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd8">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>API Gateway & Service Mesh</h2>
+          <p>Single entry point for all client requests. Handles auth, rate limiting, routing — so individual services
+            don't have to.</p>
+        </div>
+        <div class="topic-card" id="tc-sd8-1">
+          <div class="topic-head" onclick="toggleTopic('sd8-1')">
+            <span class="topic-num">01</span><span class="topic-title">API Gateway — What It Does</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd8-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">API Gateway</div>
+              <p>A reverse proxy that sits between clients and your microservices. All external requests go through it.
+                It handles cross-cutting concerns so each service doesn't have to implement them individually.</p>
+            </div>
+            <div class="code-block"><code>// Without API Gateway — each service handles everything
+Client → Auth Service     (has its own auth, rate limiting, logging)
+Client → Job Service      (has its own auth, rate limiting, logging)
+Client → Payment Service  (has its own auth, rate limiting, logging)
+// Duplicated logic everywhere!
+
+// With API Gateway
+Client → API Gateway → Auth Service
+                    → Job Service
+                    → Payment Service
+
+// API Gateway handles:
+// ✓ Authentication — verify JWT once, pass user context to services
+// ✓ Rate limiting — per client, per endpoint
+// ✓ SSL termination — HTTPS at gateway, HTTP internally
+// ✓ Request routing — /api/jobs → job-service, /api/payments → payment-service
+// ✓ Load balancing — across service instances
+// ✓ Request/Response transformation — protocol translation
+// ✓ Logging & monitoring — single place for all request logs
+// ✓ Caching — cache common responses
+
+// Examples: AWS API Gateway, Kong, Nginx, Traefik, Express Gateway</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is an API Gateway? What does it do?</div>
+              <div class="iq">What is the difference between an API Gateway and a Load Balancer?</div>
+              <div class="iq">What is SSL termination?</div>
+              <div class="iq">What is a reverse proxy?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sd9">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,137,6,.15);color:#ff8906">System Design</span>
+          <h2>Consistent Hashing</h2>
+          <p>Solves the resharding problem. Used by Redis Cluster, Cassandra, DynamoDB, and CDNs for distributing data.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-sd9-1">
+          <div class="topic-head" onclick="toggleTopic('sd9-1')">
+            <span class="topic-num">01</span><span class="topic-title">Consistent Hashing — The Problem It Solves</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('sd9-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="section-title">The Problem with Simple Hashing</div>
+            <div class="code-block"><code>// Simple hash: serverIndex = hash(key) % numServers
+// 3 servers: key "user123" → hash = 300 → 300 % 3 = 0 → Server 0
+
+// Problem: add a 4th server
+// key "user123" → hash = 300 → 300 % 4 = 0 (same!)
+// key "user456" → hash = 456 → 456 % 3 = 0, but 456 % 4 = 0 (moved!)
+// 75% of all keys move to different servers when you add/remove ONE server!
+// Massive cache misses, data needs to move</code></div>
+            <div class="section-title">Consistent Hashing — The Solution</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Imagine a ring (circle) of hash values from 0 to
+                2^32-1</div>
+              <div class="point"><span class="point-bullet">→</span>Servers are placed at positions on the ring by
+                hashing their IP/name</div>
+              <div class="point"><span class="point-bullet">→</span>A key is assigned to the first server clockwise from
+                its hash position on the ring</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Adding a server</strong> — only keys between
+                the new server and its predecessor move. ~1/N keys affected.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Removing a server</strong> — only keys on
+                that server move to its successor. ~1/N keys affected.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Virtual nodes</strong> — each physical
+                server has multiple positions on the ring. Ensures even data distribution.</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"Consistent hashing solves the resharding problem. With naive modulo hashing, adding one server causes
+                most keys to move — causing cache misses everywhere. With consistent hashing, servers and keys are
+                mapped to a ring. Adding a server only moves ~1/N of all keys to the new server — minimal disruption.
+                Redis Cluster and Cassandra use consistent hashing for distributing data across nodes."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sp1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(109,193,231,.15);color:#6dc1e7">System Design Problem</span>
+          <h2>Design a URL Shortener (Bitly)</h2>
+          <p>Classic beginner SD question. Tests your knowledge of hashing, databases, caching, and scale. Walk through
+            this verbally.</p>
+        </div>
+        <div class="topic-card" id="tc-sp1-1">
+          <div class="topic-head" onclick="toggleTopic('sp1-1')">
+            <span class="topic-num">01</span><span class="topic-title">URL Shortener — Complete Answer</span>
+            <div class="topic-tags"><span class="ttag t-freq">Classic Problem</span></div>
+            <div class="topic-chk" onclick="markDone('sp1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="approach-box">
+              <div class="approach-label">Step 1 — Clarify Requirements</div>
+              <div class="approach-box" style="margin:.5rem 0;border:none;background:transparent;padding:.3rem 0;">
+                <div style="color:var(--text);font-size:12.5px;">Functional: Create short URL from long URL. Redirect
+                  short URL to original. Custom aliases? Expiry?<br>
+                  Non-functional: 100M URLs/day write. 10B redirects/day read (read-heavy 100:1 ratio). 99.9% uptime.
+                  Low latency redirect (&lt;100ms).</div>
+              </div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Step 2 — Estimate Scale</div>
+              <div class="approach-box" style="margin:.5rem 0;border:none;background:transparent;padding:.3rem 0;">
+                <div style="color:var(--text);font-size:12.5px;">100M URLs/day = 1,157 writes/sec<br>
+                  10B redirects/day = 115,740 reads/sec<br>
+                  Storage: 100M × 500 bytes = 50GB/day → 18TB/year</div>
+              </div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Step 3 — API Design</div>
+              <div class="code-block"><code>POST /api/shorten
+Body: { longUrl: "https://...", customAlias?: "mylink", expiryDays?: 30 }
+Response: { shortUrl: "https://bit.ly/abc123" }
+
+GET /{shortCode}
+Response: 301 Redirect → original URL
+// 301 (permanent) — browser caches redirect, reduces server load
+// 302 (temporary) — browser always asks server, enables analytics</code></div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Step 4 — Core Design</div>
+              <div class="code-block"><code>// Short code generation — 7 characters, base62 (a-z A-Z 0-9)
+// 62^7 = 3.5 trillion combinations — enough for billions of URLs
+
+// Option A: Hash the long URL
+shortCode = base62(md5(longUrl)).substring(0, 7)
+// Problem: collision possible, same URL gives same code
+
+// Option B: Auto-increment ID + base62 encode (better)
+id = db.autoIncrement()      // 1, 2, 3...
+shortCode = base62Encode(id) // "1" → "b", "1000000" → "4c92"
+
+// Database schema
+URLs table:
+  id          BIGINT PRIMARY KEY AUTO_INCREMENT
+  short_code  VARCHAR(7) UNIQUE INDEX
+  long_url    TEXT
+  created_at  TIMESTAMP
+  expires_at  TIMESTAMP
+  user_id     BIGINT
+
+// High-level architecture
+Client → Load Balancer → App Servers → Redis Cache → Database
+                                                 ↑ miss
+                                            PostgreSQL (primary + replicas)</code></div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Step 5 — Deep Dive: Redirect Performance</div>
+              <div class="code-block"><code>// Redirect flow (must be &lt;100ms):
+GET /abc123
+  1. Check Redis: GET "url:abc123" → hit → return 301 redirect  (~1ms)
+  2. Miss → query DB → cache in Redis with TTL → return redirect (~10ms)
+
+// Cache most popular URLs in Redis (80/20 rule — 20% URLs = 80% traffic)
+// Redis can handle 115,000 reads/sec easily</code></div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Step 6 — Bottlenecks & Scale</div>
+              <div class="approach-box" style="margin:.5rem 0;border:none;background:transparent;padding:.3rem 0;">
+                <div style="color:var(--text);font-size:12.5px;">Write bottleneck: Single DB for auto-increment is fine
+                  for 1,157/sec. At scale: use multiple ID generators (Twitter Snowflake — distributed unique IDs).<br>
+                  Read bottleneck: Redis cache absorbs 99% of reads. DB only sees cache misses.<br>
+                  Geography: Add CDN and edge caches for redirect — serve from nearest region.</div>
+              </div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Follow-up Questions</div>
+              <div class="iq">How do you handle custom aliases?</div>
+              <div class="iq">How do you implement URL expiry?</div>
+              <div class="iq">How do you track click analytics?</div>
+              <div class="iq">Should you use 301 or 302 redirect?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sp2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(109,193,231,.15);color:#6dc1e7">System Design Problem</span>
+          <h2>Design a Job Portal — Your Darwinbox</h2>
+          <p>You literally built parts of this. This is the easiest SD question you can get. Connect your real
+            experience to system design thinking.</p>
+        </div>
+        <div class="topic-card" id="tc-sp2-1">
+          <div class="topic-head" onclick="toggleTopic('sp2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Job Portal System Design — Your Experience</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Your Best
+                Answer</span></div>
+            <div class="topic-chk" onclick="markDone('sp2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="approach-box">
+              <div class="approach-label">Requirements (Ask These)</div>
+              <div class="approach-box" style="margin:.5rem 0;border:none;background:transparent;padding:.3rem 0;">
+                <div style="color:var(--text);font-size:12.5px;">
+                  Functional: Job posting by HR. Job search by candidates. Application submission with resume. AI-based
+                  screening. Leaderboard/ranking. Notifications.<br>
+                  Scale: 1M job seekers, 10K companies, 100K daily applications, 1M daily searches.
+                </div>
+              </div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">High-Level Architecture</div>
+              <div class="code-block"><code>// Core Services
+Client Apps (Web/Mobile)
+    ↓
+API Gateway (Auth, Rate Limiting, Routing)
+    ↓
+┌─────────────────────────────────────────────────────────┐
+│  Job Service    │  Application Service  │  AI Service   │
+│  (CRUD jobs)    │  (submit, track)      │  (scoring,    │
+│                 │                       │   MCQ gen)    │
+└────────┬────────┴──────────┬────────────┴──────┬────────┘
+         │                   │                   │
+    MongoDB (jobs)     MongoDB (apps)       Groq API
+    Redis (search)     S3 (resumes)
+         │
+   Elasticsearch (job search with filters)
+         │
+   Message Queue (Kafka)
+    → Notification Service (email/SMS on apply)
+    → AI Scoring Service (async assessment scoring)</code></div>
+            </div>
+            <div class="approach-box">
+              <div class="approach-label">Key Design Decisions — From Your Experience</div>
+              <div class="point-list">
+                <div class="point"><span class="point-bullet">→</span><strong>MongoDB for jobs & applications</strong> —
+                  flexible schema, different companies have different job fields. You chose this in Darwinbox for good
+                  reason.</div>
+                <div class="point"><span class="point-bullet">→</span><strong>Elasticsearch for search</strong> —
+                  full-text search across job titles, descriptions, skills. Filters for location, salary, experience.
+                  Much faster than SQL LIKE queries.</div>
+                <div class="point"><span class="point-bullet">→</span><strong>S3 for resumes</strong> — object storage
+                  for PDFs. Presigned URLs for access. Your exact implementation.</div>
+                <div class="point"><span class="point-bullet">→</span><strong>Message queue for AI scoring</strong> —
+                  assessment scoring is async. Candidate submits → instant response → scoring happens in background via
+                  queue.</div>
+                <div class="point"><span class="point-bullet">→</span><strong>Redis for leaderboard</strong> — Sorted
+                  Set for real-time candidate ranking per job. O(log N) updates.</div>
+                <div class="point"><span class="point-bullet">→</span><strong>Redis cache for job listings</strong> —
+                  job listings don't change often. Cache with 1-hour TTL. Invalidate when job is updated.</div>
+              </div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to connect to your experience</div>
+              <p>"I actually built significant parts of this at Darwinbox. My architecture had 10 Mongoose schemas, 8
+                controllers, and 9 service modules. For search at scale I'd add Elasticsearch on top of MongoDB —
+                MongoDB is the source of truth, Elasticsearch is the search index. For AI assessment scoring, I'd move
+                the synchronous Groq API call to an async message queue — candidate submits, gets immediate
+                confirmation, scoring happens in background. I already built the ResilientAIService for reliability — it
+                would sit inside the AI Scoring worker."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sp3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(109,193,231,.15);color:#6dc1e7">System Design Problem</span>
+          <h2>Design a Notification System</h2>
+          <p>Tests message queues, multiple channels (email/SMS/push), rate limiting, and failure handling.</p>
+        </div>
+        <div class="topic-card" id="tc-sp3-1">
+          <div class="topic-head" onclick="toggleTopic('sp3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Notification System — Key Design Points</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('sp3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Architecture
+API Server → Message Queue → Notification Workers → Channels
+                                   ↓
+                    ┌──────────────┼──────────────┐
+                Email Worker   SMS Worker    Push Worker
+                (SendGrid)     (Twilio)      (FCM/APNS)
+
+// Why message queue?
+// - Decouple: application doesn't wait for email to be sent
+// - Retry: if SendGrid is down, message stays in queue
+// - Rate limiting: email providers limit sends/second
+// - Scale: add more email workers during peak hours
+
+// Key considerations:
+// 1. User preferences — don't send email if user disabled email notifications
+// 2. Rate limiting — don't spam users. Max 1 email per hour per user.
+//    Store last sent time in Redis per user per notification type.
+// 3. Priority queues — transactional (OTP, password reset) vs marketing
+//    Different queues, transactional processed first
+// 4. Retry with exponential backoff — 1st retry after 1min, 2nd after 5min, 3rd after 30min
+// 5. Dead letter queue — messages that failed all retries go here for inspection
+// 6. Idempotency — if same notification sent twice (queue duplicate), don't send twice to user
+//    Use notification ID + check in Redis if already sent</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Follow-up Questions</div>
+              <div class="iq">How do you prevent sending duplicate notifications?</div>
+              <div class="iq">How do you handle user notification preferences?</div>
+              <div class="iq">What is a dead letter queue?</div>
+              <div class="iq">How do you prioritise transactional vs marketing notifications?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-sp4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(109,193,231,.15);color:#6dc1e7">System Design Problem</span>
+          <h2>Design a Rate Limiter</h2>
+          <p>Tests distributed systems thinking. Token bucket is the answer — you already implemented throttling in
+            Darwinbox.</p>
+        </div>
+        <div class="topic-card" id="tc-sp4-1">
+          <div class="topic-head" onclick="toggleTopic('sp4-1')">
+            <span class="topic-num">01</span><span class="topic-title">Distributed Rate Limiter Design</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('sp4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Problem with in-memory rate limiter in multi-server setup:
+Server 1: User A made 3 requests → allows 7 more
+Server 2: User A made 3 requests → allows 7 more (doesn't know about Server 1!)
+// User effectively gets 20 requests instead of 10!
+
+// Solution: Redis as shared counter (all servers share one Redis)
+// Token Bucket with Redis:
+
+async function isAllowed(userId, limit=100, windowSec=60) {
+  const key = `ratelimit:${userId}`;
+  
+  // MULTI/EXEC for atomic operation
+  const pipeline = redis.pipeline();
+  pipeline.incr(key);
+  pipeline.expire(key, windowSec);
+  const [count] = await pipeline.exec();
+  
+  if (count > limit) {
+    // Set Retry-After header
+    const ttl = await redis.ttl(key);
+    throw new RateLimitError(ttl);
+  }
+  return true;
+}
+
+// Response headers for good API design:
+// X-RateLimit-Limit: 100
+// X-RateLimit-Remaining: 45
+// X-RateLimit-Reset: 1714086400  (Unix timestamp when window resets)
+// Retry-After: 30  (seconds until next request allowed, on 429)</code></div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Rate limit by</strong> — IP address
+                (unauthenticated), user ID (authenticated), API key (B2B)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Different limits per endpoint</strong> —
+                login: 5/min, general API: 100/min, AI endpoints: 10/min</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Sliding window log</strong> — store
+                timestamps of each request in Redis sorted set. More accurate than fixed window but uses more memory.
+              </div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to connect to your experience</div>
+              <p>"I implemented request throttling in my ResilientAIService using the token bucket pattern in memory.
+                For a distributed system with multiple servers, you'd move that shared counter to Redis so all server
+                instances see the same count. The logic is identical — just replace the in-process counter with a Redis
+                INCR + EXPIRE."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Time & Space Complexity</h2>
+          <p>You've solved 600+ problems — you know this practically. Now express it clearly in an interview.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa1-1">
+          <div class="topic-head" onclick="toggleTopic('dsa1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Big O — Common Complexities</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// COMMON COMPLEXITIES — fastest to slowest:
+O(1)       Constant   — HashMap get, array index access
+O(log n)   Logarithmic — Binary search, BST operations, heap push/pop
+O(n)       Linear      — Linear scan, sum of array
+O(n log n) Linearithmic — Merge sort, heap sort, most efficient sorts
+O(n²)      Quadratic   — Bubble sort, nested loops over same array
+O(2^n)     Exponential — Recursive fibonacci (unoptimised), subset generation
+O(n!)      Factorial   — Permutations of n elements
+
+// QUICK PATTERN RECOGNITION:
+// One loop over n elements         → O(n)
+// Loop inside a loop over n        → O(n²)
+// Halving the problem each step    → O(log n)
+// One loop + binary search inside  → O(n log n)
+// Recursive with two branches      → often O(2^n), use memoization → O(n)
+
+// SPACE COMPLEXITY:
+// Recursive calls use stack space — depth of recursion = space
+// Storing n elements = O(n) space
+// In-place algorithm = O(1) extra space (modify input)</code></div>
+            <div class="section-title">How to Analyse in an Interview</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Count loops — each nested loop multiplies complexity
+              </div>
+              <div class="point"><span class="point-bullet">→</span>Ignore constants — O(2n) = O(n), O(n + n²) = O(n²)
+              </div>
+              <div class="point"><span class="point-bullet">→</span>Dominant term wins — always take the largest growing
+                term</div>
+              <div class="point"><span class="point-bullet">→</span>Always state BOTH time and space complexity when
+                done solving</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"My solution uses one pass over the array so it's O(n) time. I use a HashMap to store seen elements,
+                which is O(n) space in the worst case. If we wanted O(1) space, we could sort the array first (O(n log
+                n) time) and use two pointers."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Arrays, LinkedLists & HashMaps</h2>
+          <p>The three most-used data structures. Know their internals, tradeoffs, and when to choose each.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa2-1">
+          <div class="topic-head" onclick="toggleTopic('dsa2-1')">
+            <span class="topic-num">01</span><span class="topic-title">When to Use Which — With Complexity</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th>Operation</th>
+                <th>Array</th>
+                <th>LinkedList</th>
+                <th>HashMap</th>
+              </tr>
+              <tr>
+                <td>Access by index</td>
+                <td>O(1) ✓</td>
+                <td>O(n) ✗</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Search (unsorted)</td>
+                <td>O(n)</td>
+                <td>O(n)</td>
+                <td>O(1) ✓</td>
+              </tr>
+              <tr>
+                <td>Insert at end</td>
+                <td>O(1) amortized</td>
+                <td>O(1) with tail pointer</td>
+                <td>O(1) amortized</td>
+              </tr>
+              <tr>
+                <td>Insert at middle</td>
+                <td>O(n) — shift</td>
+                <td>O(1) — relink</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Delete at middle</td>
+                <td>O(n) — shift</td>
+                <td>O(1) — relink</td>
+                <td>O(1) amortized</td>
+              </tr>
+              <tr>
+                <td>Memory</td>
+                <td>Contiguous — cache friendly</td>
+                <td>Non-contiguous — pointers overhead</td>
+                <td>Overhead for hash table</td>
+              </tr>
+            </table>
+            <div class="section-title">Choose based on your access pattern</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Use Array when</strong> — you need
+                index-based access, or cache performance matters (contiguous memory). Default choice for most problems.
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Use LinkedList when</strong> — frequent
+                insert/delete at beginning or middle, no random access needed. Implementing Queue (deque) or LRU cache.
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Use HashMap when</strong> — fast lookup by
+                key, counting frequencies, checking membership, caching results. O(1) average for get/put/delete.</div>
+            </div>
+            <div class="section-title">HashMap Collision Handling — Two Methods</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Chaining</strong> — each bucket is a linked
+                list. Collisions appended to the list. Java HashMap uses this (then converts to tree at 8 entries).
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Open Addressing</strong> — if bucket
+                occupied, probe to next slot. Less memory overhead but more complex. Python dict uses this.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Trees & BST</h2>
+          <p>Know the four traversals verbally, BST operations and complexity, and balanced vs unbalanced trees.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa3-1">
+          <div class="topic-head" onclick="toggleTopic('dsa3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Trees — Traversals & BST Properties</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// TREE TRAVERSALS — say the pattern out loud
+//         1
+//        / //       2   3
+//      / //     4   5
+
+// Inorder   (Left → Root → Right): 4 2 5 1 3  ← gives SORTED output for BST!
+// Preorder  (Root → Left → Right): 1 2 4 5 3  ← root always first, good for copying tree
+// Postorder (Left → Right → Root): 4 5 2 3 1  ← root always last, good for deleting tree
+// Level order (BFS row by row):    1 2 3 4 5  ← uses a Queue</code></div>
+            <div class="section-title">BST — Binary Search Tree Properties</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Left child &lt; parent &lt; right child — always
+              </div>
+              <div class="point"><span class="point-bullet">→</span>Search, insert, delete: O(log n) for balanced tree,
+                O(n) for skewed (degenerate) tree</div>
+              <div class="point"><span class="point-bullet">→</span>Inorder traversal of BST gives sorted sequence —
+                useful for finding kth smallest</div>
+            </div>
+            <div class="section-title">Balanced vs Unbalanced Trees</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Balanced BST</strong> — height is O(log n).
+                Search is O(log n). Examples: AVL tree, Red-Black tree.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Unbalanced BST</strong> — inserting sorted
+                values (1,2,3,4,5) creates a linked list. Height O(n). Search degrades to O(n).</div>
+              <div class="point"><span class="point-bullet">→</span>Java's TreeMap and TreeSet use Red-Black tree —
+                self-balancing, always O(log n).</div>
+            </div>
+            <div class="section-title">Other Important Trees</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Heap</strong> — complete binary tree.
+                Min-heap: parent ≤ children. Max-heap: parent ≥ children. O(log n) insert/delete, O(1) peek. Used for
+                priority queue.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Trie</strong> — prefix tree. Each node = one
+                character. Used for autocomplete, spell check. O(L) operations where L = word length.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Segment Tree</strong> — range queries (range
+                sum, range min) in O(log n).</div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between inorder, preorder, and postorder traversal?</div>
+              <div class="iq">What is the time complexity of BST operations in the worst case?</div>
+              <div class="iq">How do you check if a binary tree is a BST?</div>
+              <div class="iq">What is the difference between a heap and a BST?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Graphs — BFS vs DFS</h2>
+          <p>Know when to use BFS vs DFS, their complexities, and common graph problems verbally.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa4-1">
+          <div class="topic-head" onclick="toggleTopic('dsa4-1')">
+            <span class="topic-num">01</span><span class="topic-title">BFS vs DFS — When to Use Each</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>BFS (Breadth-First Search)</th>
+                <th>DFS (Depth-First Search)</th>
+              </tr>
+              <tr>
+                <td>Data structure</td>
+                <td>Queue (FIFO)</td>
+                <td>Stack (or recursion)</td>
+              </tr>
+              <tr>
+                <td>Order</td>
+                <td>Level by level — nearest nodes first</td>
+                <td>Go as deep as possible before backtracking</td>
+              </tr>
+              <tr>
+                <td>Space</td>
+                <td>O(w) — w = max width of graph</td>
+                <td>O(h) — h = max depth/height</td>
+              </tr>
+              <tr>
+                <td>Shortest path?</td>
+                <td>Yes — in unweighted graph, BFS guarantees shortest path</td>
+                <td>No — doesn't guarantee shortest path</td>
+              </tr>
+              <tr>
+                <td>Use for</td>
+                <td>Shortest path, level-order, nearby nodes first</td>
+                <td>Path existence, cycle detection, topological sort, maze solving</td>
+              </tr>
+              <tr>
+                <td>Time complexity</td>
+                <td>O(V + E)</td>
+                <td>O(V + E)</td>
+              </tr>
+            </table>
+            <div class="section-title">Common Graph Problems — Know What Algorithm to Use</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Shortest path (unweighted)</strong> — BFS
+              </div>
+              <div class="point"><span class="point-bullet">→</span><strong>Shortest path (weighted)</strong> —
+                Dijkstra's algorithm (uses min-heap)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Detect cycle</strong> — DFS with visited +
+                recursion stack tracking</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Topological sort</strong> — DFS or Kahn's
+                algorithm (BFS-based). Used for build order, course prerequisites.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Connected components</strong> — DFS or BFS
+                from each unvisited node</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Bipartite check</strong> — BFS with
+                2-coloring</div>
+            </div>
+            <div class="section-title">Graph Representations</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Adjacency List</strong> — HashMap&lt;Node,
+                List&lt;Node&gt;&gt;. Space O(V+E). Good for sparse graphs. Most common.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Adjacency Matrix</strong> — boolean[][]).
+                Space O(V²). O(1) edge lookup. Good for dense graphs.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa5">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Sorting Algorithms</h2>
+          <p>Know the complexities cold. Know which to use when. Know why Java uses TimSort and when QuickSort is
+            better.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa5-1">
+          <div class="topic-head" onclick="toggleTopic('dsa5-1')">
+            <span class="topic-num">01</span><span class="topic-title">All Sorting Algorithms — Comparison</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa5-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th>Algorithm</th>
+                <th>Best</th>
+                <th>Average</th>
+                <th>Worst</th>
+                <th>Space</th>
+                <th>Stable?</th>
+              </tr>
+              <tr>
+                <td>Bubble Sort</td>
+                <td>O(n)</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Selection Sort</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Insertion Sort</td>
+                <td>O(n)</td>
+                <td>O(n²)</td>
+                <td>O(n²)</td>
+                <td>O(1)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Merge Sort</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(n)</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Quick Sort</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(n²)*</td>
+                <td>O(log n)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Heap Sort</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(1)</td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>TimSort (Java/Python)</td>
+                <td>O(n)</td>
+                <td>O(n log n)</td>
+                <td>O(n log n)</td>
+                <td>O(n)</td>
+                <td>Yes</td>
+              </tr>
+            </table>
+            <div class="section-title">Key Concepts</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Stable sort</strong> — equal elements
+                maintain their original relative order. Merge Sort is stable; Quick Sort is not.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>QuickSort worst case O(n²)</strong> —
+                happens when pivot is always smallest/largest (sorted input). Fixed by randomised pivot or
+                median-of-three.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>TimSort</strong> — hybrid of Merge Sort +
+                Insertion Sort. Java Arrays.sort() and Collections.sort() use TimSort. O(n) on nearly-sorted data.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>When to use Insertion Sort</strong> — small
+                arrays (&lt;10 elements) or nearly-sorted. TimSort uses Insertion Sort for small runs internally.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Counting Sort / Radix Sort</strong> — O(n+k)
+                where k is range. Non-comparison based. Use when values are in a small, known range.</div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What sorting algorithm does Java use internally? Why?</div>
+              <div class="iq">What is a stable sort? Give an example where stability matters.</div>
+              <div class="iq">When does QuickSort perform poorly? How do you fix it?</div>
+              <div class="iq">Why is Merge Sort preferred over QuickSort for linked lists?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa6">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Dynamic Programming</h2>
+          <p>Recognising DP problems and the approach to solve them — more important than memorising solutions.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa6-1">
+          <div class="topic-head" onclick="toggleTopic('dsa6-1')">
+            <span class="topic-num">01</span><span class="topic-title">How to Recognise & Solve DP Problems</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa6-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Dynamic Programming</div>
+              <p>Break a problem into overlapping subproblems, solve each once, store the result
+                (memoization/tabulation). Two conditions: Optimal Substructure (optimal solution built from optimal
+                sub-solutions) + Overlapping Subproblems (same sub-problems solved repeatedly).</p>
+            </div>
+            <div class="section-title">How to Recognise a DP Problem</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Question asks for
+                <strong>"minimum/maximum/count/ways"</strong> — strong DP signal
+              </div>
+              <div class="point"><span class="point-bullet">→</span>Brute force is exponential (recursive tree with
+                repeated subproblems)</div>
+              <div class="point"><span class="point-bullet">→</span>Can the problem be broken into smaller similar
+                problems?</div>
+            </div>
+            <div class="section-title">The Approach — 4 Steps</div>
+            <div class="code-block"><code>// Step 1: Define the state
+// dp[i] = minimum cost to reach step i
+// dp[i][j] = minimum edit distance between str1[0..i] and str2[0..j]
+
+// Step 2: Recurrence relation (transition)
+// Fibonacci: dp[n] = dp[n-1] + dp[n-2]
+// Climbing stairs: dp[i] = dp[i-1] + dp[i-2]  (can take 1 or 2 steps)
+// Knapsack: dp[i][w] = max(dp[i-1][w], dp[i-1][w-weight[i]] + value[i])
+
+// Step 3: Base cases
+// dp[0] = 0, dp[1] = 1 (fibonacci)
+// dp[0][j] = j, dp[i][0] = i (edit distance)
+
+// Step 4: Top-down (memoization) vs Bottom-up (tabulation)
+// Top-down: recursion + HashMap cache (natural, easier to think)
+// Bottom-up: iterate and fill dp array (no stack overflow, usually faster)
+
+// Example: Fibonacci
+// Naive recursion: O(2^n)
+// With memoization: O(n)
+Map<Integer, Long> memo = new HashMap<>();
+long fib(int n) {
+  if (n <= 1) return n;
+  if (memo.containsKey(n)) return memo.get(n);
+  long result = fib(n-1) + fib(n-2);
+  memo.put(n, result);
+  return result;
+}</code></div>
+            <div class="section-title">Common DP Problem Patterns</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>1D DP</strong> — Fibonacci, climbing stairs,
+                house robber, coin change</div>
+              <div class="point"><span class="point-bullet">→</span><strong>2D DP</strong> — Longest Common Subsequence,
+                Edit Distance, 0/1 Knapsack</div>
+              <div class="point"><span class="point-bullet">→</span><strong>String DP</strong> — palindrome partition,
+                regex matching</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Grid DP</strong> — unique paths, minimum
+                path sum</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-page" id="page-dsa7">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(167,134,223,.15);color:#a786df">DSA Theory</span>
+          <h2>Stack, Queue & Heap</h2>
+          <p>Three data structures with very specific use cases. Know when each is the right tool.</p>
+        </div>
+        <div class="topic-card" id="tc-dsa7-1">
+          <div class="topic-head" onclick="toggleTopic('dsa7-1')">
+            <span class="topic-num">01</span><span class="topic-title">Stack, Queue & Priority Queue — Use Cases</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-dsa">DSA</span></div>
+            <div class="topic-chk" onclick="markDone('dsa7-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="section-title">Stack — LIFO (Last In First Out)</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Operations: push (add top), pop (remove top), peek
+                (view top) — all O(1)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Use for</strong>: function call stack,
+                undo/redo, bracket matching, DFS iterative, monotonic stack problems</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Classic problems</strong>: valid
+                parentheses, next greater element, daily temperatures, largest rectangle in histogram</div>
+            </div>
+            <div class="section-title">Queue — FIFO (First In First Out)</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Operations: enqueue (add back), dequeue (remove
+                front), peek — all O(1)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Use for</strong>: BFS traversal, task
+                scheduling, message queues, sliding window problems</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Deque (ArrayDeque)</strong> — double-ended,
+                add/remove from both ends. Use for sliding window maximum.</div>
+            </div>
+            <div class="section-title">Priority Queue (Heap)</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Always gives min (or max) element in O(1).
+                Insert/delete O(log n).</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Use for</strong>: Dijkstra's shortest path,
+                K-th largest/smallest element, merge K sorted lists, task scheduling by priority</div>
+              <div class="point"><span class="point-bullet">→</span>Java: PriorityQueue (min-heap by default). For
+                max-heap: new PriorityQueue&lt;&gt;(Collections.reverseOrder())</div>
+            </div>
+            <div class="code-block"><code>// When to use which — decision tree:
+// Need LIFO?                    → Stack
+// Need FIFO?                    → Queue
+// Need min/max efficiently?     → PriorityQueue (Heap)
+// Need sorted order always?     → TreeMap / TreeSet (Red-Black Tree)
+// Need fast lookup by key?      → HashMap
+// Need sorted + fast lookup?    → TreeMap
+
+// Classic interview pattern — Top K elements:
+// Find K largest elements in array — use min-heap of size K
+// O(n log K) time instead of O(n log n) for full sort</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between Stack and Queue?</div>
+              <div class="iq">How would you implement a Queue using two Stacks?</div>
+              <div class="iq">What is a monotonic stack? When would you use it?</div>
+              <div class="iq">How do you find the Kth largest element efficiently?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <button class="mob-nav-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+  <script>
+    const done = {};
+    try { Object.assign(done, JSON.parse(localStorage.getItem('prep_sd_done') || '{}')); } catch (e) { }
+    function save() { try { localStorage.setItem('prep_sd_done', JSON.stringify(done)); } catch (e) { } }
+    function markDone(id, e) {
+      e.stopPropagation(); done[id] = !done[id]; save();
+      const card = document.getElementById('tc-' + id);
+      card.classList.toggle('done', done[id]);
+      card.querySelector('.topic-chk').textContent = done[id] ? '✓' : '';
+      updateProgress();
+    }
+    function toggleTopic(id) { document.getElementById('tc-' + id).classList.toggle('open'); }
+    function showPage(pageId, el) {
+      document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+      const pg = document.getElementById('page-' + pageId);
+      if (pg) pg.classList.add('active');
+      el.classList.add('active');
+      document.getElementById('sidebar').classList.remove('open');
+      window.scrollTo(0, 0);
+    }
+    function updateProgress() {
+      const cards = document.querySelectorAll('[id^="tc-"]');
+      const total = cards.length;
+      const doneCount = Object.values(done).filter(Boolean).length;
+      const pct = total ? Math.round(doneCount / total * 100) : 0;
+      document.getElementById('progFill').style.width = pct + '%';
+      document.getElementById('progCount').textContent = doneCount + ' / ' + total;
+    }
+    document.querySelectorAll('[id^="tc-"]').forEach(card => {
+      const id = card.id.replace('tc-', '');
+      if (done[id]) { card.classList.add('done'); const chk = card.querySelector('.topic-chk'); if (chk) chk.textContent = '✓'; }
+    });
+    updateProgress();
+  </script>
+</body>
+
+</html>

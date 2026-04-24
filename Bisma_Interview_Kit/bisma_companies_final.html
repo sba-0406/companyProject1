@@ -1,0 +1,2486 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisma's Job Hunt — 200+ Companies</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255, 255, 255, 0.07);
+      --border2: rgba(255, 255, 255, 0.13);
+      --text: #f0f0f5;
+      --muted: #888899;
+      --accent: #7c6aff;
+      --accent2: #c084fc;
+      --easy: #34d399;
+      --med: #fbbf24;
+      --hard: #f87171;
+      --intern: #60a5fa;
+      --fte: #a78bfa;
+      --both: #5eead4;
+      --cat-high: #7c6aff;
+      --cat-mid: #06b6d4;
+      --cat-low: #22c55e;
+      --cat-startup: #f59e0b;
+      --cat-midstartup: #ec4899;
+      --cat-mass: #64748b;
+      --cat-fintech: #10b981;
+      --cat-mnc: #8b5cf6;
+      --cat-bfsi: #3b82f6;
+      --cat-product: #f97316;
+      --cat-saas: #14b8a6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 3rem 2rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-left {}
+
+    .hero-tag {
+      display: inline-block;
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(124, 106, 255, 0.1);
+      border: 1px solid rgba(124, 106, 255, 0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 0.75rem;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+    }
+
+    .stat-pill .n {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-pill .l {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2px;
+    }
+
+    /* CONTROLS */
+    .controls-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: linear-gradient(var(--bg) 80%, transparent);
+    }
+
+    .controls {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 14px;
+    }
+
+    .search-box svg {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .search-box input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    .search-box input::placeholder {
+      color: var(--muted);
+    }
+
+    select {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #1a1a24;
+    }
+
+    .count-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-left: 0.5rem;
+    }
+
+    /* CATEGORY FILTERS */
+    .cat-filters {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      font-size: 12px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 600;
+      padding: 5px 14px;
+      border-radius: 999px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.18s;
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .cat-btn.active,
+    .cat-btn:hover {
+      color: #fff;
+    }
+
+    .cat-btn[data-cat="all"].active {
+      border-color: var(--accent);
+      background: rgba(124, 106, 255, 0.15);
+      color: var(--accent);
+    }
+
+    .cat-btn[data-cat="high-product"].active {
+      border-color: var(--cat-high);
+      background: rgba(124, 106, 255, 0.1);
+      color: var(--cat-high);
+    }
+
+    .cat-btn[data-cat="mid-tier"].active {
+      border-color: var(--cat-mid);
+      background: rgba(6, 182, 212, 0.1);
+      color: var(--cat-mid);
+    }
+
+    .cat-btn[data-cat="startup"].active {
+      border-color: var(--cat-startup);
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--cat-startup);
+    }
+
+    .cat-btn[data-cat="mid-startup"].active {
+      border-color: var(--cat-midstartup);
+      background: rgba(236, 72, 153, 0.1);
+      color: var(--cat-midstartup);
+    }
+
+    .cat-btn[data-cat="fintech"].active {
+      border-color: var(--cat-fintech);
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--cat-fintech);
+    }
+
+    .cat-btn[data-cat="mass-hiring"].active {
+      border-color: #94a3b8;
+      background: rgba(100, 116, 139, 0.1);
+      color: #94a3b8;
+    }
+
+    .cat-btn[data-cat="bfsi-gcc"].active {
+      border-color: var(--cat-bfsi);
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--cat-bfsi);
+    }
+
+    .cat-btn[data-cat="saas-product"].active {
+      border-color: var(--cat-saas);
+      background: rgba(20, 184, 166, 0.1);
+      color: var(--cat-saas);
+    }
+
+    .cat-btn[data-cat="mnc-service"].active {
+      border-color: #a855f7;
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+    }
+
+    /* GRID */
+    .grid-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 12px;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      border-color: var(--border2);
+      transform: translateY(-2px);
+    }
+
+    .card.open {
+      border-color: var(--accent);
+    }
+
+    .card-top {
+      padding: 1rem 1.1rem 0.85rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .card-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 26px;
+      padding-top: 3px;
+    }
+
+    .card-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-role {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .salary-tag {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-left: auto;
+    }
+
+    /* BADGES ROW */
+    .badges {
+      padding: 0 1.1rem 0.85rem 2.9rem;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .badge-easy {
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--easy);
+      border-color: rgba(52, 211, 153, 0.2);
+    }
+
+    .badge-med {
+      background: rgba(251, 191, 36, 0.1);
+      color: var(--med);
+      border-color: rgba(251, 191, 36, 0.2);
+    }
+
+    .badge-hard {
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--hard);
+      border-color: rgba(248, 113, 113, 0.2);
+    }
+
+    .badge-intern {
+      background: rgba(96, 165, 250, 0.1);
+      color: var(--intern);
+      border-color: rgba(96, 165, 250, 0.2);
+    }
+
+    .badge-fte {
+      background: rgba(167, 139, 250, 0.1);
+      color: var(--fte);
+      border-color: rgba(167, 139, 250, 0.2);
+    }
+
+    .badge-both {
+      background: rgba(94, 234, 212, 0.1);
+      color: var(--both);
+      border-color: rgba(94, 234, 212, 0.2);
+    }
+
+    .badge-ref-yes {
+      background: rgba(124, 106, 255, 0.12);
+      color: #a78bfa;
+      border-color: rgba(124, 106, 255, 0.2);
+    }
+
+    .badge-ref-opt {
+      background: rgba(245, 158, 11, 0.1);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .badge-ref-no {
+      background: rgba(100, 116, 139, 0.1);
+      color: #94a3b8;
+      border-color: rgba(100, 116, 139, 0.2);
+    }
+
+    /* EXPAND */
+    .card-expand {
+      display: none;
+      padding: 0 1.1rem 1.1rem 2.9rem;
+      border-top: 1px solid var(--border);
+      margin: 0 0.75rem;
+      padding-top: 0.9rem;
+    }
+
+    .card.open .card-expand {
+      display: block;
+    }
+
+    .expand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .expand-item .el {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .expand-item .ev {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .tips {
+      background: var(--surface2);
+      border-radius: 10px;
+      padding: 0.7rem 0.9rem;
+      margin-top: 6px;
+    }
+
+    .tips .tip-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .tips p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .card-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(124, 106, 255, 0.1);
+      border: 1px solid rgba(124, 106, 255, 0.2);
+      padding: 3px 10px;
+      border-radius: 999px;
+      transition: background 0.15s;
+    }
+
+    .card-link:hover {
+      background: rgba(124, 106, 255, 0.2);
+    }
+
+    .chevron {
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform 0.2s;
+      margin-top: 2px;
+    }
+
+    .card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    /* NO RESULTS */
+    .no-results {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 4rem;
+      color: var(--muted);
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+    }
+
+    /* TRACKER BAR */
+    .tracker-bar {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .tb-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .tb-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .tb-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .tb-count {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+    }
+
+    .tb-div {
+      width: 1px;
+      height: 18px;
+      background: var(--border);
+    }
+
+    /* STATUS BUTTONS */
+    .status-row {
+      padding: 0 1.1rem 0.7rem 2.9rem;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .slabel {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-right: 2px;
+    }
+
+    .sbtn {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all .15s;
+    }
+
+    .sbtn:hover {
+      border-color: var(--border2);
+      color: var(--text);
+    }
+
+    .sbtn.s-saved {
+      background: rgba(251, 191, 36, .15);
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, .3);
+    }
+
+    .sbtn.s-applied {
+      background: rgba(96, 165, 250, .15);
+      color: #60a5fa;
+      border-color: rgba(96, 165, 250, .3);
+    }
+
+    .sbtn.s-interview {
+      background: rgba(167, 139, 250, .15);
+      color: #a78bfa;
+      border-color: rgba(167, 139, 250, .3);
+    }
+
+    .sbtn.s-offer {
+      background: rgba(52, 211, 153, .15);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, .3);
+    }
+
+    .sbtn.s-rejected {
+      background: rgba(248, 113, 113, .15);
+      color: #f87171;
+      border-color: rgba(248, 113, 113, .3);
+    }
+
+    /* STATUS BORDER */
+    .card.st-saved {
+      border-left: 3px solid #fbbf24;
+    }
+
+    .card.st-applied {
+      border-left: 3px solid #60a5fa;
+    }
+
+    .card.st-interview {
+      border-left: 3px solid #a78bfa;
+    }
+
+    .card.st-offer {
+      border-left: 3px solid #34d399;
+    }
+
+    .card.st-rejected {
+      border-left: 3px solid #f87171;
+    }
+
+    /* STACK ACCURACY */
+    .badge-exact {
+      background: rgba(52, 211, 153, .1);
+      color: #34d399;
+      border-color: rgba(52, 211, 153, .2);
+    }
+
+    .badge-transfer {
+      background: rgba(251, 191, 36, .1);
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, .2);
+    }
+
+    .badge-stackdiff {
+      background: rgba(248, 113, 113, .1);
+      color: #f87171;
+      border-color: rgba(248, 113, 113, .2);
+    }
+
+    /* NOTES */
+    .notes-wrap {
+      padding: 0 1.1rem 0.9rem 2.9rem;
+    }
+
+    .notes-lbl {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .notes-wrap textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      padding: 7px 10px;
+      resize: none;
+      outline: none;
+      height: 55px;
+      transition: border-color .15s;
+    }
+
+    .notes-wrap textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .notes-wrap textarea::placeholder {
+      color: var(--muted);
+    }
+
+    /* CAT LEGEND */
+    .legend {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem 1.5rem;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+      .grid-wrap {
+        grid-template-columns: 1fr;
+        padding: 0 1rem 3rem;
+      }
+
+      .controls-wrap,
+      .cat-filters,
+      .hero,
+      .legend {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .expand-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* NAV */
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 0;
+    }
+
+    .topnav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--accent);
+      padding: 1rem 1.5rem 1rem 0;
+      border-right: 1px solid var(--border);
+      margin-right: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .topnav-tab {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 1rem 1.1rem;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .topnav-tab:hover {
+      color: var(--text);
+    }
+
+    .topnav-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .page-wrap {
+      display: none;
+    }
+
+    .page-wrap.active {
+      display: block;
+    }
+
+    /* BEST FIT PAGE */
+    .bf-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 2rem 4rem;
+    }
+
+    .bf-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .bf-sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .bf-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .bf-section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .bf-wave-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .bf-wave-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .bf-wave-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      line-height: 1.7;
+      padding: 8px 12px;
+      background: var(--surface);
+      border-radius: 10px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .bf-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 8px;
+    }
+
+    .bf-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: .9rem 1rem;
+      display: flex;
+      gap: 10px;
+      transition: border-color .15s;
+    }
+
+    .bf-card:hover {
+      border-color: var(--border2);
+    }
+
+    .bf-card.ref-card {
+      border-left: 3px solid var(--accent);
+    }
+
+    .bf-order {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      min-width: 28px;
+      line-height: 1.1;
+    }
+
+    .bf-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .bf-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .bf-role {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .bf-why {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .bf-tags {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .bf-tag {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .t-pay {
+      background: rgba(192, 132, 252, .1);
+      color: #c084fc;
+      border: 1px solid rgba(192, 132, 252, .2);
+    }
+
+    .t-hire {
+      background: rgba(94, 234, 212, .1);
+      color: #5eead4;
+      border: 1px solid rgba(94, 234, 212, .2);
+    }
+
+    .t-ref {
+      background: rgba(124, 106, 255, .1);
+      color: #a78bfa;
+      border: 1px solid rgba(124, 106, 255, .2);
+    }
+
+    .t-direct {
+      background: rgba(52, 211, 153, .1);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .t-easy {
+      background: rgba(52, 211, 153, .1);
+      color: #34d399;
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .t-med {
+      background: rgba(251, 191, 36, .1);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, .2);
+    }
+
+    .t-hard {
+      background: rgba(248, 113, 113, .1);
+      color: #f87171;
+      border: 1px solid rgba(248, 113, 113, .2);
+    }
+
+    .bf-divider {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 0 10px;
+    }
+
+    .bf-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .bf-divider-txt {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .hiring-window {
+      font-size: 11px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      color: var(--muted);
+    }
+
+    .hiring-window strong {
+      color: var(--text);
+    }
+
+    @media(max-width:600px) {
+      .bf-wrap {
+        padding: 1rem;
+      }
+
+      .bf-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topnav {
+        padding: 0 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="topnav">
+    <div class="topnav-logo">Bisma · Job OS</div>
+    <button class="topnav-tab active" onclick="switchPage('all-companies',this)">🏢 All 210 Companies</button>
+    <button class="topnav-tab" onclick="switchPage('best-fit',this)">⭐ Best Fit for You</button>
+  </nav>
+  <div class="page-wrap active" id="page-all-companies">
+
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-tag">Bisma Alisha · 2026 Batch · Mohan Babu University</div>
+        <h1>Your <span>Job Hunt</span><br>Command Center</h1>
+        <p class="hero-sub">200+ curated companies for your Node.js · MongoDB · PostgreSQL · AI/LLM stack. Entry-level
+          only. Built around your Darwinbox internship and 9.85 CGPA.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-pill">
+          <div class="n" id="totalCount">210</div>
+          <div class="l">Companies</div>
+        </div>
+        <div class="stat-pill">
+          <div class="n">8–14</div>
+          <div class="l">LPA Range</div>
+        </div>
+        <div class="stat-pill">
+          <div class="n">9</div>
+          <div class="l">Categories</div>
+        </div>
+        <div class="stat-pill">
+          <div class="n">67%</div>
+          <div class="l">Easy–Med</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-high)"></div>High-level Product
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-mid)"></div>Mid-tier Product
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-startup)"></div>Startup
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-midstartup)"></div>Mid-Startup
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-fintech)"></div>Fintech
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-bfsi)"></div>BFSI / GCC
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-saas)"></div>SaaS Product
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:#a855f7"></div>MNC / Service
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--cat-mass)"></div>Mass Hiring
+      </div>
+    </div>
+
+    <div class="tracker-bar">
+      <span class="tb-label">Tracker:</span>
+      <div class="tb-item">
+        <div class="tb-dot" style="background:#fbbf24"></div><span class="tb-count" id="tb-saved">0</span>&nbsp;<span
+          style="font-size:12px;color:var(--muted)">Saved</span>
+      </div>
+      <div class="tb-div"></div>
+      <div class="tb-item">
+        <div class="tb-dot" style="background:#60a5fa"></div><span class="tb-count" id="tb-applied">0</span>&nbsp;<span
+          style="font-size:12px;color:var(--muted)">Applied</span>
+      </div>
+      <div class="tb-div"></div>
+      <div class="tb-item">
+        <div class="tb-dot" style="background:#a78bfa"></div><span class="tb-count"
+          id="tb-interview">0</span>&nbsp;<span style="font-size:12px;color:var(--muted)">Interview</span>
+      </div>
+      <div class="tb-div"></div>
+      <div class="tb-item">
+        <div class="tb-dot" style="background:#34d399"></div><span class="tb-count" id="tb-offer">0</span>&nbsp;<span
+          style="font-size:12px;color:var(--muted)">Offer</span>
+      </div>
+      <div class="tb-div"></div>
+      <div class="tb-item">
+        <div class="tb-dot" style="background:#f87171"></div><span class="tb-count" id="tb-rejected">0</span>&nbsp;<span
+          style="font-size:12px;color:var(--muted)">Rejected</span>
+      </div>
+      <div class="tb-div"></div>
+      <span style="font-size:11px;color:var(--muted)">All saved locally in your browser</span>
+    </div>
+
+    <div class="controls-wrap">
+      <div class="controls">
+        <div class="search-box">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input type="text" id="searchInput" placeholder="Search company, role, tech..." oninput="applyFilters()">
+        </div>
+        <select id="diffFilter" onchange="applyFilters()">
+          <option value="all">All difficulties</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <select id="typeFilter" onchange="applyFilters()">
+          <option value="all">Intern + FTE</option>
+          <option value="intern">Internship</option>
+          <option value="fte">FTE only</option>
+          <option value="both">Both available</option>
+        </select>
+        <select id="refFilter" onchange="applyFilters()">
+          <option value="all">Any referral</option>
+          <option value="yes">Referral critical</option>
+          <option value="opt">Referral helps</option>
+          <option value="no">Direct apply OK</option>
+        </select>
+        <select id="sortFilter" onchange="applyFilters()">
+          <option value="default">Sort: Default</option>
+          <option value="salary-high">Salary: High → Low</option>
+          <option value="salary-low">Salary: Low → High</option>
+          <option value="easiest">Easiest First</option>
+          <option value="status">By Status</option>
+        </select>
+        <select id="statusFilter" onchange="applyFilters()">
+          <option value="all">All statuses</option>
+          <option value="saved">💛 Saved</option>
+          <option value="applied">📤 Applied</option>
+          <option value="interview">🎯 Interview</option>
+          <option value="offer">🎉 Offer</option>
+          <option value="rejected">✕ Rejected</option>
+        </select>
+        <span class="count-badge" id="countBadge">210 shown</span>
+      </div>
+    </div>
+
+    <div class="cat-filters">
+      <button class="cat-btn active" data-cat="all" onclick="setCat('all',this)">All (210)</button>
+      <button class="cat-btn" data-cat="high-product" onclick="setCat('high-product',this)">⬡ High-level
+        Product</button>
+      <button class="cat-btn" data-cat="mid-tier" onclick="setCat('mid-tier',this)">◈ Mid-tier Product</button>
+      <button class="cat-btn" data-cat="startup" onclick="setCat('startup',this)">◎ Startup</button>
+      <button class="cat-btn" data-cat="mid-startup" onclick="setCat('mid-startup',this)">◐ Mid-Startup</button>
+      <button class="cat-btn" data-cat="fintech" onclick="setCat('fintech',this)">◆ Fintech</button>
+      <button class="cat-btn" data-cat="bfsi-gcc" onclick="setCat('bfsi-gcc',this)">◉ BFSI / GCC</button>
+      <button class="cat-btn" data-cat="saas-product" onclick="setCat('saas-product',this)">◑ SaaS Product</button>
+      <button class="cat-btn" data-cat="mnc-service" onclick="setCat('mnc-service',this)">◇ MNC / Service</button>
+      <button class="cat-btn" data-cat="mass-hiring" onclick="setCat('mass-hiring',this)">○ Mass Hiring</button>
+    </div>
+
+    <div class="grid-wrap" id="grid"></div>
+
+    <script>
+      const CAT_COLORS = {
+        'high-product': '#7c6aff',
+        'mid-tier': '#06b6d4',
+        'startup': '#f59e0b',
+        'mid-startup': '#ec4899',
+        'fintech': '#10b981',
+        'bfsi-gcc': '#3b82f6',
+        'saas-product': '#14b8a6',
+        'mnc-service': '#a855f7',
+        'mass-hiring': '#64748b'
+      };
+
+      // Stack accuracy map — honest assessment per company
+      const STACK_MAP = {
+        1: 'diff', 2: 'transfer', 3: 'exact', 4: 'exact', 5: 'transfer', 6: 'transfer', 7: 'exact', 8: 'transfer', 9: 'exact', 10: 'exact',
+        11: 'exact', 12: 'transfer', 13: 'exact', 14: 'exact', 15: 'exact', 16: 'exact', 17: 'exact', 18: 'exact', 19: 'exact', 20: 'exact',
+        21: 'exact', 22: 'exact', 23: 'exact', 24: 'transfer', 25: 'exact', 26: 'exact', 27: 'exact', 28: 'exact', 29: 'exact', 30: 'exact',
+        31: 'exact', 32: 'exact', 33: 'exact', 34: 'exact', 35: 'exact', 36: 'exact', 37: 'exact', 38: 'exact', 39: 'exact', 40: 'exact',
+        41: 'exact', 42: 'exact', 43: 'exact', 44: 'exact', 45: 'exact', 46: 'exact', 47: 'exact', 48: 'exact', 49: 'exact', 50: 'exact',
+        51: 'exact', 52: 'exact', 53: 'exact', 54: 'exact', 55: 'exact', 56: 'exact', 57: 'exact', 58: 'exact', 59: 'exact', 60: 'exact',
+        61: 'exact', 62: 'exact', 63: 'exact', 64: 'exact', 65: 'exact', 66: 'exact', 67: 'exact', 68: 'exact', 69: 'exact', 70: 'exact',
+        71: 'exact', 72: 'exact', 73: 'exact', 74: 'exact', 75: 'exact', 76: 'exact', 77: 'exact', 78: 'exact', 79: 'exact', 80: 'exact',
+        81: 'exact', 82: 'exact', 83: 'exact', 84: 'exact', 85: 'exact', 86: 'exact', 87: 'exact', 88: 'exact', 89: 'exact', 90: 'exact',
+        91: 'exact', 92: 'exact', 93: 'exact', 94: 'transfer', 95: 'exact', 96: 'exact', 97: 'exact', 98: 'transfer', 99: 'transfer',
+        100: 'transfer', 101: 'transfer', 102: 'transfer', 103: 'exact', 104: 'transfer', 105: 'transfer', 106: 'transfer',
+        107: 'transfer', 108: 'transfer', 109: 'exact', 110: 'transfer', 111: 'transfer', 112: 'transfer', 113: 'transfer',
+        114: 'transfer', 115: 'transfer', 116: 'transfer', 117: 'transfer', 118: 'transfer', 119: 'transfer', 120: 'transfer',
+        121: 'exact', 122: 'exact', 123: 'transfer', 124: 'exact', 125: 'transfer', 126: 'transfer', 127: 'exact', 128: 'transfer',
+        129: 'exact', 130: 'exact', 131: 'diff', 132: 'diff', 133: 'exact', 134: 'exact', 135: 'transfer', 136: 'exact', 137: 'exact',
+        138: 'exact', 139: 'exact', 140: 'exact', 141: 'exact', 142: 'exact', 143: 'exact', 144: 'exact', 145: 'exact', 146: 'exact',
+        147: 'exact', 148: 'exact', 149: 'exact', 150: 'exact', 151: 'exact', 152: 'exact', 153: 'exact', 154: 'exact', 155: 'exact',
+        156: 'exact', 157: 'exact', 158: 'exact', 159: 'exact', 160: 'exact', 161: 'exact', 162: 'exact', 163: 'exact', 164: 'exact',
+        165: 'exact', 166: 'exact', 167: 'exact', 168: 'exact', 169: 'exact', 170: 'transfer', 171: 'exact', 172: 'exact', 173: 'exact',
+        174: 'exact', 175: 'exact', 176: 'exact', 177: 'exact', 178: 'exact', 179: 'exact', 180: 'exact', 181: 'exact', 182: 'exact',
+        183: 'exact', 184: 'exact', 185: 'exact', 186: 'exact', 187: 'exact', 188: 'transfer', 189: 'transfer', 190: 'transfer',
+        191: 'exact', 192: 'transfer', 193: 'exact', 194: 'exact', 195: 'exact', 196: 'transfer', 197: 'exact', 198: 'exact',
+        199: 'diff', 200: 'exact', 201: 'transfer', 202: 'transfer', 203: 'transfer', 204: 'exact', 205: 'exact', 206: 'exact',
+        207: 'exact', 208: 'exact', 209: 'transfer', 210: 'exact'
+      };
+
+      const SALARY_MIN = {
+        1: 25, 2: 18, 3: 18, 4: 14, 5: 15, 6: 14, 7: 18, 8: 15, 9: 20, 10: 14,
+        11: 8, 12: 7, 13: 9, 14: 8, 15: 8, 16: 9, 17: 10, 18: 10, 19: 8, 20: 8,
+        21: 8, 22: 7, 23: 8, 24: 9, 25: 8, 26: 8, 27: 9, 28: 10, 29: 8, 30: 8,
+        31: 8, 32: 8, 33: 8, 34: 10, 35: 10, 36: 8, 37: 8, 38: 9, 39: 9, 40: 8,
+        41: 8, 42: 8, 43: 8, 44: 8, 45: 8, 46: 8, 47: 8, 48: 8, 49: 8, 50: 8,
+        51: 8, 52: 8, 53: 8, 54: 8, 55: 8, 56: 8, 57: 8, 58: 8, 59: 8, 60: 8,
+        61: 9, 62: 8, 63: 9, 64: 9, 65: 9, 66: 8, 67: 9, 68: 10, 69: 8, 70: 9,
+        71: 7, 72: 10, 73: 9, 74: 9, 75: 9, 76: 9, 77: 9, 78: 8, 79: 7, 80: 7,
+        81: 8, 82: 10, 83: 8, 84: 9, 85: 9, 86: 8, 87: 8, 88: 8, 89: 9, 90: 10,
+        91: 9, 92: 8, 93: 8, 94: 8, 95: 8, 96: 7, 97: 7, 98: 7, 99: 7, 100: 7,
+        101: 6, 102: 7, 103: 6, 104: 8, 105: 9, 106: 9, 107: 10, 108: 8, 109: 9, 110: 12,
+        111: 14, 112: 12, 113: 8, 114: 7, 115: 7, 116: 7, 117: 6, 118: 6, 119: 6, 120: 6,
+        121: 12, 122: 12, 123: 14, 124: 18, 125: 18, 126: 14, 127: 18, 128: 15, 129: 12, 130: 14,
+        131: 9, 132: 10, 133: 8, 134: 10, 135: 7, 136: 8, 137: 8, 138: 8, 139: 7, 140: 8,
+        141: 8, 142: 8, 143: 8, 144: 8, 145: 8, 146: 8, 147: 8, 148: 7, 149: 8, 150: 7,
+        151: 7, 152: 7, 153: 7, 154: 6, 155: 8, 156: 8, 157: 8, 158: 9, 159: 9, 160: 9,
+        161: 9, 162: 9, 163: 9, 164: 8, 165: 10, 166: 8, 167: 7, 168: 10, 169: 7, 170: 7,
+        171: 7, 172: 8, 173: 8, 174: 8, 175: 9, 176: 8, 177: 8, 178: 8, 179: 8, 180: 7,
+        181: 8, 182: 9, 183: 8, 184: 8, 185: 7, 186: 9, 187: 7, 188: 6, 189: 6, 190: 6,
+        191: 8, 192: 8, 193: 9, 194: 12, 195: 12, 196: 14, 197: 9, 198: 15, 199: 25, 200: 20,
+        201: 15, 202: 10, 203: 14, 204: 8, 205: 6, 206: 10, 207: 9, 208: 10, 209: 8, 210: 8
+      };
+
+      // Persistence
+      let statuses = {}, notes = {};
+      try { statuses = JSON.parse(localStorage.getItem('bst') || '{}'); } catch (e) { }
+      try { notes = JSON.parse(localStorage.getItem('bnt') || '{}'); } catch (e) { }
+      function saveS() { try { localStorage.setItem('bst', JSON.stringify(statuses)); } catch (e) { } }
+      function saveN() { try { localStorage.setItem('bnt', JSON.stringify(notes)); } catch (e) { } }
+
+      function updateTrackerBar() {
+        const c = { saved: 0, applied: 0, interview: 0, offer: 0, rejected: 0 };
+        Object.values(statuses).forEach(s => { if (c[s] !== undefined) c[s]++; });
+        ['saved', 'applied', 'interview', 'offer', 'rejected'].forEach(k => {
+          const el = document.getElementById('tb-' + k);
+          if (el) el.textContent = c[k];
+        });
+      }
+
+      function setStatus(n, st, e) {
+        e.stopPropagation();
+        statuses[n] = statuses[n] === st ? null : st;
+        if (!statuses[n]) delete statuses[n];
+        saveS();
+        const card = document.getElementById('card' + n);
+        if (card) {
+          card.className = card.className.replace(/\bst-\w+/g, '').trim();
+          if (statuses[n]) card.classList.add('st-' + statuses[n]);
+          card.querySelectorAll('.sbtn').forEach(b => {
+            b.className = 'sbtn';
+            if (b.dataset.s === statuses[n]) b.classList.add('s-' + statuses[n]);
+          });
+        }
+        updateTrackerBar();
+      }
+
+      function saveNote(n, e) {
+        notes[n] = e.target.value;
+        saveN();
+      }
+
+      function getStackBadge(n) {
+        const s = STACK_MAP[n] || 'transfer';
+        if (s === 'exact') return '<span class="badge badge-exact">✓ Exact stack</span>';
+        if (s === 'transfer') return '<span class="badge badge-transfer">~ Transferable</span>';
+        return '<span class="badge badge-stackdiff">≠ Different stack</span>';
+      }
+
+      function getDiffBadge(d) {
+        if (d === 'easy') return '<span class="badge badge-easy">Easy</span>';
+        if (d === 'medium') return '<span class="badge badge-med">Medium</span>';
+        return '<span class="badge badge-hard">Hard</span>';
+      }
+      function getTypeBadge(t) {
+        if (t === 'intern') return '<span class="badge badge-intern">Intern</span>';
+        if (t === 'fte') return '<span class="badge badge-fte">FTE</span>';
+        return '<span class="badge badge-both">Intern + FTE</span>';
+      }
+      function getRefBadge(r) {
+        if (r === 'yes') return '<span class="badge badge-ref-yes">Referral critical</span>';
+        if (r === 'opt') return '<span class="badge badge-ref-opt">Referral helps</span>';
+        return '<span class="badge badge-ref-no">Direct apply</span>';
+      }
+      function getCatLabel(cat) {
+        const map = { 'high-product': 'High-level Product', 'mid-tier': 'Mid-tier Product', 'startup': 'Startup', 'mid-startup': 'Mid-Startup', 'fintech': 'Fintech', 'bfsi-gcc': 'BFSI/GCC', 'saas-product': 'SaaS Product', 'mnc-service': 'MNC/Service', 'mass-hiring': 'Mass Hiring' };
+        return map[cat] || cat;
+      }
+
+      let activeCat = 'all';
+
+      function renderGrid(list) {
+        const grid = document.getElementById('grid');
+        if (!list.length) {
+          grid.innerHTML = '<div class="no-results">No companies match your filters</div>';
+          document.getElementById('countBadge').textContent = '0 shown';
+          return;
+        }
+        grid.innerHTML = list.map(c => {
+          const st = statuses[c.n] || '';
+          const nt = notes[c.n] || '';
+          return `
+    <div class="card${st ? ' st-' + st : ''}" id="card${c.n}" data-cat="${c.cat}" data-diff="${c.diff}" data-type="${c.type}" data-ref="${c.ref}" onclick="toggleCard(${c.n})">
+      <div class="card-top">
+        <span class="card-num">#${c.n}</span>
+        <div class="card-main">
+          <div class="card-name">${c.name}</div>
+          <div class="card-role">${c.role}</div>
+        </div>
+        <div class="card-right">
+          <span class="salary-tag">${c.pay.split('(')[0].trim()}</span>
+          <div class="cat-dot" style="background:${CAT_COLORS[c.cat] || '#888'}" title="${getCatLabel(c.cat)}"></div>
+        </div>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="badges">
+        <span class="badge" style="background:${CAT_COLORS[c.cat]}18;color:${CAT_COLORS[c.cat]};border-color:${CAT_COLORS[c.cat]}30;font-size:10px;padding:2px 8px;border-radius:999px;">${getCatLabel(c.cat)}</span>
+        ${getDiffBadge(c.diff)}
+        ${getTypeBadge(c.type)}
+        ${getRefBadge(c.ref)}
+        ${getStackBadge(c.n)}
+      </div>
+      <div class="status-row" onclick="event.stopPropagation()">
+        <span class="slabel">Track:</span>
+        <button class="sbtn${st === 'saved' ? ' s-saved' : ''}"     data-s="saved"     onclick="setStatus(${c.n},'saved',event)">💛 Save</button>
+        <button class="sbtn${st === 'applied' ? ' s-applied' : ''}" data-s="applied"   onclick="setStatus(${c.n},'applied',event)">📤 Applied</button>
+        <button class="sbtn${st === 'interview' ? ' s-interview' : ''}" data-s="interview" onclick="setStatus(${c.n},'interview',event)">🎯 Interview</button>
+        <button class="sbtn${st === 'offer' ? ' s-offer' : ''}"     data-s="offer"     onclick="setStatus(${c.n},'offer',event)">🎉 Offer</button>
+        <button class="sbtn${st === 'rejected' ? ' s-rejected' : ''}" data-s="rejected" onclick="setStatus(${c.n},'rejected',event)">✕ Reject</button>
+      </div>
+      <div class="card-expand" id="exp${c.n}" onclick="event.stopPropagation()">
+        <div class="expand-grid">
+          <div class="expand-item"><div class="el">Role</div><div class="ev">${c.role}</div></div>
+          <div class="expand-item"><div class="el">Salary</div><div class="ev">${c.pay}</div></div>
+          <div class="expand-item"><div class="el">Hiring type</div><div class="ev">${c.type === 'both' ? 'Intern & FTE' : c.type.toUpperCase()}</div></div>
+          <div class="expand-item"><div class="el">Referral</div><div class="ev">${c.ref === 'yes' ? 'Critical' : c.ref === 'opt' ? 'Helps a lot' : 'Not needed'}</div></div>
+          <div class="expand-item" style="grid-column:1/-1"><div class="el">Stack relevance</div><div class="ev">${c.stack}</div></div>
+        </div>
+        <div class="tips"><div class="tip-label">Your strategy</div><p>${c.tip}</p></div>
+        <div class="notes-wrap">
+          <div class="notes-lbl">Your notes (saved locally)</div>
+          <textarea placeholder="e.g. Applied 20 Apr · Referral from X · Interview on 5 May..." onchange="saveNote(${c.n},event)" onclick="event.stopPropagation()">${nt}</textarea>
+        </div>
+        <a class="card-link" href="${c.url}" target="_blank" onclick="event.stopPropagation()">Career page ↗</a>
+      </div>
+    </div>`;
+        }).join('');
+        document.getElementById('countBadge').textContent = list.length + ' shown';
+      }
+
+      function applyFilters() {
+        const q = document.getElementById('searchInput').value.toLowerCase();
+        const diff = document.getElementById('diffFilter').value;
+        const type = document.getElementById('typeFilter').value;
+        const ref = document.getElementById('refFilter').value;
+        const sort = document.getElementById('sortFilter').value;
+        const stF = document.getElementById('statusFilter').value;
+
+        let list = companies.filter(c => {
+          if (activeCat !== 'all' && c.cat !== activeCat) return false;
+          if (diff !== 'all' && c.diff !== diff) return false;
+          if (type !== 'all' && c.type !== type) return false;
+          if (ref !== 'all' && c.ref !== ref) return false;
+          if (stF !== 'all' && statuses[c.n] !== stF) return false;
+          if (q && !c.name.toLowerCase().includes(q) && !c.role.toLowerCase().includes(q) && !c.stack.toLowerCase().includes(q) && !c.tip.toLowerCase().includes(q)) return false;
+          return true;
+        });
+
+        if (sort === 'salary-high') list.sort((a, b) => (SALARY_MIN[b.n] || 0) - (SALARY_MIN[a.n] || 0));
+        else if (sort === 'salary-low') list.sort((a, b) => (SALARY_MIN[a.n] || 0) - (SALARY_MIN[b.n] || 0));
+        else if (sort === 'easiest') list.sort((a, b) => ({ 'easy': 0, 'medium': 1, 'hard': 2 }[a.diff] || 0) - ({ 'easy': 0, 'medium': 1, 'hard': 2 }[b.diff] || 0));
+        else if (sort === 'status') list.sort((a, b) => {
+          const o = { offer: 0, interview: 1, applied: 2, saved: 3, rejected: 4, null: 5 };
+          return (o[statuses[a.n]] ?? 5) - (o[statuses[b.n]] ?? 5);
+        });
+
+        renderGrid(list);
+      }
+
+      function setCat(cat, btn) {
+        activeCat = cat;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      }
+
+      function toggleCard(n) {
+        const card = document.getElementById('card' + n);
+        const exp = document.getElementById('exp' + n);
+        const isOpen = card.classList.contains('open');
+        document.querySelectorAll('.card.open').forEach(c => {
+          c.classList.remove('open');
+          const e = document.getElementById('exp' + c.id.replace('card', ''));
+          if (e) e.style.display = 'none';
+        });
+        if (!isOpen) { card.classList.add('open'); exp.style.display = 'block'; }
+      }
+
+      // Keyboard shortcut: press / to focus search
+      document.addEventListener('keydown', e => {
+        if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+          e.preventDefault();
+          document.getElementById('searchInput').focus();
+        }
+      });
+
+      const companies = [
+        // ===== HIGH-LEVEL PRODUCT =====
+        { n: 1, name: "Google", cat: "high-product", role: "SWE / STEP Intern", salary: "Not applicable", pay: "25–50 LPA (STEP intern ₹1.5L/mo)", diff: "hard", type: "intern", ref: "opt", stack: "Node.js (less common), system design", tip: "Near impossible from tier-3 without referral. However, STEP internship is designed for underrepresented — worth one shot. Focus on LC hard, system design. Get a referral via LinkedIn targeting Googlers from Andhra/Telangana.", url: "https://careers.google.com" },
+        { n: 2, name: "Microsoft", cat: "high-product", role: "SWE Intern / FTE", salary: "18–30 LPA", pay: "18–30 LPA fresher", diff: "hard", type: "both", ref: "yes", stack: "Node.js used in Azure/Teams, strong DSA required", tip: "Hard from tier-3. Referral from LinkedIn is critical. Microsoft hires via off-campus too — apply to Azure/Teams backend roles. Your LLM project is a conversation starter.", url: "https://careers.microsoft.com" },
+        { n: 3, name: "Amazon", cat: "high-product", role: "SDE Intern / SDE-1", salary: "18–26 LPA", pay: "18–26 LPA", diff: "hard", type: "both", ref: "opt", stack: "Node.js, AWS (you know this), REST APIs", tip: "Hard but not impossible. 14-LP behaviour + 2 DSA rounds. Your AWS S3 + Node.js experience helps. Apply aggressively — Amazon has high volume hiring. Use LinkedIn referral.", url: "https://amazon.jobs" },
+        { n: 4, name: "Flipkart", cat: "high-product", role: "SDE Intern / SDE-1", salary: "14–20 LPA", pay: "14–20 LPA", diff: "hard", type: "both", ref: "opt", stack: "Node.js/Java, MongoDB, system design", tip: "Hard. Internal referral helps bypass resume filter. Focus on medium-hard DSA + low-level design. Your deployed AI project adds weight.", url: "https://careers.flipkart.com" },
+        { n: 5, name: "Adobe (India)", cat: "high-product", role: "MTS Intern / MTS-1", salary: "15–22 LPA", pay: "15–22 LPA", diff: "hard", type: "both", ref: "yes", stack: "Node.js, REST APIs, backend systems", tip: "Hard. Adobe India (Noida/Bangalore) has intern → FTE pipeline. Referral from LinkedIn is almost necessary from tier-3. Target Adobe's Marketo/Experience Cloud teams.", url: "https://careers.adobe.com" },
+        { n: 6, name: "Salesforce (Hyderabad)", cat: "high-product", role: "Associate MTS", salary: "14–18 LPA", pay: "14–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, Apex (learn basics)", tip: "Hard but Salesforce Hyderabad is very active. AMTS role opened off-campus via LinkedIn in 2025. Strong LLM project + RBAC can actually get you a call.", url: "https://careers.salesforce.com" },
+        { n: 7, name: "Atlassian (India)", cat: "high-product", role: "Graduate SWE", salary: "18–25 LPA", pay: "18–25 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, PostgreSQL", tip: "Hard. But Atlassian's Bangalore team is hiring aggressively. Apply off-campus + referral. Your PostgreSQL + JWT + full-stack build is directly relevant.", url: "https://www.atlassian.com/company/careers" },
+        { n: 8, name: "Uber (India)", cat: "high-product", role: "SWE Intern / SWE-1", salary: "15–22 LPA", pay: "15–22 LPA", diff: "hard", type: "both", ref: "yes", stack: "Node.js, PostgreSQL, distributed systems", tip: "Hard. Uber Bangalore hires backend engineers. Strong system design + DSA needed. Referral from LinkedIn is your best path in.", url: "https://www.uber.com/us/en/careers/" },
+        { n: 9, name: "LinkedIn", cat: "high-product", role: "SWE Intern", salary: "20–28 LPA", pay: "20–28 LPA", diff: "hard", type: "intern", ref: "yes", stack: "Node.js, REST APIs, distributed systems", tip: "Very hard. Apply anyway — one shot. Your LinkedIn profile itself is your first impression. Make it strong.", url: "https://careers.linkedin.com" },
+        { n: 10, name: "Intuit (India)", cat: "high-product", role: "SWE-1", salary: "14–20 LPA", pay: "14–20 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, PostgreSQL, REST APIs", tip: "Hard. Intuit Bangalore opens fresher roles. They value product thinking. Your Darwinbox internship + RBAC system is exactly what they want — but referral is needed.", url: "https://careers.intuit.com" },
+
+        // ===== MID-TIER PRODUCT =====
+        { n: 11, name: "Freshworks", cat: "mid-tier", role: "Associate SWE / Intern", salary: "8–12 LPA", pay: "8–12 LPA", diff: "easy", type: "both", ref: "no", stack: "Node.js, MongoDB, REST APIs — exact match", tip: "Your stack matches Freshworks perfectly. Apply directly via career page. Their fresher process: online test + 2 tech interviews. 600 DSA problems makes the test easy.", url: "https://www.freshworks.com/company/careers/" },
+        { n: 12, name: "Zoho", cat: "mid-tier", role: "Member Technical Staff", salary: "7–9 LPA", pay: "7–9 LPA (6.5 base + perks)", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Zoho runs their own coding test open to all colleges. Score high on their written test. No bias against tier-3. Apply directly at zoho.com/careers.", url: "https://careers.zohocorp.com" },
+        { n: 13, name: "CleverTap", cat: "mid-tier", role: "SWE (Backend)", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, analytics — your exact project", tip: "Your AI recruitment analytics dashboard aligns with their product. LinkedIn cold apply + referral from Darwinbox colleagues if any moved here.", url: "https://clevertap.com/careers/" },
+        { n: 14, name: "MoEngage", cat: "mid-tier", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Direct apply. Their engineering blog shows Node.js usage throughout. Medium DSA + backend API design round.", url: "https://www.moengage.com/careers/" },
+        { n: 15, name: "WebEngage", cat: "mid-tier", role: "Backend Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Apply directly. Their stack matches yours almost 1:1. 2–3 rounds: DSA + system design (basic) + HR.", url: "https://webengage.com/careers/" },
+        { n: 16, name: "BrowserStack", cat: "mid-tier", role: "SWE (Backend)", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Values deployed projects strongly. Share your Moodify and recruitment platform GitHub links. Medium DSA, strong system design.", url: "https://www.browserstack.com/careers" },
+        { n: 17, name: "Postman", cat: "mid-tier", role: "Software Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs — they BUILD the REST tool", tip: "Your REST API experience is directly on-brand. Apply off-campus. Postman is in Bangalore. Medium–hard rounds but your projects speak loudly.", url: "https://www.postman.com/company/careers/" },
+        { n: 18, name: "Sprinklr (India)", cat: "mid-tier", role: "Software Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Sprinklr Gurgaon/Bangalore. Strong backend culture. Your LLM integration + RBAC system is rare for freshers — highlight it.", url: "https://www.sprinklr.com/company/careers/" },
+        { n: 19, name: "Whatfix", cat: "mid-tier", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Bangalore SaaS. Direct apply works. 2 rounds: DSA + project walkthrough. Your Darwinbox experience is a strong differentiator.", url: "https://whatfix.com/careers/" },
+        { n: 20, name: "Leadsquared", cat: "mid-tier", role: "SWE Backend", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Direct apply via Naukri/LinkedIn. Bangalore HQ. Their CRM product uses your exact stack. Show your leaderboard + analytics dashboard from the recruitment platform.", url: "https://www.leadsquared.com/careers/" },
+        { n: 21, name: "Capillary Technologies", cat: "mid-tier", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "SaaS loyalty platform. Node.js/PostgreSQL backend. Direct apply. Show your Neon PostgreSQL cloud deployment — they'll love it.", url: "https://www.capillarytech.com/careers/" },
+        { n: 22, name: "Netcore Cloud", cat: "mid-tier", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "MarTech SaaS. Direct apply via Naukri. Fast hiring process. Good for early interview practice.", url: "https://netcorecloud.com/careers/" },
+        { n: 23, name: "Zenoti", cat: "mid-tier", role: "Software Engineer I", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Hyderabad HQ — local advantage for you! Vertical SaaS for wellness businesses. Direct apply.", url: "https://www.zenoti.com/careers" },
+        { n: 24, name: "Icertis (India)", cat: "mid-tier", role: "SDE", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "Contract SaaS — Pune/Hyderabad. Medium difficulty. Your RBAC + contract-adjacent system at Darwinbox is highly relevant.", url: "https://www.icertis.com/company/careers/" },
+        { n: 25, name: "Nagarro", cat: "mid-tier", role: "Staff Engineer Fresher", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Digital engineering company. High hiring volume. Apply directly. Good stepping stone with salary above service companies.", url: "https://www.nagarro.com/en/careers" },
+
+        // ===== SAAS PRODUCT =====
+        { n: 26, name: "Keka HR", cat: "saas-product", role: "SWE Backend", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs — HR-tech match", tip: "Hyderabad HQ — local edge. Same domain as Darwinbox. You can speak their product language. Direct apply via keka.com/careers.", url: "https://www.keka.com/careers" },
+        { n: 27, name: "Multiplier", cat: "saas-product", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, RBAC — your exact skills", tip: "Global HR SaaS. Your RBAC implementation is almost a perfect portfolio match. Direct LinkedIn apply.", url: "https://www.usemultiplier.com/careers" },
+        { n: 28, name: "Rippling (India)", cat: "saas-product", role: "Software Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Premium HR SaaS. Medium difficulty. Referral helps. Your LLM + RBAC combination is exactly their engineering persona.", url: "https://www.rippling.com/careers" },
+        { n: 29, name: "GreytHR", cat: "saas-product", role: "Product Engineer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Bangalore-based payroll SaaS. Very friendly to non-tier-1 candidates. Direct apply.", url: "https://greythr.com/company/careers/" },
+        { n: 30, name: "HrOne", cat: "saas-product", role: "SWE", salary: "6–9 LPA", pay: "6–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "HR SaaS — Gurgaon. Direct Naukri apply. Easy process. Good for backup offer.", url: "https://hrone.cloud/careers/" },
+        { n: 31, name: "Darwinbox (FTE)", cat: "saas-product", role: "Product Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "easy", type: "fte", ref: "no", stack: "Your exact internship company", tip: "HIGHEST PRIORITY. If PPO not yet offered, email your manager now. You know the codebase. Internal conversion is far easier than any other application.", url: "https://darwinbox.com/careers" },
+        { n: 32, name: "Eka Software", cat: "saas-product", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Commodity SaaS, Bangalore. Skills-first culture. Direct apply. Your deployment experience (Render/Neon) is a plus.", url: "https://www.ekaplus.com/company/careers/" },
+        { n: 33, name: "Chargebee", cat: "saas-product", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Billing SaaS — Chennai/SF. Your PostgreSQL + JWT auth experience is relevant. Medium interviews. GitHub portfolio matters a lot here.", url: "https://www.chargebee.com/careers/" },
+        { n: 34, name: "Leapwork", cat: "saas-product", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Test automation SaaS. Direct apply. Node.js backend work.", url: "https://www.leapwork.com/company/careers" },
+        { n: 35, name: "Darwinbox (new team ref)", cat: "saas-product", role: "ML/AI Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "yes", stack: "Node.js, LLaMA/Groq API, MongoDB", tip: "Ask your current manager to refer you to the AI/ML engineering team. Your generator–critic LLM pipeline is exactly what Darwinbox is building out.", url: "https://darwinbox.com/careers" },
+        { n: 36, name: "Scaler (InterviewBit)", cat: "saas-product", role: "Backend Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "EdTech platform. 600 DSA problems is their minimum bar — you clear it. Apply directly and walk through your AI recommendation system architecture.", url: "https://www.scaler.com/careers/" },
+        { n: 37, name: "upGrad (tech)", cat: "saas-product", role: "SWE Backend", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "EdTech SaaS. Your AI recommendation system (Moodify-style) is directly relevant to their personalization work.", url: "https://www.upgrad.com/careers/" },
+        { n: 38, name: "IndiaMart (tech)", cat: "saas-product", role: "SDE", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "both", ref: "no", stack: "Node.js, MongoDB, PostgreSQL", tip: "B2B marketplace. Listed company, Noida. High volume hiring, tier-3 friendly. Strong DSA needed for their test.", url: "https://www.indiamart.com/careers/" },
+        { n: 39, name: "NoBroker", cat: "saas-product", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "PropTech unicorn, Bangalore. Your recommendation system experience (Moodify) is relevant to their personalization layer.", url: "https://www.nobroker.in/careers" },
+        { n: 40, name: "Testbook", cat: "saas-product", role: "SWE Backend", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "both", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "EdTech SaaS. Direct apply. Good for getting a quick offer to have leverage.", url: "https://testbook.com/jobs" },
+
+        // ===== STARTUP =====
+        { n: 41, name: "Porter (Logistics)", cat: "startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "High-growth logistics startup. Node.js backend roles. Direct LinkedIn apply. High ownership early on.", url: "https://porter.in/careers" },
+        { n: 42, name: "Jar App", cat: "startup", role: "Backend Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Micro-savings fintech startup. Small team, maximum impact. Your profile is over-qualified in the best way. Direct LinkedIn apply.", url: "https://www.myjar.app/careers" },
+        { n: 43, name: "Jupiter Money", cat: "startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, JWT auth", tip: "Neobank startup. Small strong team. Your JWT auth + PostgreSQL skills match. Direct apply.", url: "https://jupiter.money/careers/" },
+        { n: 44, name: "Slice (neobank)", cat: "startup", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Bangalore neo-bank. Less competitive than Razorpay. Direct apply + LinkedIn.", url: "https://www.sliceit.com/careers" },
+        { n: 45, name: "Finbox", cat: "startup", role: "Backend Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, PostgreSQL", tip: "Credit decisioning API startup. Small team = big responsibility. Your Darwinbox API work is directly relevant.", url: "https://finbox.in/careers/" },
+        { n: 46, name: "Recko", cat: "startup", role: "Backend SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL", tip: "Fintech reconciliation startup. PostgreSQL heavy. Direct apply.", url: "https://recko.io/careers" },
+        { n: 47, name: "Ezetap (Razorpay sub)", cat: "startup", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Payments startup acquired by Razorpay. Less competitive filter. Good entry point to Razorpay ecosystem.", url: "https://razorpay.com/jobs/" },
+        { n: 48, name: "Setu (PhonePe sub)", cat: "startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Banking API infrastructure startup. Pure backend company. Your API design knowledge is highly relevant.", url: "https://setu.co/about/careers" },
+        { n: 49, name: "Decentro", cat: "startup", role: "Backend Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Banking APIs startup. Bangalore. Direct apply. Small team.", url: "https://decentro.tech/careers" },
+        { n: 50, name: "Hyperface", cat: "startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL", tip: "Credit card infrastructure startup. Small team. Direct LinkedIn apply.", url: "https://hyperface.co/careers" },
+        { n: 51, name: "M2P Fintech", cat: "startup", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Card-as-a-service startup, Chennai. Direct apply via LinkedIn.", url: "https://m2pfintech.com/careers/" },
+        { n: 52, name: "Juspay", cat: "startup", role: "Software Developer", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, distributed systems", tip: "Payment orchestration startup. Bangalore. Medium difficulty — functional programming culture. But worth it for the learning.", url: "https://juspay.in/careers" },
+        { n: 53, name: "Khatabook", cat: "startup", role: "Backend Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "B2B fintech for SMEs. Direct apply. Your JWT auth + REST APIs are relevant.", url: "https://khatabook.com/careers/" },
+        { n: 54, name: "OKCredit", cat: "startup", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "SME fintech. Bangalore. Direct apply. Good for backup offer.", url: "https://www.okcredit.in/careers" },
+        { n: 55, name: "Signzy", cat: "startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Digital onboarding SaaS for BFSI. Your Multer + S3 + document handling at Darwinbox is directly relevant!", url: "https://signzy.com/careers/" },
+        { n: 56, name: "Credgenics", cat: "startup", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Debt collection SaaS. Bangalore. Node.js + MongoDB = match.", url: "https://credgenics.com/careers" },
+        { n: 57, name: "Yubi (CredAvenue)", cat: "startup", role: "SWE Backend", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Debt marketplace startup. Chennai. Medium rounds. PostgreSQL + auth experience is relevant.", url: "https://www.go-yubi.com/careers/" },
+        { n: 58, name: "Lendingkart", cat: "startup", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "SME lending fintech. Ahmedabad/Bangalore. Direct apply.", url: "https://www.lendingkart.com/careers/" },
+        { n: 59, name: "CreditMantri", cat: "startup", role: "Backend Engineer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "Credit advisory startup. Chennai. Direct apply. Good backup offer.", url: "https://www.creditmantri.com/careers/" },
+        { n: 60, name: "Healthifyme", cat: "startup", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "HealthTech startup with ML-driven recommendation. Your Moodify recommendation system is highly relevant here.", url: "https://healthifyme.com/careers" },
+
+        // ===== MID STARTUP =====
+        { n: 61, name: "CRED", cat: "mid-startup", role: "Software Engineer", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, PostgreSQL, distributed systems", tip: "Premium startup. Hard from tier-3. But your LLM + RBAC project could get you noticed. Referral from LinkedIn is critical.", url: "https://careers.cred.club/" },
+        { n: 62, name: "Meesho", cat: "mid-startup", role: "SWE Backend", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, MongoDB, REST APIs", tip: "E-commerce unicorn. Hard. Strong DSA + system design needed. Referral helps significantly.", url: "https://meesho.io/careers" },
+        { n: 63, name: "Delhivery", cat: "mid-startup", role: "Software Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Logistics unicorn. Medium rounds. Direct apply + referral optional. Supply chain + API design focus.", url: "https://www.delhivery.com/careers" },
+        { n: 64, name: "Shiprocket", cat: "mid-startup", role: "Software Engineer", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "E-commerce logistics. Direct apply. Node.js + REST APIs = direct match.", url: "https://www.shiprocket.in/careers/" },
+        { n: 65, name: "Licious", cat: "mid-startup", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Q-commerce startup. Direct apply. Backend API roles.", url: "https://licious.in/careers" },
+        { n: 66, name: "Spinny", cat: "mid-startup", role: "SWE Backend", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "AutoTech startup. Direct LinkedIn apply. Low competition, high visibility.", url: "https://www.spinny.com/careers/" },
+        { n: 67, name: "BlackBuck", cat: "mid-startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Trucking logistics unicorn. Bangalore. Medium rounds. Your backend project depth is a differentiator.", url: "https://blackbuck.com/careers.html" },
+        { n: 68, name: "Dunzo", cat: "mid-startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Q-commerce startup. Direct apply. Good learning environment.", url: "https://www.dunzo.com/careers" },
+        { n: 69, name: "Urban Company", cat: "mid-startup", role: "Software Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Home services unicorn. Bangalore. Medium rounds. Direct apply.", url: "https://www.urbancompany.com/careers" },
+        { n: 70, name: "ShareChat", cat: "mid-startup", role: "SWE Backend", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, MongoDB, distributed systems", tip: "Social media unicorn. Hard. Strong system design needed. Referral helps.", url: "https://sharechat.com/careers" },
+        { n: 71, name: "InMobi", cat: "mid-startup", role: "Software Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, MongoDB", tip: "AdTech unicorn. Bangalore. Medium difficulty. Similar to DeltaX but larger scale.", url: "https://www.inmobi.com/company/careers/" },
+        { n: 72, name: "Unacademy (tech)", cat: "mid-startup", role: "SWE Backend", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "EdTech unicorn. Bangalore. Medium rounds. Your recommendation system is relevant.", url: "https://unacademy.com/careers" },
+        { n: 73, name: "Vedantu", cat: "mid-startup", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "EdTech startup. Direct apply. Good for quick offer.", url: "https://careers.vedantu.com/" },
+        { n: 74, name: "Ola (tech team)", cat: "mid-startup", role: "SWE Backend", salary: "10–15 LPA", pay: "10–15 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Ride-hailing unicorn. Medium difficulty. Strong DSA + system design needed.", url: "https://www.olacabs.com/careers" },
+        { n: 75, name: "Nykaa (tech)", cat: "mid-startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "E-commerce unicorn. Direct apply. Your recommendation system (Moodify) is relevant to their personalization team.", url: "https://careers.nykaa.com/" },
+
+        // ===== FINTECH =====
+        { n: 76, name: "Razorpay", cat: "fintech", role: "SDE-1", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Payments leader. Your Node.js + PostgreSQL + JWT is a direct match. Medium difficulty — harder DSA than Freshworks but not Amazon-level. GitHub portfolio critical.", url: "https://razorpay.com/jobs/" },
+        { n: 77, name: "PhonePe", cat: "fintech", role: "SDE-1", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, PostgreSQL, distributed systems", tip: "Hard. Referral from LinkedIn Googlers/PhonePe employees. Strong system design + DSA needed. Worth applying — your LLM project is differentiating.", url: "https://careers.phonepe.com/" },
+        { n: 78, name: "Paytm", cat: "fintech", role: "SWE Backend", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Large fintech. Off-campus hiring active. Medium rounds. Your JWT auth + analytics work is relevant.", url: "https://paytm.com/about-us/careers/" },
+        { n: 79, name: "Cashfree Payments", cat: "fintech", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, Express.js, PostgreSQL — exact match", tip: "Direct apply. Node.js/Express.js is their core stack. One of the best easy wins in fintech for your profile.", url: "https://www.cashfree.com/careers/" },
+        { n: 80, name: "PayU India", cat: "fintech", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Direct apply. Gurugram/Bangalore. Medium online test + 2 tech rounds.", url: "https://payu.in/careers" },
+        { n: 81, name: "Pine Labs", cat: "fintech", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Payments fintech. Noida. Direct apply. Less competitive than Razorpay.", url: "https://www.pinelabs.com/careers" },
+        { n: 82, name: "BillDesk", cat: "fintech", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Legacy payments company but stable. Direct Naukri apply.", url: "https://www.billdesk.com/web/careers" },
+        { n: 83, name: "Innoviti Payments", cat: "fintech", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Bangalore fintech. Direct apply. Good backup option.", url: "https://www.innoviti.com/careers" },
+        { n: 84, name: "Freecharge (Axis Bank sub)", cat: "fintech", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "opt", stack: "Node.js, REST APIs", tip: "Axis Bank's fintech arm. Referral from bank employees helps. Node.js backend work.", url: "https://www.freecharge.in/" },
+        { n: 85, name: "Niyo Solutions", cat: "fintech", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Neobank for salaried workforce. Bangalore. Direct apply. Your PostgreSQL + auth work is a fit.", url: "https://www.goniyo.com/careers" },
+        { n: 86, name: "Groww", cat: "fintech", role: "SDE Backend", salary: "10–15 LPA", pay: "10–15 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "WealthTech unicorn. Medium difficulty. Your analytics dashboard + PostgreSQL experience is directly relevant.", url: "https://groww.in/careers" },
+        { n: 87, name: "Smallcase", cat: "fintech", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, PostgreSQL", tip: "Investment platform. Bangalore. Medium rounds. Your full-stack skills match.", url: "https://smallcase.com/careers" },
+        { n: 88, name: "Zerodha (Rainmatter)", cat: "fintech", role: "Software Developer", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Apply via their blog post jobs — they post on zerodha.com/blog. Unconventional hiring. Cover letter matters more than DSA here.", url: "https://zerodha.com/careers/" },
+        { n: 89, name: "Upstox", cat: "fintech", role: "SWE Backend", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Trading platform. Medium difficulty. Node.js + PostgreSQL = direct match.", url: "https://upstox.com/open-positions/" },
+        { n: 90, name: "Fampay", cat: "fintech", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Neobank for teens. Small team. Direct LinkedIn apply. High ownership.", url: "https://fampay.in/careers/" },
+        { n: 91, name: "BharatPe", cat: "fintech", role: "SWE", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "SME payments unicorn. Medium difficulty. Direct apply.", url: "https://careers.bharatpe.com/" },
+        { n: 92, name: "Open Financial", cat: "fintech", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Neobank for SMEs. Bangalore. Direct apply. Strong backend culture.", url: "https://open.money/careers" },
+        { n: 93, name: "Perfios", cat: "fintech", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "BFSI analytics SaaS. Bangalore. Your analytics dashboard + PostgreSQL from Moodify is directly relevant.", url: "https://www.perfios.com/careers" },
+        { n: 94, name: "Fisdom", cat: "fintech", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "WealthTech startup. Bangalore. Direct apply.", url: "https://www.fisdom.com/careers/" },
+        { n: 95, name: "Scripbox", cat: "fintech", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL", tip: "Mutual fund investment platform. Bangalore. Direct apply.", url: "https://scripbox.com/about/careers/" },
+
+        // ===== BFSI / GCC =====
+        { n: 96, name: "HSBC GCC (Hyderabad)", cat: "bfsi-gcc", role: "Associate SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, PostgreSQL", tip: "Hyderabad — local advantage! HSBC GCC is tier-3 friendly. 9.85 CGPA clears any filter. Apply via Naukri + LinkedIn.", url: "https://www.hsbc.com/careers" },
+        { n: 97, name: "Standard Chartered GCC", cat: "bfsi-gcc", role: "Associate Technology Analyst", salary: "9–12 LPA", pay: "9–12 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Bangalore/Chennai. CGPA filter + tech rounds. Your 9.85 CGPA is a door opener. Direct apply via Naukri.", url: "https://www.sc.com/en/careers/" },
+        { n: 98, name: "Deutsche Bank (India tech)", cat: "bfsi-gcc", role: "Technology Associate", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Pune/Bangalore tech hubs. CGPA + tech rounds. Medium difficulty. Referral helps.", url: "https://careers.db.com/india" },
+        { n: 99, name: "Barclays India", cat: "bfsi-gcc", role: "Technology Analyst", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Pune/Noida. High-volume hiring. Your CGPA 9.85 clears their bar. Direct Naukri apply.", url: "https://home.barclays/careers/" },
+        { n: 100, name: "Citi India (Pune)", cat: "bfsi-gcc", role: "Applications Dev Analyst", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "Large GCC. Medium rounds. CGPA checked — yours is strong. Referral from LinkedIn Citi employees helps.", url: "https://jobs.citi.com" },
+        { n: 101, name: "JP Morgan Chase (India)", cat: "bfsi-gcc", role: "SWE Analyst", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, PostgreSQL, REST APIs", tip: "Hard but achievable with referral. JPMC Mumbai/Bangalore hires backend engineers. Strong DSA + system design + referral needed.", url: "https://careers.jpmorgan.com" },
+        { n: 102, name: "Goldman Sachs (India)", cat: "bfsi-gcc", role: "Analyst (Engineering)", salary: "14–20 LPA", pay: "14–20 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, distributed systems", tip: "Very hard from tier-3. But Goldman Bangalore hires via referral. Strong coding round + market structure knowledge helps.", url: "https://www.goldmansachs.com/careers/" },
+        { n: 103, name: "Morgan Stanley (India)", cat: "bfsi-gcc", role: "Technology Analyst", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, PostgreSQL, REST APIs", tip: "Hard. Mumbai GCC. Referral critical. Target their Technology Analyst program.", url: "https://www.morganstanley.com/people/careers" },
+        { n: 104, name: "Wells Fargo India", cat: "bfsi-gcc", role: "Associate SWE", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, MongoDB", tip: "Hyderabad/Bangalore GCC. Medium difficulty. More accessible than GS/JPM.", url: "https://www.wellsfargojobs.com/en/" },
+        { n: 105, name: "BNY Mellon (India)", cat: "bfsi-gcc", role: "Associate SWE", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "Pune GCC. Medium rounds. BFSI domain knowledge helps — your RBAC + audit system at Darwinbox is relevant.", url: "https://bnymellon.com/careers" },
+        { n: 106, name: "State Street (India)", cat: "bfsi-gcc", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Bangalore GCC. Easy to medium rounds. Direct Naukri apply.", url: "https://www.statestreet.com/global/en/about/careers.html" },
+        { n: 107, name: "Fidelity Investments (India)", cat: "bfsi-gcc", role: "SWE Associate", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, PostgreSQL, REST APIs", tip: "Bangalore GCC. Medium rounds. Referral helps. Your PostgreSQL + auth skills are relevant.", url: "https://jobs.fidelity.com/" },
+        { n: 108, name: "American Express (India)", cat: "bfsi-gcc", role: "Engineer", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "Gurgaon/Bangalore. AMEX hires backend engineers. Medium difficulty. Apply off-campus.", url: "https://jobs.americanexpress.com/" },
+        { n: 109, name: "Lumen Technologies", cat: "bfsi-gcc", role: "Software Engineer I", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Direct apply. Networking/Cloud company. Backend API work. Easy rounds.", url: "https://jobs.lumen.com" },
+        { n: 110, name: "Synchrony (India)", cat: "bfsi-gcc", role: "SWE Associate", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Hyderabad GCC — local advantage! Consumer finance company. Direct apply via Naukri.", url: "https://www.synchronycareers.com/" },
+
+        // ===== MNC / SERVICE =====
+        { n: 111, name: "Thoughtworks India", cat: "mnc-service", role: "Application Developer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, REST APIs, TDD", tip: "Values code quality + TDD. Your unit tests in Moodify project is a perfect talking point. Apply off-campus — test + pair-programming interview.", url: "https://www.thoughtworks.com/en-in/careers" },
+        { n: 112, name: "Mphasis", cat: "mnc-service", role: "SWE (Cloud/Backend)", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Direct apply. Has cloud/backend tracks separate from regular service roles. Better pay than TCS/Infosys.", url: "https://careers.mphasis.com" },
+        { n: 113, name: "LTIMindtree", cat: "mnc-service", role: "Engineer Trainee", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "both", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Digital track within LTIMindtree has better work. Campus + off-campus. Direct Naukri apply.", url: "https://www.ltimindtree.com/careers/" },
+        { n: 114, name: "Hexaware", cat: "mnc-service", role: "Graduate Engineer Trainee", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Regular off-campus drives. BFSI + digital tracks. Less crowded than TCS.", url: "https://hexaware.com/careers/" },
+        { n: 115, name: "Persistent Systems", cat: "mnc-service", role: "Software Engineer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "both", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Pune-based. High volume. Digital + product engineering tracks. Direct Naukri apply.", url: "https://www.persistent.com/careers/" },
+        { n: 116, name: "Mphasis NextLabs", cat: "mnc-service", role: "Associate Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Mphasis's innovation track. Better than regular Mphasis roles. Node.js + AI experience preferred.", url: "https://careers.mphasis.com" },
+        { n: 117, name: "Capgemini", cat: "mnc-service", role: "Associate Software Engineer", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "High volume. Apply for their CTSS/ADM tracks. Include InfyTQ/AMCAT if needed as backup.", url: "https://www.capgemini.com/in-en/careers/" },
+        { n: 118, name: "DXC Technology", cat: "mnc-service", role: "Associate Professional", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Off-campus drives. Direct Naukri apply. Good backup offer.", url: "https://careers.dxc.com/" },
+        { n: 119, name: "Cognizant", cat: "mnc-service", role: "Programmer Analyst Trainee", salary: "6.5–8 LPA", pay: "6.5–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Large volume hiring. Cognizant has a Digital track (higher pay). Apply specifically for digital/full-stack roles.", url: "https://careers.cognizant.com/" },
+        { n: 120, name: "Wipro", cat: "mnc-service", role: "Project Engineer", salary: "6.5–8 LPA", pay: "6.5–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Apply for Wipro WILP or elite/turbo tracks which have better roles and slightly higher pay.", url: "https://careers.wipro.com/" },
+        { n: 121, name: "HCL Technologies (AMP)", cat: "mnc-service", role: "Graduate Trainee", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "HCL's AMP program has Polaris track at ₹10 LPA for top performers. Worth applying just for that track.", url: "https://www.hcltech.com/careers/campus-hiring" },
+        { n: 122, name: "Tech Mahindra", cat: "mnc-service", role: "Software Engineer", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Backup option. Apply for their Innovation Labs track.", url: "https://www.techmahindra.com/en-in/careers/" },
+        { n: 123, name: "Infosys", cat: "mass-hiring", role: "Systems Engineer", salary: "6.5–8 LPA", pay: "6.5–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Only apply for InfyTQ or DSE/SP tracks (₹8–9 LPA). Avoid the regular SE role which is service work.", url: "https://www.infosys.com/careers/" },
+        { n: 124, name: "TCS", cat: "mass-hiring", role: "Systems Engineer / Ninja", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Apply ONLY for TCS Ninja/Digital tracks. Regular SE role is underpaid. Ninja/Digital pay ₹7–9 LPA.", url: "https://www.tcs.com/careers" },
+        { n: 125, name: "Accenture", cat: "mass-hiring", role: "ASE / Packaged App Dev", salary: "6.5–8 LPA", pay: "6.5–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Apply for Accenture ASE Digital/Cloud tracks. The 'Advanced Analytics' and 'Cloud Engineering' tracks are relevant to your skills.", url: "https://www.accenture.com/in-en/careers" },
+
+        // ===== MORE SAAS PRODUCT =====
+        { n: 126, name: "Druva", cat: "saas-product", role: "SWE", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, cloud storage", tip: "Data protection SaaS. Your AWS S3 experience from Darwinbox is DIRECTLY relevant. Medium rounds.", url: "https://www.druva.com/company/careers/" },
+        { n: 127, name: "Hasura", cat: "startup", role: "Software Engineer", salary: "10–15 LPA", pay: "10–15 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, GraphQL", tip: "GraphQL/PostgreSQL-focused company. Your PostgreSQL depth from Moodify + Neon is relevant. Open-source friendly culture.", url: "https://hasura.io/careers/" },
+        { n: 128, name: "Conducto (Kovai)", cat: "saas-product", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "B2B SaaS, Coimbatore/Bangalore. Direct apply.", url: "https://www.kovai.co/careers/" },
+        { n: 129, name: "Chargebee (Chennai)", cat: "saas-product", role: "SWE", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, PostgreSQL, REST APIs", tip: "Billing SaaS. Your Neon PostgreSQL + JWT auth from Moodify matches their stack.", url: "https://www.chargebee.com/careers/" },
+        { n: 130, name: "Yellow.ai", cat: "saas-product", role: "SWE Backend", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, LLMs, REST APIs", tip: "Conversational AI SaaS. Your LLaMA pipeline + Groq API experience is a DIRECT match. Highlight your generator-critic architecture.", url: "https://yellow.ai/careers/" },
+        { n: 131, name: "Haptik (JioHaptik)", cat: "saas-product", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, AI/NLP", tip: "Conversational AI platform. Your LLM + chatbot pipeline at Darwinbox is extremely relevant. Direct apply.", url: "https://www.haptik.ai/careers" },
+        { n: 132, name: "Observe.AI", cat: "saas-product", role: "SWE", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, ML integration", tip: "AI-powered contact center SaaS. Your LLM pipeline experience is highly differentiating here.", url: "https://www.observe.ai/company/careers/" },
+        { n: 133, name: "Uniphore", cat: "saas-product", role: "SWE Backend", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, AI/ML APIs", tip: "Conversational AI SaaS. Similar to Yellow.ai. Your LLM experience is rare for freshers.", url: "https://www.uniphore.com/company/careers/" },
+        { n: 134, name: "Rasa (India ops)", cat: "startup", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, REST APIs, NLP", tip: "Open-source conversational AI. Your LLM work makes you a strong candidate.", url: "https://rasa.com/careers/" },
+        { n: 135, name: "Vernacular.ai", cat: "startup", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, AI APIs", tip: "Voice AI startup. Your LLM + audio processing understanding helps.", url: "https://vernacular.ai/careers" },
+
+        // ===== MORE FINTECH / BFSI =====
+        { n: 136, name: "EXL Service", cat: "bfsi-gcc", role: "Analyst / SWE", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Analytics + tech company. Noida/Bangalore. Direct Naukri apply.", url: "https://www.exlservice.com/about/careers" },
+        { n: 137, name: "WNS Holdings", cat: "bfsi-gcc", role: "Associate SWE", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "BPO tech arm. Service work but above 6 LPA. Backup.", url: "https://www.wns.com/careers" },
+        { n: 138, name: "Genpact (Tech)", cat: "bfsi-gcc", role: "Associate SWE", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Tech track at Genpact pays ₹6–8 LPA. Apply specifically for digital/tech engineer roles.", url: "https://www.genpact.com/careers" },
+        { n: 139, name: "Muthoot Finance (tech)", cat: "bfsi-gcc", role: "SWE", salary: "6–9 LPA", pay: "6–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "NBFC with growing tech team. Direct Naukri apply.", url: "https://www.muthootfinance.com/careers" },
+        { n: 140, name: "ICICI Bank (iTrust/Tech)", cat: "bfsi-gcc", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "ICICI's tech division (iWork/iTrust). Bangalore. Medium rounds. Apply via iimjobs/Naukri.", url: "https://www.icicicareers.com/" },
+
+        // ===== GLOBAL/REMOTE STARTUPS =====
+        { n: 141, name: "Gupshup", cat: "saas-product", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, messaging APIs", tip: "Messaging/conversational platform. Mumbai/Bangalore. Your Nodemailer + API work from Darwinbox is relevant.", url: "https://www.gupshup.io/developer/careers" },
+        { n: 142, name: "Route Mobile", cat: "saas-product", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "CPaaS company. Mumbai. Direct apply.", url: "https://www.routemobile.com/careers/" },
+        { n: 143, name: "Tanla Platforms", cat: "saas-product", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Hyderabad CPaaS company — local advantage! Direct apply.", url: "https://www.tanla.com/careers/" },
+        { n: 144, name: "Kaleyra", cat: "saas-product", role: "Backend SWE", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "CPaaS startup. Bangalore. Direct apply.", url: "https://www.kaleyra.com/careers/" },
+        { n: 145, name: "ValueFirst (Twilio India)", cat: "saas-product", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Communications SaaS. Direct Naukri apply.", url: "https://www.valuefirst.ai/careers/" },
+
+        // ===== HRTECH SPECIFIC =====
+        { n: 146, name: "Workday (India)", cat: "high-product", role: "SWE Associate", salary: "14–20 LPA", pay: "14–20 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, HR-tech", tip: "Your Darwinbox HR-tech context is a genuine differentiator here. Hard from tier-3 — referral essential. But worth trying given your HR-tech domain expertise.", url: "https://www.workday.com/en-us/company/careers.html" },
+        { n: 147, name: "SAP India (HR products)", cat: "mnc-service", role: "Associate Developer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, HR-tech", tip: "SAP Labs Bangalore/Hyderabad. Your HR-tech domain knowledge is directly relevant to their SuccessFactors team. Medium difficulty.", url: "https://jobs.sap.com/" },
+        { n: 148, name: "Oracle India (HCM Cloud)", cat: "mnc-service", role: "Associate Applications Dev", salary: "10–14 LPA", pay: "10–14 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, PostgreSQL", tip: "Oracle Hyderabad has a large HCM Cloud engineering team — your HR-tech domain knowledge is rare for freshers.", url: "https://www.oracle.com/in/corporate/careers/" },
+        { n: 149, name: "PeopleStrong", cat: "saas-product", role: "Product Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "HR SaaS, Gurgaon. Direct Darwinbox competitor. Your domain experience is a near-guaranteed shortlist.", url: "https://www.peoplestrong.com/careers/" },
+        { n: 150, name: "Zimyo", cat: "saas-product", role: "SWE", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "HR SaaS startup. Gurgaon. Direct apply. Your HR-tech context from Darwinbox = instant credibility.", url: "https://www.zimyo.com/careers/" },
+        { n: 151, name: "Spine Technologies", cat: "saas-product", role: "Software Developer", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "Payroll SaaS. Mumbai. Direct apply. Good backup option.", url: "https://www.spinehr.com/careers" },
+        { n: 152, name: "SumHR", cat: "startup", role: "Backend Developer", salary: "6–9 LPA", pay: "6–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "HR startup. Direct apply. Same domain as Darwinbox.", url: "https://www.sumhr.com/careers" },
+        { n: 153, name: "Talentpool", cat: "startup", role: "SWE", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "ATS startup. Your AI recruitment platform is basically their product. Use your project as your pitch.", url: "https://talentpoolindia.com/careers" },
+        { n: 154, name: "iSmartRecruit", cat: "startup", role: "Backend Developer", salary: "6–9 LPA", pay: "6–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "ATS startup. Ahmedabad. Your AI recruitment platform is literally their core product.", url: "https://www.ismartrecruit.com/careers" },
+        { n: 155, name: "Oorwin", cat: "saas-product", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Hyderabad HR-tech SaaS — LOCAL ADVANTAGE + domain match. Direct apply.", url: "https://www.oorwin.com/careers" },
+
+        // ===== CLOUD / INFRA / DEVTOOLS =====
+        { n: 156, name: "Cloudflare (India)", cat: "high-product", role: "SWE (Network)", salary: "14–20 LPA", pay: "14–20 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, edge computing, REST APIs", tip: "Hard. But your CSP configuration + security headers knowledge from Moodify shows security-aware thinking. Referral needed.", url: "https://www.cloudflare.com/careers/jobs/" },
+        { n: 157, name: "HashiCorp (India)", cat: "high-product", role: "SWE", salary: "15–22 LPA", pay: "15–22 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, infrastructure", tip: "Hard. Go/Node.js backend. Referral needed. Long shot but worth one application.", url: "https://www.hashicorp.com/careers" },
+        { n: 158, name: "Nutanix (India)", cat: "mnc-service", role: "SWE Intern / SWE", salary: "10–15 LPA", pay: "10–15 LPA", diff: "medium", type: "both", ref: "opt", stack: "Node.js, REST APIs, distributed systems", tip: "Cloud/HCI company. Bangalore. Medium difficulty. Your deployed architecture knowledge helps.", url: "https://www.nutanix.com/company/careers" },
+        { n: 159, name: "Pure Storage (India)", cat: "mnc-service", role: "SWE", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, systems", tip: "Storage SaaS. Hard from tier-3. Referral critical.", url: "https://www.purestorage.com/company/careers.html" },
+        { n: 160, name: "Arista Networks (India)", cat: "mnc-service", role: "SWE", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, networking", tip: "Networking company. Hard. Strong DSA + networking basics needed.", url: "https://www.arista.com/en/careers" },
+
+        // ===== E-COMMERCE / TECH =====
+        { n: 161, name: "Amazon (AWS India)", cat: "high-product", role: "Cloud Support Engineer / SDE Intern", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "both", ref: "opt", stack: "Node.js, AWS S3 (you already use this!), REST APIs", tip: "Your AWS S3 usage in Darwinbox is a direct talking point. Target AWS roles specifically. Hard but your S3 experience is genuine.", url: "https://amazon.jobs" },
+        { n: 162, name: "Flipkart (tech)", cat: "high-product", role: "SDE Intern", salary: "2L/mo (intern)", pay: "14–18 LPA (FTE)", diff: "hard", type: "intern", ref: "yes", stack: "Node.js, MongoDB, system design", tip: "Hard. Target their summer intern program. Referral helps. Strong DSA + OOD needed.", url: "https://careers.flipkart.com" },
+        { n: 163, name: "Myntra (tech)", cat: "high-product", role: "SDE-1", salary: "14–18 LPA", pay: "14–18 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, MongoDB, REST APIs", tip: "Flipkart subsidiary. Hard. Your recommendation system (Moodify) is on-brand for fashion recommendation.", url: "https://careers.myntra.com/" },
+        { n: 164, name: "Swiggy (tech)", cat: "high-product", role: "SDE-1", salary: "12–18 LPA", pay: "12–18 LPA", diff: "hard", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Hard. Strong DSA + system design. Your Node.js + MongoDB + caching layer (Moodify) is directly relevant to their architecture.", url: "https://bytes.swiggy.com/life-at-swiggy/career/" },
+        { n: 165, name: "Zomato (tech)", cat: "high-product", role: "SDE-1", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Hard. Your in-memory caching layer in Moodify is a system design talking point. Strong DSA needed.", url: "https://www.zomato.com/careers" },
+        { n: 166, name: "BigBasket (tech)", cat: "mid-startup", role: "Software Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Tata-owned grocery platform. Medium rounds. Your backend + deployment experience helps.", url: "https://www.bigbasket.com/careers/" },
+        { n: 167, name: "Jio Platforms", cat: "mnc-service", role: "SWE", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Reliance's tech arm. Navi Mumbai. Medium difficulty. Apply via LinkedIn.", url: "https://www.jio.com/en-in/careers" },
+        { n: 168, name: "Myntra Jabong", cat: "mid-startup", role: "SWE", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "Fashion e-commerce. Medium rounds. Direct apply.", url: "https://careers.myntra.com/" },
+        { n: 169, name: "Meesho (tech)", cat: "mid-startup", role: "SWE-1", salary: "12–16 LPA", pay: "12–16 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, MongoDB, distributed systems", tip: "Hard. Referral critical from tier-3. Strong DSA + system design.", url: "https://meesho.io/careers" },
+        { n: 170, name: "AJIO (Reliance Retail)", cat: "mid-startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "Fashion e-commerce from Reliance. Medium rounds. Direct apply.", url: "https://www.ril.com/OurBusinesses/Retail.aspx" },
+
+        // ===== HEALTHCARE / EDTECH / OTHER =====
+        { n: 171, name: "Practo", cat: "mid-startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "HealthTech platform. Bangalore. Medium rounds. Direct apply.", url: "https://practo.com/company/about#careers" },
+        { n: 172, name: "PharmEasy (tech)", cat: "mid-startup", role: "SWE Backend", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "HealthTech unicorn. Direct apply. Medium rounds.", url: "https://www.pharmeasy.in/careers" },
+        { n: 173, name: "1mg (Tata Health)", cat: "mid-startup", role: "Software Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "HealthTech under Tata. Medium rounds. Direct apply.", url: "https://careers.1mg.com/" },
+        { n: 174, name: "Lybrate", cat: "startup", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "HealthTech startup. Direct apply. Backup option.", url: "https://www.lybrate.com/company/careers" },
+        { n: 175, name: "Docquity", cat: "startup", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Healthcare professional network. Bangalore. Direct apply.", url: "https://docquity.com/careers/" },
+        { n: 176, name: "Niramai Health Analytix", cat: "startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, ML APIs", tip: "AI + healthcare startup. Your LLM API integration skills are relevant.", url: "https://www.niramai.com/careers/" },
+        { n: 177, name: "CureFit / Cult.fit", cat: "mid-startup", role: "SWE Backend", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Fitness + HealthTech. Bangalore. Medium rounds. Direct apply.", url: "https://careers.cure.fit/" },
+        { n: 178, name: "Embibe (Reliance EdTech)", cat: "saas-product", role: "Software Engineer", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, AI/ML APIs", tip: "AI-powered EdTech. Your LLM integration for assessment (at Darwinbox) is DIRECTLY relevant to what they build.", url: "https://careers.embibe.com/" },
+        { n: 179, name: "Extramarks", cat: "saas-product", role: "SWE", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "EdTech company. Direct Naukri apply.", url: "https://www.extramarks.com/careers" },
+        { n: 180, name: "LearnApp", cat: "startup", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "Finance EdTech. Direct apply.", url: "https://learnapp.com/careers" },
+
+        // ===== LOGISTICS / SUPPLY CHAIN =====
+        { n: 181, name: "Rivigo (Juspay logistics)", cat: "mid-startup", role: "SWE Backend", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Logistics platform. Medium rounds. Direct apply.", url: "https://www.rivigo.com/careers/" },
+        { n: 182, name: "FarEye", cat: "saas-product", role: "Software Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Logistics SaaS. Noida. Direct apply. Node.js backend work.", url: "https://fareye.com/careers/" },
+        { n: 183, name: "Locus", cat: "startup", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Logistics optimization startup. Bangalore. Medium rounds. Good learning environment.", url: "https://locus.sh/about/careers/" },
+        { n: 184, name: "Pickrr (Shiprocket sub)", cat: "startup", role: "SWE", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "Logistics SaaS. Direct apply.", url: "https://www.shiprocket.in/careers/" },
+        { n: 185, name: "DTDC (tech)", cat: "mnc-service", role: "Software Engineer", salary: "6–8 LPA", pay: "6–8 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "Legacy logistics company with growing tech team. Direct apply. Backup.", url: "https://dtdc.com/about-careers.htm" },
+
+        // ===== BONUS TARGETS =====
+        { n: 186, name: "Atlassian (Jira/Confluence)", cat: "high-product", role: "Graduate SWE", salary: "18–25 LPA", pay: "18–25 LPA", diff: "hard", type: "fte", ref: "yes", stack: "Node.js, REST APIs, PostgreSQL", tip: "Hard. But Atlassian Bangalore is actively hiring. Your deployed project with RBAC + audit logging is very Jira-esque. Referral from LinkedIn is key.", url: "https://www.atlassian.com/company/careers" },
+        { n: 187, name: "Nykaa Fashion Tech", cat: "mid-startup", role: "Backend SWE", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Fashion + tech. Your recommendation system is directly applicable. Direct apply.", url: "https://careers.nykaa.com/" },
+        { n: 188, name: "Ajmera Realty (tech)", cat: "startup", role: "SWE", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "PropTech startup. Direct apply. Backup.", url: "https://www.ajmera.com/careers" },
+        { n: 189, name: "Housing.com (tech)", cat: "mid-startup", role: "Software Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "PropTech platform under REA Group. Medium rounds. Direct apply.", url: "https://housing.com/careers" },
+        { n: 190, name: "MagicBricks (tech)", cat: "mid-startup", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "PropTech. Times Group subsidiary. Direct Naukri apply.", url: "https://www.magicbricks.com/careers" },
+        { n: 191, name: "PayNearby", cat: "fintech", role: "Backend Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Fintech startup. Direct apply. Node.js match.", url: "https://paynearby.in/careers/" },
+        { n: 192, name: "Mswipe", cat: "fintech", role: "SWE", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs", tip: "POS fintech. Mumbai. Direct Naukri apply. Backup.", url: "https://www.mswipe.com/careers.php" },
+        { n: 193, name: "Numberz", cat: "fintech", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, PostgreSQL", tip: "Accounts receivable fintech. Small team. Direct apply.", url: "https://numberz.in/careers" },
+        { n: 194, name: "Kylas Sales CRM", cat: "saas-product", role: "SWE", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "CRM SaaS startup, Pune. Direct apply. HR-adjacent domain.", url: "https://kylas.io/careers" },
+        { n: 195, name: "BeatRoute", cat: "startup", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Sales automation SaaS. Direct apply.", url: "https://beatroute.io/careers/" },
+        { n: 196, name: "LeadSquared Mobile", cat: "saas-product", role: "SWE Backend", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Mobile CRM SaaS. Bangalore. Direct apply.", url: "https://www.leadsquared.com/careers/" },
+        { n: 197, name: "Exotel", cat: "saas-product", role: "Software Engineer", salary: "8–12 LPA", pay: "8–12 LPA", diff: "medium", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs, telephony APIs", tip: "Cloud telephony SaaS. Bangalore. Your Nodemailer/API integration is similar pattern. Medium rounds.", url: "https://exotel.com/company/careers/" },
+        { n: 198, name: "Ozonetel", cat: "saas-product", role: "SWE", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, REST APIs, MongoDB", tip: "Hyderabad cloud telephony — LOCAL ADVANTAGE! Direct apply.", url: "https://ozonetel.com/careers/" },
+        { n: 199, name: "Tata 1mg (tech)", cat: "mid-startup", role: "SWE Backend", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "HealthTech unicorn under Tata. Medium rounds. Good brand name.", url: "https://careers.1mg.com/" },
+        { n: 200, name: "Ola Electric (tech)", cat: "mid-startup", role: "SWE Backend", salary: "9–13 LPA", pay: "9–13 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, MongoDB, REST APIs", tip: "EV company with growing software team. Medium rounds. Ola ecosystem = interesting domain.", url: "https://www.olaelectric.com/careers" },
+        { n: 201, name: "AtomChat", cat: "startup", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Chat infrastructure startup. Direct apply.", url: "https://www.cometchat.com/careers" },
+        { n: 202, name: "Airmeet", cat: "startup", role: "SWE Backend", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Virtual events SaaS. Direct apply.", url: "https://www.airmeet.com/careers" },
+        { n: 203, name: "Hubilo", cat: "startup", role: "Software Engineer", salary: "8–10 LPA", pay: "8–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Event tech startup. Direct apply.", url: "https://hubilo.com/careers/" },
+        { n: 204, name: "Graphy (Classplus)", cat: "startup", role: "Backend Engineer", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Creator economy EdTech. Direct apply.", url: "https://classplus.co/careers" },
+        { n: 205, name: "iMocha", cat: "saas-product", role: "Software Engineer", salary: "7–10 LPA", pay: "7–10 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "AI skill assessment SaaS — VERY similar to your Darwinbox recruitment platform. Pune. Direct apply.", url: "https://imocha.io/careers/" },
+        { n: 206, name: "Mercer Mettl", cat: "saas-product", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs", tip: "Online assessment + proctoring SaaS. Your AI MCQ generation system (Darwinbox) is LITERALLY their product. Strong fit.", url: "https://mettl.com/company/careers/" },
+        { n: 207, name: "HireVue (India)", cat: "saas-product", role: "Backend Engineer", salary: "9–12 LPA", pay: "9–12 LPA", diff: "medium", type: "fte", ref: "opt", stack: "Node.js, REST APIs, AI/ML", tip: "AI video interview platform. Your generator-critic LLM pipeline from Darwinbox is identical to their core tech.", url: "https://www.hirevue.com/company/careers" },
+        { n: 208, name: "Glider.ai", cat: "startup", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs, LLMs", tip: "AI hiring platform. Your entire Darwinbox project IS their product. This is your strongest pitch possible.", url: "https://glider.ai/careers/" },
+        { n: 209, name: "Recruitly", cat: "startup", role: "Backend Developer", salary: "7–9 LPA", pay: "7–9 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB", tip: "ATS startup. Direct apply. Strong resume match.", url: "https://recruitly.io/" },
+        { n: 210, name: "Hirequotient", cat: "startup", role: "SWE", salary: "8–11 LPA", pay: "8–11 LPA", diff: "easy", type: "fte", ref: "no", stack: "Node.js, MongoDB, REST APIs, LLMs", tip: "AI interview platform. Your Darwinbox LLM project + behavioral simulation = their entire product thesis. APPLY HERE FIRST.", url: "https://hirequotient.com/careers" },
+      ];
+
+      // all functions defined above
+      renderGrid(companies);
+      updateTrackerBar();
+    </script>
+
+  </div><!-- end page-all-companies -->
+
+  <div class="page-wrap" id="page-best-fit">
+    <div class="bf-wrap">
+      <h2 class="bf-title">⭐ Companies That Will Hire YOU</h2>
+      <p class="bf-sub">Only companies confirmed or very likely to use <strong style="color:var(--text)">Node.js ·
+          Express.js · MongoDB · PostgreSQL · REST APIs · LLM/AI APIs</strong> — matching your exact Darwinbox + Moodify
+        stack.<br>
+        Sorted in the order you should apply. <span style="color:#a78bfa">Purple left border</span> = referral needed or
+        strongly recommended first.</p>
+
+      <!-- WAVE 1 -->
+      <div class="bf-section">
+        <div class="bf-section-head">
+          <span class="bf-wave-badge"
+            style="background:rgba(52,211,153,.12);color:#34d399;border:1px solid rgba(52,211,153,.3)">Wave 1</span>
+          <span class="bf-wave-title">Apply RIGHT NOW — No prep needed</span>
+        </div>
+        <div class="bf-wave-desc">These companies will shortlist you based on your Darwinbox internship alone. Apply
+          today. Getting live interviews now is itself part of your prep. Direct apply — no referral needed.</div>
+        <div class="hiring-window">📅 <strong>Hiring window:</strong> Year-round for off-campus · Campus drives: Aug–Nov
+          2025 · Off-campus peaks: Jan–Apr & Jul–Sep</div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Direct Apply — No referral needed</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">1</div>
+            <div class="bf-info">
+              <div class="bf-name">Darwinbox (FTE/PPO)</div>
+              <div class="bf-role">Product Engineer</div>
+              <div class="bf-why">You literally built their product. Email your manager today about conversion. Highest
+                win-rate of all 210.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct/PPO</span><span
+                  class="bf-tag t-hire">Apply today</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">2</div>
+            <div class="bf-info">
+              <div class="bf-name">Keka HR</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Hyderabad HQ (local). Node.js + MongoDB confirmed. Same HR-tech domain as Darwinbox.
+                Direct apply.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">3</div>
+            <div class="bf-info">
+              <div class="bf-name">Oorwin</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Hyderabad HR SaaS. Node.js + MongoDB. Local + domain = double advantage. Direct apply.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">7–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">4</div>
+            <div class="bf-info">
+              <div class="bf-name">Freshworks</div>
+              <div class="bf-role">Associate SWE</div>
+              <div class="bf-why">Node.js + MongoDB confirmed via engineering blog. OA + 2 tech rounds. 600 DSA handles
+                the OA.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–12 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">5</div>
+            <div class="bf-info">
+              <div class="bf-name">MoEngage</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB confirmed. Direct apply via careers page. DSA + backend API design
+                round.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">6</div>
+            <div class="bf-info">
+              <div class="bf-name">WebEngage</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + MongoDB exact match. 2–3 rounds. One of the fastest hiring processes in this
+                list.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">7</div>
+            <div class="bf-info">
+              <div class="bf-name">Netcore Cloud</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB MarTech SaaS. Fast process. Good for getting an early offer to build
+                leverage.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">7–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct/Naukri</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">8</div>
+            <div class="bf-info">
+              <div class="bf-name">Mercer Mettl</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Online assessment SaaS — your AI MCQ generation engine at Darwinbox IS their product.
+                Strongest single match.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">9</div>
+            <div class="bf-info">
+              <div class="bf-name">Glider.ai</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">AI hiring platform. Your entire Darwinbox project is what they sell. Send GitHub link
+                with application.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">10</div>
+            <div class="bf-info">
+              <div class="bf-name">HireQuotient</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">AI interview platform. LLM + behavioral simulation = their entire product. Apply with
+                GitHub.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">11</div>
+            <div class="bf-info">
+              <div class="bf-name">iMocha</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Skill assessment SaaS. Node.js + MongoDB. Your JD-driven assessment engine from
+                Darwinbox maps to their product.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">7–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">12</div>
+            <div class="bf-info">
+              <div class="bf-name">Haptik (JioHaptik)</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Conversational AI. Node.js + MongoDB + LLMs. Your Groq API + LLaMA pipeline IS their
+                core product.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">13</div>
+            <div class="bf-info">
+              <div class="bf-name">Signzy</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Digital onboarding SaaS for BFSI. Your Multer + S3 + pdf-parse at Darwinbox = exactly
+                what they build.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">14</div>
+            <div class="bf-info">
+              <div class="bf-name">Springworks</div>
+              <div class="bf-role">Backend Developer</div>
+              <div class="bf-why">HR-tech startup. Node.js + MongoDB. Darwinbox domain knowledge = instant credibility
+                here.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">15</div>
+            <div class="bf-info">
+              <div class="bf-name">Tanla Platforms</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Hyderabad CPaaS (local). Node.js + MongoDB confirmed. Your Nodemailer/API integration
+                is directly relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">16</div>
+            <div class="bf-info">
+              <div class="bf-name">Ozonetel</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Hyderabad cloud telephony (local). Node.js + REST APIs. Local advantage + direct
+                apply.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">7–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">17</div>
+            <div class="bf-info">
+              <div class="bf-name">Cashfree Payments</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + Express.js + PostgreSQL confirmed. Best easy fintech win. Direct apply.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">18</div>
+            <div class="bf-info">
+              <div class="bf-name">PeopleStrong</div>
+              <div class="bf-role">Product Engineer</div>
+              <div class="bf-why">Darwinbox competitor. Node.js + MongoDB. Your HR-tech domain = immediate shortlist.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">7–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">19</div>
+            <div class="bf-info">
+              <div class="bf-name">Zenoti</div>
+              <div class="bf-role">Software Engineer I</div>
+              <div class="bf-why">Hyderabad SaaS (local). Node.js + PostgreSQL confirmed. Vertical SaaS, easy process.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#34d399">20</div>
+            <div class="bf-info">
+              <div class="bf-name">Whatfix</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB DAP SaaS. Bangalore. 2 rounds: DSA + project walkthrough.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 2 -->
+      <div class="bf-section">
+        <div class="bf-section-head">
+          <span class="bf-wave-badge"
+            style="background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.3)">Wave 2</span>
+          <span class="bf-wave-title">Apply after DSA + Backend prep (Weeks 3–4)</span>
+        </div>
+        <div class="bf-wave-desc">These have medium rounds: OA + 2 tech interviews. Finish DSA foundations and Node.js
+          deep-dive first. Your Darwinbox projects will be the differentiator in interviews.</div>
+        <div class="hiring-window">📅 <strong>Hiring window:</strong> Year-round off-campus · Best months to apply:
+          <strong>Jan–Apr 2026</strong> (you're in this window now) and <strong>Jul–Sep 2026</strong></div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Referral recommended first — border highlighted</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#60a5fa">21</div>
+            <div class="bf-info">
+              <div class="bf-name">Yellow.ai ★ Get referral first</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Node.js + MongoDB + LLM APIs. Your Groq + LLaMA = direct experience. Referral from
+                LinkedIn employees speeds shortlisting.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#60a5fa">22</div>
+            <div class="bf-info">
+              <div class="bf-name">Multiplier ★ Get referral first</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL + RBAC confirmed. Your RBAC implementation from Darwinbox = their
+                product. Referral skips screening.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#60a5fa">23</div>
+            <div class="bf-info">
+              <div class="bf-name">Observe.AI ★ Get referral first</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + LLM integration. AI contact center SaaS. Your LLM pipeline at Darwinbox is
+                directly what they build.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–13 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Direct apply</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">24</div>
+            <div class="bf-info">
+              <div class="bf-name">Leadsquared</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Node.js + MongoDB CRM SaaS. Show leaderboard + analytics dashboard from Darwinbox.
+                Direct Naukri apply.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">25</div>
+            <div class="bf-info">
+              <div class="bf-name">Capillary Technologies</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL loyalty SaaS. Show your Neon PostgreSQL cloud deployment from
+                Moodify.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–10 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">26</div>
+            <div class="bf-info">
+              <div class="bf-name">Exotel</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB cloud telephony SaaS Bangalore. API integration pattern from
+                Darwinbox is relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">27</div>
+            <div class="bf-info">
+              <div class="bf-name">Gupshup</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + MongoDB messaging platform. Your Nodemailer + REST API integration is
+                directly relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">28</div>
+            <div class="bf-info">
+              <div class="bf-name">HireVue India</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">AI video interview platform. Node.js + LLM APIs. Your generator-critic pipeline =
+                their core tech.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">29</div>
+            <div class="bf-info">
+              <div class="bf-name">Jupiter Money</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL + JWT neobank. Small strong team. JWT auth skills match exactly.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">30</div>
+            <div class="bf-info">
+              <div class="bf-name">Slice (neobank)</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL. Less competitive than Razorpay. Good fintech experience.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">31</div>
+            <div class="bf-info">
+              <div class="bf-name">Perfios</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL BFSI analytics. Your analytics dashboard + Neon PostgreSQL from
+                Moodify = direct match.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">32</div>
+            <div class="bf-info">
+              <div class="bf-name">Uniphore</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Conversational AI SaaS. Node.js + MongoDB + LLM APIs. Your LLM experience is rare for
+                a fresher here.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">33</div>
+            <div class="bf-info">
+              <div class="bf-name">Embibe (Reliance)</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">AI EdTech. Node.js + MongoDB + LLM. Your LLM assessment engine from Darwinbox = their
+                product.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–13 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">34</div>
+            <div class="bf-info">
+              <div class="bf-name">Porter</div>
+              <div class="bf-role">Backend Engineer</div>
+              <div class="bf-why">Node.js + MongoDB logistics startup. Direct LinkedIn apply. High ownership from day
+                one.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">8–11 LPA</span><span
+                  class="bf-tag t-easy">Easy</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#60a5fa">35</div>
+            <div class="bf-info">
+              <div class="bf-name">Druva</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + REST APIs + AWS S3. Your S3 experience from Darwinbox is directly relevant
+                to their storage product.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–13 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 3 -->
+      <div class="bf-section">
+        <div class="bf-section-head">
+          <span class="bf-wave-badge"
+            style="background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3)">Wave 3</span>
+          <span class="bf-wave-title">Apply after System Design prep (Weeks 5–6)</span>
+        </div>
+        <div class="bf-wave-desc">These companies have a dedicated system design round. Finish at least 5 SD topics
+          before applying. By this point, aim to have 1–2 offers from Wave 1 as leverage.</div>
+        <div class="hiring-window">📅 <strong>Hiring window:</strong> Off-campus year-round · Freshers especially
+          active: <strong>Feb–May 2026</strong> and <strong>Aug–Oct 2026</strong></div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Referral strongly recommended — apply both ways</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#a78bfa">36</div>
+            <div class="bf-info">
+              <div class="bf-name">Razorpay ★ Referral first</div>
+              <div class="bf-role">SDE-1</div>
+              <div class="bf-why">Node.js + PostgreSQL payments confirmed. JWT + REST + PostgreSQL = direct match.
+                Referral bypasses resume filter.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#a78bfa">37</div>
+            <div class="bf-info">
+              <div class="bf-name">Rippling India ★ Referral first</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL + RBAC HR SaaS. Your profile is a near-perfect match. Referral
+                skips cold screening.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#a78bfa">38</div>
+            <div class="bf-info">
+              <div class="bf-name">Groww ★ Referral first</div>
+              <div class="bf-role">SDE Backend</div>
+              <div class="bf-why">Node.js + PostgreSQL WealthTech. Analytics dashboard skills relevant. Referral helps
+                bypass OA screening.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–15 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#a78bfa">39</div>
+            <div class="bf-info">
+              <div class="bf-name">CleverTap ★ Referral first</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Node.js + MongoDB analytics pipeline confirmed. Your aggregation-powered analytics
+                from Darwinbox = their product.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#a78bfa">40</div>
+            <div class="bf-info">
+              <div class="bf-name">BrowserStack ★ Referral first</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Node.js + PostgreSQL confirmed. Values deployed GitHub projects heavily. Referral
+                helps shortlisting.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–13 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-ref">Referral helps</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Direct apply</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">41</div>
+            <div class="bf-info">
+              <div class="bf-name">Postman</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + REST APIs — they build the REST testing tool. Your documented API design is
+                on-brand for them.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">42</div>
+            <div class="bf-info">
+              <div class="bf-name">Chargebee</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL billing SaaS confirmed. Your Neon PostgreSQL deployment from
+                Moodify is directly relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">43</div>
+            <div class="bf-info">
+              <div class="bf-name">Sprinklr</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB CX SaaS confirmed. Your LLM integration + RBAC is rare for a
+                fresher. Highlight both.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">44</div>
+            <div class="bf-info">
+              <div class="bf-name">Setu (PhonePe)</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL banking API infra. Pure backend company. Your API design skills
+                are directly relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">45</div>
+            <div class="bf-info">
+              <div class="bf-name">Upstox</div>
+              <div class="bf-role">SWE Backend</div>
+              <div class="bf-why">Node.js + PostgreSQL trading platform confirmed. Direct match on your exact stack.
+              </div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">46</div>
+            <div class="bf-info">
+              <div class="bf-name">Hasura</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + PostgreSQL + GraphQL data platform. Your Neon PostgreSQL depth from Moodify
+                is directly relevant.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–15 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">47</div>
+            <div class="bf-info">
+              <div class="bf-name">Smallcase</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB + PostgreSQL investment platform. Bangalore. Full-stack skills
+                match.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–12 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#a78bfa">48</div>
+            <div class="bf-info">
+              <div class="bf-name">BharatPe</div>
+              <div class="bf-role">Software Engineer</div>
+              <div class="bf-why">Node.js + MongoDB payments unicorn confirmed. Medium difficulty. Direct apply.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">9–13 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WAVE 4 -->
+      <div class="bf-section">
+        <div class="bf-section-head">
+          <span class="bf-wave-badge"
+            style="background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.3)">Wave 4</span>
+          <span class="bf-wave-title">Stretch targets — Apply with full prep + offers in hand</span>
+        </div>
+        <div class="bf-wave-desc">Hard rounds. Strong DSA + system design + referral needed. Apply only after you have
+          at least one offer from Wave 1–2. That offer gives you confidence and a negotiation anchor.</div>
+        <div class="hiring-window">📅 <strong>Hiring window:</strong> Off-campus year-round · Freshers hiring peaks:
+          <strong>Mar–Jun 2026</strong> · Set LinkedIn job alerts for all of these</div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Referral critical — do not apply cold</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#f59e0b">49</div>
+            <div class="bf-info">
+              <div class="bf-name">PhonePe ★ Referral critical</div>
+              <div class="bf-role">SDE-1</div>
+              <div class="bf-why">Node.js + PostgreSQL confirmed. Hard DSA + system design. Without referral, resume
+                gets buried. LinkedIn connect with PhonePe engineers.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">12–18 LPA</span><span
+                  class="bf-tag t-hard">Hard</span><span class="bf-tag t-ref">Referral critical</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card ref-card">
+            <div class="bf-order" style="color:#f59e0b">50</div>
+            <div class="bf-info">
+              <div class="bf-name">Atlassian India ★ Referral critical</div>
+              <div class="bf-role">Graduate SWE</div>
+              <div class="bf-why">Node.js + PostgreSQL confirmed. Your RBAC + AuditLog system is very Jira-esque.
+                Referral from LinkedIn Atlassian engineers in Bangalore.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">18–25 LPA</span><span
+                  class="bf-tag t-hard">Hard</span><span class="bf-tag t-ref">Referral critical</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bf-divider">
+          <div class="bf-divider-line"></div>
+          <div class="bf-divider-txt">Direct apply worth trying</div>
+          <div class="bf-divider-line"></div>
+        </div>
+        <div class="bf-grid">
+          <div class="bf-card">
+            <div class="bf-order" style="color:#f59e0b">51</div>
+            <div class="bf-info">
+              <div class="bf-name">Swiggy</div>
+              <div class="bf-role">SDE-1</div>
+              <div class="bf-why">Node.js + MongoDB + in-memory caching confirmed. Your caching layer from Moodify is a
+                real system design talking point.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">12–18 LPA</span><span
+                  class="bf-tag t-hard">Hard</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#f59e0b">52</div>
+            <div class="bf-info">
+              <div class="bf-name">Amazon</div>
+              <div class="bf-role">SDE Intern / SDE-1</div>
+              <div class="bf-why">Node.js + AWS S3 — your genuine hands-on experience. 14 Leadership Principles + 2 DSA
+                rounds. Apply anyway.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">18–26 LPA</span><span
+                  class="bf-tag t-hard">Hard</span><span class="bf-tag t-direct">Direct apply</span><span
+                  class="bf-tag t-hire">Feb–Apr, Sep–Nov</span></div>
+            </div>
+          </div>
+          <div class="bf-card">
+            <div class="bf-order" style="color:#f59e0b">53</div>
+            <div class="bf-info">
+              <div class="bf-name">Razorpay (direct too)</div>
+              <div class="bf-role">SDE-1</div>
+              <div class="bf-why">Even without referral, strong GitHub + deployed projects can get you shortlisted.
+                Apply both ways.</div>
+              <div class="bf-tags"><span class="bf-tag t-pay">10–14 LPA</span><span
+                  class="bf-tag t-med">Medium</span><span class="bf-tag t-direct">Direct also</span><span
+                  class="bf-tag t-hire">Year-round</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- end page-best-fit -->
+
+  <script>
+    function switchPage(id, btn) {
+      document.querySelectorAll('.page-wrap').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.topnav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('page-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+
+</html>
