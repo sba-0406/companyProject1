@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .role-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 10px 20px;
+            background: #eee;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .role-btn.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .locked {
+            filter: grayscale(1);
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+        <div id="nav-links">
+            <!-- Navbar built via main.js -->
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Select Your Target Role</h1>
+        <div class="role-selector" id="roleSelector">
+            <!-- Dynamic roles will be injected here -->
+        </div>
+
+        <h2 id="roleTitle">Scenarios</h2>
+        <p id="roleDesc">Please select a role to see available simulations.</p>
+        <br>
+
+        <!-- Dojo Launchpad -->
+        <div id="dojo-card" class="card"
+            style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #6366f1; display:none; margin-bottom: 30px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <h3 style="color: #818cf8; margin-bottom: 5px;">🥋 The Leadership Dojo</h3>
+                    <p style="color: #cbd5e1; font-size: 0.9em; max-width: 600px;">
+                        Enter the Immersive Persona Chat. Test your soft skills against an unpredictable AI opponent.
+                        <br><span style="color: #94a3b8; font-size: 0.85em;">(Powered by Real-Time Sentiment
+                            Analysis)</span>
+                    </p>
+                </div>
+                <button onclick="startDojo()" class="btn"
+                    style="background: #6366f1; border: none; padding: 12px 24px; font-weight: 600;">
+                    Enter Arena ➤
+                </button>
+            </div>
+        </div>
+
+        <div id="scenario-list" class="grid-2">
+            <!-- Scenarios will load here -->
+        </div>
+
+        <div id="admin-notice"
+            style="display:none; margin-top: 30px; padding: 25px; border: 1px solid var(--danger); border-radius: 16px; background: rgba(239, 68, 68, 0.1); backdrop-filter: blur(10px);">
+            <h3 style="color: var(--danger); margin-bottom: 10px;">System Administrator Mode</h3>
+            <p style="color: var(--text-main); line-height: 1.5;">You are currently logged in with <strong>Elevated
+                    Privileges</strong>. You can participate in employee simulations or access the Management Panel to
+                manage user authorizations.</p>
+            <a href="/admin" class="btn" style="background: var(--danger); margin-top: 15px;">Launch Admin Panel</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const roleBtns = document.querySelectorAll('.role-btn');
+            const list = document.getElementById('scenario-list');
+            const roleTitle = document.getElementById('roleTitle');
+            const roleDesc = document.getElementById('roleDesc');
+            const adminNotice = document.getElementById('admin-notice');
+
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.role === 'admin') adminNotice.style.display = 'block';
+
+            // Find completed scenarios for progression check
+            let history = [];
+            try {
+                const hRes = await fetch('/api/simulation/history', { credentials: 'include' });
+                const hData = await hRes.json();
+                if (hData.success) history = hData.data;
+            } catch (e) { }
+
+            const loadScenarios = async (role) => {
+                roleTitle.innerText = `${role} Scenarios`;
+                roleDesc.innerText = `Work through these simulations from Easy to Hard.`;
+                roleTitle.innerText = `${role} Scenarios`;
+                roleDesc.innerText = `Work through these simulations from Easy to Hard.`;
+                document.getElementById('dojo-card').style.display = 'block'; // Show Dojo
+                list.innerHTML = '<div class="card" style="grid-column: 1/-1; text-align: center;"><h3>Loading scenarios...</h3></div>';
+
+                try {
+                    console.log('Fetching scenarios for role:', role);
+                    const res = await fetch(`/api/scenarios?jobRole=${encodeURIComponent(role)}`, { credentials: 'include' });
+
+                    if (!res.ok) {
+                        const errorData = await res.json().catch(() => ({}));
+                        console.error('Fetch failed:', res.status, errorData);
+                        list.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align: center; border: 1px solid var(--danger);">
+                            <h3 style="color: var(--danger);">Error ${res.status}</h3>
+                            <p>${errorData.error || 'Failed to load scenarios. Please try logging in again.'}</p>
+                        </div>`;
+                        return;
+                    }
+
+                    const data = await res.json();
+                    console.log('Scenarios data received:', data);
+                    list.innerHTML = '';
+
+                    if (data.success && data.data && data.data.length > 0) {
+                        data.data.forEach((s, index) => {
+                            // Safer ID check: h.scenario might be object or string ID
+                            const isCompleted = history.some(h => {
+                                const hId = (typeof h.scenario === 'object' && h.scenario !== null) ? h.scenario._id : h.scenario;
+                                return hId === s._id;
+                            });
+
+                            // Progression Logic: Unlock if it's the first one, or the previous one is completed
+                            let isLocked = false;
+                            if (index > 0) {
+                                const prevId = data.data[index - 1]._id;
+                                const prevCompleted = history.some(h => {
+                                    const hId = (typeof h.scenario === 'object' && h.scenario !== null) ? h.scenario._id : h.scenario;
+                                    return hId === prevId;
+                                });
+                                if (!prevCompleted) isLocked = true;
+                            }
+
+                            const div = document.createElement('div');
+                            div.className = `card scenario-card ${isLocked ? 'locked' : ''}`;
+                            div.innerHTML = `
+                                <div style="display:flex; justify-content:space-between;">
+                                    <h3>${s.title}</h3>
+                                    ${isCompleted ? '<span class="badge badge-success">Completed</span>' : ''}
+                                </div>
+                                <span class="badge badge-warning">${s.difficulty}</span>
+                                <p style="margin: 10px 0;">${s.description}</p>
+                                ${!isLocked ? `<a href="/scenario/${s._id}" class="btn">${isCompleted ? 'Retry' : 'Start'} Simulation</a>` : '<p style="color:red">Complete previous level to unlock</p>'}
+                            `;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        console.warn('No scenarios found for role:', role);
+                        list.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align: center;">
+                            <h3>No simulations currently available for "${role}"</h3>
+                            <p style="color: var(--text-muted); margin-top: 10px;">Please select another role or check back later.</p>
+                        </div>`;
+                    }
+                } catch (err) {
+                    console.error('Error in loadScenarios:', err);
+                    list.innerHTML = `<div class="card" style="grid-column: 1/-1; text-align: center;">
+                            <h3>Network Error</h3>
+                            <p>Could not connect to the server. Please check your connection.</p>
+                        </div>`;
+                }
+            };
+
+            window.startDojo = async () => {
+                const activeBtn = document.querySelector('.role-btn.active');
+                if (!activeBtn) return alert('Please select a role first');
+
+                const role = activeBtn.dataset.role;
+                const btn = document.querySelector('#dojo-card button');
+                const originalText = btn.innerHTML;
+
+                try {
+                    btn.innerHTML = 'Initializing...';
+                    btn.disabled = true;
+
+                    const res = await fetch('/api/chat/start', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ role }),
+                        credentials: 'include'
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        window.location.href = `/chat/${data.data._id}`;
+                    } else {
+                        alert(data.error || 'Failed to start Dojo session');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Network error starting Dojo');
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            };
+
+            // 1. Fetch Dynamic Roles
+            try {
+                const rRes = await fetch('/api/scenarios/roles', { credentials: 'include' });
+                const rData = await rRes.json();
+                const selector = document.getElementById('roleSelector');
+
+                if (rData.success && rData.data.length > 0) {
+                    selector.innerHTML = rData.data.map(r => `
+                        <button class="role-btn" data-role="${r}">${r}</button>
+                    `).join('');
+
+                    // Re-assign roleBtns after injection
+                    const newRoleBtns = document.querySelectorAll('.role-btn');
+                    newRoleBtns.forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            newRoleBtns.forEach(b => b.classList.remove('active'));
+                            btn.classList.add('active');
+                            loadScenarios(btn.dataset.role);
+                        });
+                    });
+
+                    // Default to first available role
+                    newRoleBtns[0].click();
+                } else {
+                    selector.innerHTML = '<p style="color:var(--text-muted)">No roles defined yet. Admin must add scenarios.</p>';
+                }
+            } catch (err) {
+                console.error("Failed to load roles:", err);
+            }
+        });
+    </script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %> | ScenarioSim
+    </title>
+    <link rel="stylesheet" href="/css/style.css?v=10">
+</head>
+
+<body class="has-sidebar">
+    <%- include('partials/_navbar') %>
+
+        <div class="main-wrapper">
+            <div class="container">
+                <div class="dashboard-header mb-20"
+                    style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h1>My Dashboard</h1>
+                        <p style="color: var(--text-muted);">Track your applications and assessment progress</p>
+                    </div>
+                    <a href="/api/applications/jobs-portal" class="btn">Explore Jobs</a>
+                </div>
+
+                <div class="card">
+                    <h2 class="section-title mb-20">💼 Your Applications</h2>
+                    <div class="grid-adaptive" id="application-list">
+                        <div class="empty-state">
+                            <p>Loading your applications...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-20">
+                    <h2 class="section-title mb-20">🔔 Recent Notifications</h2>
+                    <div id="dashboard-notifications">
+                        <div class="empty-state">
+                            <p>Loading notifications...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            async function loadApplications() {
+                try {
+                    const response = await fetch('/api/applications/my-applications');
+                    const data = await response.json();
+                    renderApplications(data.data);
+                } catch (error) {
+                    console.error('Error loading applications:', error);
+                    const list = document.getElementById('application-list');
+                    if (list) list.innerHTML = `<p>Error loading applications.</p>`;
+                }
+            }
+
+            async function loadDashboardNotifications() {
+                try {
+                    const res = await fetch('/api/notifications');
+                    const data = await res.json();
+                    if (data.success && Array.isArray(data.data)) {
+                        renderDashboardNotifications(data.data.slice(0, 3));
+                    }
+                } catch (err) {
+                    console.error('Error loading notifs:', err);
+                }
+            }
+
+            function renderDashboardNotifications(notifications) {
+                const container = document.getElementById('dashboard-notifications');
+                if (!container) return;
+                if (!notifications || notifications.length === 0) {
+                    container.innerHTML = `<div class="empty-state"><p>No messages yet.</p></div>`;
+                    return;
+                }
+
+                container.innerHTML = notifications.map(n => `
+                    <div class="notification-item ${n.isRead ? '' : 'unread'}" style="border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px;" onclick="handleNotiClick(event, '${n._id}', '${n.actionUrl || ''}')">
+                        <div style="display: flex; justify-content: space-between; padding: 10px 10px 5px;">
+                            <div class="noti-title">${n.title}</div>
+                            <div class="noti-time" style="font-size: 0.7rem; color: var(--text-muted);">${new Date(n.createdAt).toLocaleDateString()}</div>
+                        </div>
+                        <div class="noti-message" style="padding: 0 10px 10px; font-size: 0.8rem; color: var(--text-muted);">${n.message}</div>
+                    </div>
+                `).join('');
+            }
+
+            function renderApplications(applications) {
+                const list = document.getElementById('application-list');
+                if (!list) return;
+                if (!applications || applications.length === 0) {
+                    list.innerHTML = `<div class="empty-state"><p>No applications yet.</p></div>`;
+                    return;
+                }
+
+                list.innerHTML = applications.map(app => {
+                    const job = app.job;
+                    if (!job || !app) return ''; // Skip rendering if job or application is missing
+
+                    const dateVal = app.appliedAt || app.createdAt;
+                    const appliedDate = dateVal ? new Date(dateVal).toLocaleDateString() : 'Recent';
+
+                    let statusBadge = 'badge-info';
+                    if (app.status === 'applied') statusBadge = 'badge-info';
+                    else if (app.status === 'shortlisted' || app.status === 'hired') statusBadge = 'badge-success';
+                    else if (app.status === 'rejected') statusBadge = 'badge-danger';
+                    else statusBadge = 'badge-warning';
+
+                    let assessmentAction = '';
+                    if (app.assessmentStatus === 'invited') {
+                        assessmentAction = `<a href="/api/assessment/assessment/${app._id}" class="btn-sm" style="flex: 1.5; text-align: center; display: flex; align-items: center; justify-content: center; background: var(--success); color: white; border-color: var(--success);">Take Assessment</a>`;
+                    } else if (app.assessmentStatus === 'in_progress') {
+                        assessmentAction = `<a href="/api/assessment/assessment/${app._id}" class="btn-sm" style="flex: 1.5; text-align: center; display: flex; align-items: center; justify-content: center; background: var(--primary-color); color: white;">Resume Assessment</a>`;
+                    } else if (app.assessmentStatus === 'completed') {
+                        assessmentAction = `<div class="btn-sm completed-pill" style="flex: 1.5; background: #f0fdf4; color: #16a34a; border-color: #bcfecb; cursor: default; display: flex; align-items: center; justify-content: center; font-weight: 700; white-space: nowrap;">✓ Completed</div>`;
+                    } else {
+                        // Pending or any other state
+                        assessmentAction = `<div class="btn-sm" style="flex: 1.5; background: #f8fafc; color: #64748b; border: 1px solid var(--border); cursor: default; display: flex; align-items: center; justify-content: center; font-size: 0.75rem;">Under Review</div>`;
+                    }
+
+                    return `
+                <div class="application-card">
+                    <div class="card-body-section">
+                        <h3 class="card-title">${job.title}</h3>
+                        <div class="card-subtitle mb-20">
+                            ${job.companyName} &bull; <span style="font-weight: 400; opacity: 0.8;">Applied on ${appliedDate}</span>
+                        </div>
+                        
+                        <div class="status-summary-box mb-20">
+                            <div class="status-item">
+                                <div class="item-label">Status</div>
+                                <span class="badge ${statusBadge}">${app.status.toUpperCase().replace('_', ' ')}</span>
+                            </div>
+                            <div class="status-item" style="text-align: right;">
+                                <div class="item-label">Assessment</div>
+                                <div class="assessment-status-val ${app.assessmentStatus === 'completed' ? 'text-success' : ''}">${app.assessmentStatus.toUpperCase().replace('_', ' ')}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer" style="padding-top: 15px;">
+                        <div style="display: flex; gap: 10px; width: 100%; flex-wrap: wrap;">
+                            ${assessmentAction}
+                            <a href="/api/applications/application/${app._id}/view" class="btn-sm btn-secondary" style="flex: 1; min-width: 80px; text-align: center; display: flex; align-items: center; justify-content: center;">Details</a>
+                        </div>
+                    </div>
+                </div>`;
+                }).join('');
+            }
+
+            loadApplications();
+            loadDashboardNotifications();
+        </script>
+</body>
+
+</html>

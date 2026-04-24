@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Dojo | Interactive Simulation</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #030712;
+            --glass-panel: rgba(17, 24, 39, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-accent: #6366f1;
+            --neon-danger: #f43f5e;
+            --neon-success: #10b981;
+            --neon-warning: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* FIXED HEADER - 100px */
+        .simulation-header {
+            position: fixed;
+            top: 81px;
+            /* Navbar height + small buffer */
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .scenario-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--neon-accent);
+        }
+
+        .timer {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* MOOD BAR */
+        .mood-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mood-emoji {
+            font-size: 1.2em;
+        }
+
+        .mood-bar-bg {
+            flex: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .mood-bar-fill {
+            height: 100%;
+            width: 50%;
+            /* Default */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(to right, var(--neon-danger), var(--neon-warning), var(--neon-success));
+            background-size: 100vw 100%;
+            background-attachment: fixed;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            position: fixed;
+            top: 181px;
+            /* Navbar (81px) + Header (100px) */
+            bottom: 220px;
+            /* Space for interaction zone */
+            left: 0;
+            right: 0;
+            overflow-y: auto;
+            padding: 40px 15%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            scroll-behavior: smooth;
+        }
+
+        /* MESSAGES */
+        .msg {
+            max-width: 80%;
+            padding: 16px 24px;
+            border-radius: 20px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .msg.ai {
+            align-self: flex-start;
+            background: var(--glass-panel);
+            border: 1px solid var(--glass-border);
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        /* INTERACTION ZONE - 220px */
+        .interaction-zone {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 220px;
+            background: #0f172a;
+            border-top: 1px solid var(--glass-border);
+            padding: 20px 15%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .mcq-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .mcq-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            padding: 12px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mcq-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--neon-accent);
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #475569;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .divider span {
+            padding: 0 15px;
+        }
+
+        .text-input-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .text-input-group input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-family: inherit;
+        }
+
+        .send-btn {
+            background: var(--neon-accent);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* OVERLAYS */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal h2 {
+            margin-bottom: 15px;
+        }
+
+        .modal p {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .typing-indicator {
+            align-self: flex-start;
+            color: var(--text-muted);
+            font-size: 0.85em;
+            font-style: italic;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+        <div id="nav-links">
+            <!-- Navbar built via main.js -->
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="simulation-header">
+        <div class="header-top">
+            <div class="scenario-title" id="scenarioIndicator">Scenario 1 / 3</div>
+            <button class="mcq-btn"
+                style="padding: 5px 15px; width: auto; font-size: 0.8em; border-color: var(--neon-danger); color: var(--neon-danger);"
+                id="skipBtn">Skip Stakeholder</button>
+            <div class="timer" id="timer">05:00</div>
+        </div>
+        <div class="mood-container">
+            <span class="mood-emoji" id="moodEmoji">😐</span>
+            <div class="mood-bar-bg">
+                <div class="mood-bar-fill" id="moodFill" style="width: 50%;"></div>
+            </div>
+            <span class="mood-emoji">😊</span>
+        </div>
+    </div>
+
+    <!-- CHAT FEED -->
+    <div class="main-content" id="chatFeed">
+        <!-- Messages loaded dynamicallly -->
+        <div class="typing-indicator" id="typingIndicator">The stakeholder is thinking...</div>
+    </div>
+
+    <!-- INTERACTION ZONE -->
+    <div class="interaction-zone">
+        <div class="mcq-options" id="mcqContainer">
+            <!-- MCQ buttons -->
+        </div>
+
+        <div class="divider">
+            <span>OR TYPE CUSTOM RESPONSE</span>
+        </div>
+
+        <div class="text-input-group">
+            <input type="text" id="customInput" placeholder="How would you handle this situation?" autocomplete="off">
+            <button class="send-btn" id="sendBtn">➤</button>
+        </div>
+    </div>
+
+    <!-- RESOLUTION OVERLAY -->
+    <div class="overlay" id="resolutionOverlay">
+        <div class="modal">
+            <div style="font-size: 4em; margin-bottom: 20px;" id="resolutionIcon">🎉</div>
+            <h2 id="resolutionTitle">Scenario Resolved</h2>
+            <p id="resolutionDesc">You successfully navigated this challenge. Moving to next scenario...</p>
+            <button class="send-btn" style="padding: 12px 30px; width: auto;" id="nextBtn">Continue ➤</button>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        (function () {
+            const sessionId = '<%= sessionId %>';
+            const chatFeed = document.getElementById('chatFeed');
+            const mcqContainer = document.getElementById('mcqContainer');
+            const customInput = document.getElementById('customInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const timerEl = document.getElementById('timer');
+            const moodFill = document.getElementById('moodFill');
+            const moodEmoji = document.getElementById('moodEmoji');
+
+            let timeLeft = 300; // 5 minutes
+            let timerInterval;
+            let currentSession = null;
+
+            document.addEventListener('DOMContentLoaded', init);
+
+            async function init() {
+                await loadSession();
+                startTimer();
+                setupInput();
+            }
+
+            async function loadSession() {
+                try {
+                    const res = await fetch(`/dojo/session/${sessionId}`);
+                    const data = await res.json();
+                    if (data.success) {
+                        currentSession = data.data;
+
+                        // If session is already completed, show the report immediately
+                        if (currentSession.status === 'completed') {
+                            finalizeSession();
+                            return;
+                        }
+
+                        updateUI();
+                        // Initial welcome message if feed is empty
+                        if (currentSession.messages.length === 0) {
+                            renderInitialMessage();
+                        } else {
+                            currentSession.messages.forEach(m => renderMessage(m));
+                        }
+                        generateInitialMCQs();
+                    }
+                } catch (err) {
+                    console.error("Load Session Failed:", err);
+                    alert("Failed to load session details. Please check your connection.");
+                }
+            }
+
+            function updateUI() {
+                const step = currentSession.scenarioProgress.currentScenario;
+                const total = currentSession.scenarioProgress.totalScenarios;
+                document.getElementById('scenarioIndicator').textContent = `Scenario ${step} / ${total}: ${currentSession.persona.name}`;
+
+                const currScenario = currentSession.scenarioProgress.scenarios[step - 1];
+                updateMoodDisplay(currScenario.moodLevel);
+            }
+
+            function updateMoodDisplay(level) {
+                moodFill.style.width = `${level}%`;
+                if (level < 40) {
+                    moodEmoji.textContent = '😠';
+                    moodFill.style.background = 'var(--neon-danger)';
+                } else if (level < 70) {
+                    moodEmoji.textContent = '😐';
+                    moodFill.style.background = 'var(--neon-warning)';
+                } else {
+                    moodEmoji.textContent = '😊';
+                    moodFill.style.background = 'var(--neon-success)';
+                }
+            }
+
+            function startTimer() {
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    const mins = Math.floor(timeLeft / 60);
+                    const secs = timeLeft % 60;
+                    timerEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        onTimeout();
+                    }
+                }, 1000);
+            }
+
+            function setupInput() {
+                sendBtn.onclick = () => handleResponse(customInput.value);
+                customInput.onkeypress = (e) => { if (e.key === 'Enter') handleResponse(customInput.value); };
+                document.getElementById('skipBtn').onclick = skipScenario;
+            }
+
+            async function skipScenario() {
+                if (!confirm("Are you sure you want to skip this stakeholder? It will be marked as unresolved in your report.")) return;
+                const btn = document.getElementById('skipBtn');
+                btn.disabled = true;
+                btn.textContent = 'Skipping...';
+                advanceScenario('skipped');
+            }
+
+            async function handleResponse(text, mcqChoice = null) {
+                if (!text && !mcqChoice) return;
+
+                // UI feedback
+                const userText = mcqChoice ? mcqChoice.text : text;
+                renderMessage({ sender: 'user', text: userText });
+                customInput.value = '';
+                mcqContainer.innerHTML = '';
+                document.getElementById('typingIndicator').style.display = 'block';
+                scrollToBottom();
+
+                try {
+                    const res = await fetch('/dojo/respond', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId, message: text, mcqChoice }),
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+
+                    document.getElementById('typingIndicator').style.display = 'none';
+
+                    if (data.success) {
+                        renderMessage({ sender: 'ai', text: data.data.message });
+                        updateMoodDisplay(data.data.moodLevel);
+                        renderMCQs(data.data.mcqOptions);
+
+                        if (data.data.isResolved) {
+                            showResolution('success', data.data.isLastScenario);
+                        }
+                    }
+                } catch (err) { console.error(err); }
+            }
+
+            function renderMCQs(options) {
+                mcqContainer.innerHTML = '';
+                if (!options) return;
+
+                const icons = ['💡', '🤝', '❓', '💬'];
+                options.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'mcq-btn';
+                    btn.innerHTML = `<span>${icons[i % icons.length]}</span> ${opt.text}`;
+                    btn.onclick = () => handleResponse(null, opt);
+                    mcqContainer.appendChild(btn);
+                });
+            }
+
+            async function generateInitialMCQs() {
+                // Fetch first set if empty
+                if (mcqContainer.children.length === 0) {
+                    const lastMsg = currentSession.messages[currentSession.messages.length - 1];
+                    const ctx = lastMsg ? lastMsg.text : currentSession.persona.instructions;
+                    const res = await fetch('/dojo/respond', { // This is a bit of a hack to reuse logic
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId, message: '' }), // Empty triggers MCQ generation
+                        credentials: 'include'
+                    });
+                    const d = await res.json();
+                    if (d.success) renderMCQs(d.data.mcqOptions);
+                }
+            }
+
+            function renderMessage(msg) {
+                const div = document.createElement('div');
+                div.className = `msg ${msg.sender}`;
+                div.textContent = msg.text;
+                chatFeed.insertBefore(div, document.getElementById('typingIndicator'));
+                scrollToBottom();
+            }
+
+            function renderInitialMessage() {
+                const txt = `[MISSION START] You are now in conversation with ${currentSession.persona.name}. 
+                Situation: ${currentSession.persona.instructions}.
+                Can you resolve the issue?`;
+                renderMessage({ sender: 'ai', text: txt });
+            }
+
+            function scrollToBottom() {
+                chatFeed.scrollTop = chatFeed.scrollHeight;
+            }
+
+            function showResolution(type, isLast = false) {
+                clearInterval(timerInterval);
+                const overlay = document.getElementById('resolutionOverlay');
+                const title = document.getElementById('resolutionTitle');
+                const icon = document.getElementById('resolutionIcon');
+                const desc = document.getElementById('resolutionDesc');
+                const nextBtn = document.getElementById('nextBtn');
+
+                if (type === 'success') {
+                    title.textContent = "Scenario Resolved!";
+                    icon.textContent = "✅";
+                    desc.textContent = "Excellent work. You successfully appeased the stakeholder.";
+                } else {
+                    title.textContent = "Scenario Failed";
+                    icon.textContent = "⏱️";
+                    desc.textContent = "Time expired before resolution was reached.";
+                }
+
+                if (isLast || (currentSession && currentSession.scenarioProgress.currentScenario >= 3)) {
+                    nextBtn.textContent = "Finish & See Career Results";
+                } else {
+                    nextBtn.textContent = "Next Stakeholder";
+                }
+
+                overlay.style.display = 'flex';
+                nextBtn.onclick = () => advanceScenario();
+            }
+
+            async function advanceScenario(reason = null) {
+                try {
+                    const res = await fetch('/dojo/next', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId, reason: reason || (timeLeft > 0 ? 'success' : 'timeout') }),
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        if (data.data.isComplete) {
+                            finalizeSession();
+                        } else {
+                            window.location.reload();
+                        }
+                    } else {
+                        alert("Movement failed: " + (data.error || "Unknown error"));
+                        document.getElementById('skipBtn').disabled = false;
+                        document.getElementById('skipBtn').textContent = 'Skip Stakeholder';
+                    }
+                } catch (err) {
+                    console.error("Advance Error:", err);
+                    alert("System error advancing simulation. Check connection.");
+                    document.getElementById('skipBtn').disabled = false;
+                }
+            }
+
+            async function finalizeSession() {
+                try {
+                    const res = await fetch('/dojo/finalize', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId }),
+                        credentials: 'include'
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        showFinalReport(data.data);
+                    } else {
+                        alert("Error generating final report: " + data.error);
+                    }
+                } catch (err) {
+                    console.error("Finalization error:", err);
+                    alert("System error finishing simulation. Please try again or check server logs.");
+                }
+            }
+
+            function showFinalReport(report) {
+                const overlay = document.getElementById('resolutionOverlay');
+                overlay.style.display = 'flex'; // Ensure visible!
+                overlay.innerHTML = `
+                    <div class="modal" style="max-width: 600px;">
+                        <h2>🏆 Simulation Complete</h2>
+                        <h1 style="font-size: 4em; margin-bottom: 20px;">Grade: ${report.overallGrade}</h1>
+                        
+                        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: left;">
+                            <h4 style="color: var(--neon-accent); margin-bottom: 10px;">Gap Analysis</h4>
+                            <p style="margin-bottom: 10px;"><strong>Strengths:</strong> ${report.gapAnalysis.strengths.join(', ')}</p>
+                            <p><strong>Improvements Needed:</strong> ${report.gapAnalysis.improvements.join(', ')}</p>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px; color: #cbd5e1; line-height: 1.6;">
+                            ${report.recommendation}
+                        </div>
+                        
+                        <button onclick="window.location.href='/dashboard'" class="send-btn" style="padding: 12px 30px; width: 100%;">
+                            Return to Dashboard
+                        </button>
+                    </div>
+                `;
+            }
+
+            function onTimeout() { showResolution('timeout'); }
+
+        })();
+    </script>
+</body>
+
+</html>

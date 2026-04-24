@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JWT Auth Demo (Basic)</title>
+    <style>
+        /* Essential for functionality */
+        .hidden {
+            display: none;
+        }
+
+        .logs {
+            margin-top: 20px;
+            border-top: 1px solid black;
+            padding-top: 10px;
+            max-height: 200px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN VIEW -->
+    <div id="login-view">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username" value="sba"><br><br>
+        <input type="password" id="password" placeholder="Password" value="123"><br><br>
+        <button onclick="login()">Sign In</button>
+        <p id="login-error" style="color: red;"></p>
+    </div>
+
+    <!-- DASHBOARD VIEW -->
+    <div id="dashboard-view" class="hidden">
+        <h1>Dashboard</h1>
+        <p><strong>Inactivity Timer:</strong> <span id="timer-display">2:30</span></p>
+        <p><strong>Access Token Life:</strong> <span id="access-timer">1:30</span></p>
+        <p><strong>Refresh Token Life:</strong> <span id="refresh-timer">3:00</span></p>
+
+        <button onclick="getPosts()">Fetch Posts</button>
+        <button onclick="logout()">Logout</button>
+
+        <h3>Activity Logs:</h3>
+        <div id="activity-log" class="logs">
+            <div>Waiting for activity...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

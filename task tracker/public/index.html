@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <button onclick="logout()" class="btn-del" style="width: auto; float: right;">Logout</button>
+    <div class="container">
+        <label for="task">Enter your task</label>
+        <input type="text" id="task" placeholder="Enter your task">
+        <label for="description">Enter your description</label>
+        <input type="text" id="description" placeholder="Enter your description">
+        <button id="addBtn">Add Task</button>
+    </div>
+    <div class="tasks">
+        <ul id="taskContainer">
+
+        </ul>
+
+    </div>
+    <script>
+        const token = localStorage.getItem("token");
+        if (!token) {
+            window.location.href = "login.html";
+        }
+
+        const task = document.querySelector("input");
+        const description = document.getElementById("description");
+        const button = document.getElementById("addBtn");
+        const taskContainer = document.getElementById("taskContainer")
+        const tasks = document.querySelector(".tasks");
+        button.addEventListener("click", async () => {
+            await fetch("http://localhost:2000/tasks", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                },
+                body: JSON.stringify({
+                    title: task.value,
+                    description: description.value
+                })
+            })
+            task.value = "";
+            description.value = "";
+            loadTasks();
+            // const task = input.value;
+            // const taskElement = document.createElement("li");
+            // const div1 = document.createElement("div");
+            // div.innerHTML = task;
+            // const div2 = document.createElement("div");
+            // div2.innerHTML = description.value;
+            // taskElement.appendChild(div1);
+            // taskElement.appendChild(div2);
+            // tasks.appendChild(taskElement);
+            // input.value = "";
+            // description.value = "";
+        })
+        async function completeTask(id) {
+            await fetch(`tasks/${id}`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": token
+                },
+                body: JSON.stringify({ status: "completed" })
+            });
+            loadTasks();
+        }
+
+        async function magicBreakdown(title) {
+            const btn = event.target;
+            const originalText = btn.innerText;
+            btn.innerText = "⏳...";
+
+            try {
+                const res = await fetch("/ai/breakdown", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": token
+                    },
+                    body: JSON.stringify({ title })
+                });
+
+                const data = await res.json();
+                // alert(`AI Breakdown for "${title}":\n\n${data.breakdown}`); // No more alerts!
+                loadTasks(); // Automatically refresh the list
+            } catch (err) {
+                alert("AI is busy right now. Try again later!");
+            } finally {
+                btn.innerText = originalText;
+            }
+        }
+
+        async function deleteTask(id) {
+            if (!confirm("Are You sure you wnat to delete it ??")) return;
+            await fetch(`tasks/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                },
+            })
+            loadTasks();
+        }
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "login.html";
+        }
+        async function loadTasks() {
+            try {
+                const res = await fetch("http://localhost:2000/tasks", {
+                    headers: { "Authorization": token }
+                });
+
+                if (res.status === 401) {
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const data = await res.json();
+                taskContainer.innerHTML = "";
+                // data.forEach(task => {
+                //     const taskElement = document.createElement("li");
+                //     const div1 = document.createElement("div");
+                //     div1.innerHTML = task.title;
+                //     const div2 = document.createElement("div");
+                //     div2.innerHTML = task.description;
+                //     taskElement.appendChild(div1);
+                //     taskElement.appendChild(div2);
+                //     taskContainer.appendChild(taskElement);
+                // })
+                data.forEach(t => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <div class="${t.status === 'completed' ? 'completed' : ''}">
+                            <strong>${t.title}</strong>
+                            <div style="font-size: 12px; opacity: 0.7">${t.description}</div>
+                        </div>
+                        <div class="actions">
+                            ${t.status !== 'completed' ? `<button class="btn-done" onclick="completeTask('${t._id}')">✓</button>` : ''}
+                            <button style="background: #9333ea; padding: 5px 10px; font-size: 12px;" onclick="magicBreakdown('${t.title}')">✨ Magic</button>
+                            <button class="btn-del" onclick="deleteTask('${t._id}')">🗑️</button>
+                        </div>
+                    `;
+                    taskContainer.appendChild(li);
+                });
+            } catch (err) {
+                console.error("Failed to load tasks:", err);
+            }
+        }
+        loadTasks();
+    </script>
+</body>
+
+</html>

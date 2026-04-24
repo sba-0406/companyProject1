@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Dojo | Immersive Simulation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #030712;
+            --glass-panel: rgba(17, 24, 39, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --neon-accent: #6366f1;
+            --neon-danger: #f43f5e;
+            --neon-success: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* FIXED HEADER - 60px */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .version-badge {
+            font-size: 0.6em;
+            background: #334155;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 10px;
+            color: #94a3b8;
+        }
+
+        /* FIXED INPUT ZONE - 80px - CENTER COLUMN ONLY */
+        .input-zone {
+            position: fixed;
+            bottom: 0;
+            left: 300px;
+            /* Match left panel width */
+            right: 300px;
+            /* Match right panel width */
+            height: 80px;
+            background: #0f172a;
+            border-top: 1px solid var(--glass-border);
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .input-zone input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1em;
+        }
+
+        .input-zone input:focus {
+            outline: none;
+            border-color: var(--neon-accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .send-btn {
+            background: var(--neon-accent);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-btn:hover {
+            background: #4f46e5;
+            transform: scale(1.05);
+        }
+
+        /* MAIN CONTENT - Between header and input */
+        .main-content {
+            position: fixed;
+            top: 60px;
+            bottom: 80px;
+            left: 0;
+            right: 0;
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            overflow: hidden;
+        }
+
+        /* LEFT PANEL */
+        .panel-left {
+            background: rgba(0, 0, 0, 0.3);
+            border-right: 1px solid var(--glass-border);
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .avatar-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .persona-info h2 {
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 1.3em;
+        }
+
+        .persona-role {
+            text-align: center;
+            color: var(--neon-accent);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .context-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: var(--text-muted);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 15px;
+        }
+
+        .context-card h4 {
+            color: var(--text-main);
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .context-card strong {
+            color: var(--neon-accent);
+        }
+
+        /* CENTER PANEL - CHAT */
+        .panel-center {
+            background: rgba(0, 0, 0, 0.2);
+            overflow-y: auto;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .msg {
+            max-width: 70%;
+            padding: 14px 20px;
+            border-radius: 18px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .msg.ai {
+            align-self: flex-start;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+
+        .msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            color: white;
+        }
+
+        .typing {
+            color: var(--text-muted);
+            font-style: italic;
+            opacity: 0.6;
+            padding: 10px;
+        }
+
+        /* RIGHT PANEL */
+        .panel-right {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 1px solid var(--glass-border);
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .hud-header {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .metric-group {
+            margin-bottom: 25px;
+        }
+
+        .metric-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .metric-val {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .bar-bg {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- FIXED HEADER -->
+    <div class="header">
+        <div class="brand">
+            <span style="font-size: 1.5em;">🥋</span> DOJO // SIMULATION <span class="version-badge">v3.0</span>
+        </div>
+        <button onclick="window.location.href='/dashboard'"
+            style="background:none; border:1px solid #334155; color:#94a3b8; padding:8px 16px; border-radius:6px; cursor:pointer;">
+            Exit
+        </button>
+    </div>
+
+    <!-- MAIN CONTENT GRID -->
+    <div class="main-content">
+        <!-- LEFT: Persona Info -->
+        <div class="panel-left">
+            <div class="avatar-container">
+                <div class="avatar-img" id="personaInitials">?</div>
+            </div>
+            <div class="persona-info">
+                <h2 id="personaName">Loading...</h2>
+                <div class="persona-role" id="personaRole">Initializing...</div>
+            </div>
+
+            <div class="context-card">
+                <h4>📂 Mission Briefing</h4>
+                <div style="margin-bottom:10px;">
+                    <strong>Situation:</strong>
+                    <p style="margin:4px 0;" id="missionSituation">Loading...</p>
+                </div>
+                <div style="margin-bottom:10px;">
+                    <strong>Objective:</strong>
+                    <p style="margin:4px 0;" id="missionObjective">Loading...</p>
+                </div>
+                <div>
+                    <strong style="color:var(--neon-danger);">Stakes:</strong>
+                    <p style="margin:4px 0;" id="missionStakes">Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER: Chat Feed -->
+        <div class="panel-center" id="messagesList">
+            <!-- Messages appear here -->
+            <div class="typing" id="typingIndicator" style="display: none;">
+                AI is typing...
+            </div>
+        </div>
+
+        <!-- RIGHT: Analytics -->
+        <div class="panel-right">
+            <div class="hud-header">Real-Time Analytics</div>
+            <div class="metric-group">
+                <div class="metric-label">
+                    <span>Empathy</span>
+                    <span class="metric-val" id="empathyScore">0%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" id="empathyBar" style="background: var(--neon-accent);"></div>
+                </div>
+            </div>
+            <div class="metric-group">
+                <div class="metric-label">
+                    <span>Professionalism</span>
+                    <span class="metric-val" id="proScore">0%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" id="proBar" style="background: var(--neon-success);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIXED INPUT ZONE -->
+    <div class="input-zone">
+        <input type="text" id="chatInput" placeholder="Type your response..." autocomplete="off">
+        <button class="send-btn" onclick="sendUserMessage()">➤</button>
+        <button onclick="endSession()"
+            style="background:#dc2626; color:white; border:none; padding:12px 20px; border-radius:8px; cursor:pointer; font-size:0.9em;">
+            End Session
+        </button>
+    </div>
+
+    <script>
+        (function () {
+            const sessionId = '<%= sessionId %>';
+            const chatInput = document.getElementById('chatInput');
+
+            document.addEventListener('DOMContentLoaded', loadSession);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendUserMessage();
+            });
+
+            async function loadSession() {
+                try {
+                    const res = await fetch(`/api/chat/${sessionId}`, { credentials: 'include' });
+                    const data = await res.json();
+                    if (data.success) {
+                        const session = data.data;
+                        renderPersona(session.persona);
+                        session.messages.forEach(msg => renderMessage(msg));
+                        scrollToBottom();
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            function renderPersona(persona) {
+                document.getElementById('personaName').textContent = persona.name;
+                document.getElementById('personaRole').textContent = persona.role;
+                document.getElementById('personaInitials').textContent = persona.name.charAt(0);
+
+                if (persona.briefing && typeof persona.briefing === 'object') {
+                    document.getElementById('missionSituation').textContent = persona.briefing.situation;
+                    document.getElementById('missionObjective').textContent = persona.briefing.objective;
+                    document.getElementById('missionStakes').textContent = persona.briefing.stakes;
+                } else {
+                    document.getElementById('missionSituation').textContent = persona.instructions || 'No context available.';
+                    document.getElementById('missionObjective').textContent = 'Survive the conversation.';
+                    document.getElementById('missionStakes').textContent = 'Unknown.';
+                }
+            }
+
+            function renderMessage(msg) {
+                const div = document.createElement('div');
+                div.className = `msg ${msg.sender}`;
+                div.textContent = msg.text;
+                document.getElementById('messagesList').appendChild(div);
+            }
+
+            window.sendUserMessage = async function () {
+                const text = chatInput.value.trim();
+                if (!text) return;
+
+                renderMessage({ sender: 'user', text });
+                chatInput.value = '';
+                scrollToBottom();
+
+                try {
+                    const res = await fetch('/api/chat/message', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId, message: text }),
+                        credentials: 'include'
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        renderMessage({ sender: 'ai', text: data.data.message });
+                        updateAnalytics(data.data.analysis);
+                        scrollToBottom();
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            };
+
+            function updateAnalytics(analysis) {
+                if (!analysis) return;
+                document.getElementById('empathyScore').textContent = `${analysis.empathy || 0}%`;
+                document.getElementById('empathyBar').style.width = `${analysis.empathy || 0}%`;
+                document.getElementById('proScore').textContent = `${analysis.professionalism || 0}%`;
+                document.getElementById('proBar').style.width = `${analysis.professionalism || 0}%`;
+            }
+
+            function scrollToBottom() {
+                const list = document.getElementById('messagesList');
+                list.scrollTop = list.scrollHeight;
+            }
+
+            window.endSession = async function () {
+                if (!confirm('End this session? You will receive a performance report.')) return;
+
+                try {
+                    const res = await fetch('/api/chat/end', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ sessionId }),
+                        credentials: 'include'
+                    });
+
+                    const data = await res.json();
+                    if (data.success) {
+                        showReport(data.data);
+                    } else {
+                        alert('Failed to end session');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Error ending session');
+                }
+            };
+
+            function showReport(report) {
+                const html = `
+                    <div style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; display:flex; align-items:center; justify-content:center; padding:20px;">
+                        <div style="background:#1e293b; border-radius:20px; padding:40px; max-width:500px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+                            <h2 style="text-align:center; margin-bottom:10px; color:#fff;">🎯 Session Complete</h2>
+                            <p style="text-align:center; color:#94a3b8; margin-bottom:30px;">Your Performance Report</p>
+                            
+                            <div style="background:rgba(99,102,241,0.1); padding:20px; border-radius:12px; margin-bottom:20px;">
+                                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                    <span style="color:#cbd5e1;">Empathy:</span>
+                                    <span style="color:#10b981; font-weight:700;">${report.performance.empathy}%</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                                    <span style="color:#cbd5e1;">Professionalism:</span>
+                                    <span style="color:#10b981; font-weight:700;">${report.performance.professionalism}%</span>
+                                </div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <span style="color:#cbd5e1;">Messages Sent:</span>
+                                    <span style="color:#fff; font-weight:700;">${report.performance.messageCount}</span>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align:center; margin-bottom:20px;">
+                                <div style="font-size:4em; margin-bottom:10px;">${getGradeEmoji(report.grade)}</div>
+                                <div style="font-size:2em; font-weight:700; color:#fff;">Grade: ${report.grade}</div>
+                            </div>
+                            
+                            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:25px;">
+                                <p style="color:#cbd5e1; font-size:0.95em; line-height:1.6; margin:0;">${report.feedback}</p>
+                            </div>
+                            
+                            <button onclick="window.location.href='/dashboard'" 
+                                style="width:100%; background:#6366f1; color:white; border:none; padding:14px; border-radius:10px; cursor:pointer; font-size:1em; font-weight:600;">
+                                Return to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.insertAdjacentHTML('beforeend', html);
+            }
+
+            function getGradeEmoji(grade) {
+                const map = { 'A': '🏆', 'B': '✨', 'C': '👍', 'D': '📈', 'F': '💪' };
+                return map[grade] || '📊';
+            }
+        })();
+    </script>
+</body>
+
+</html>

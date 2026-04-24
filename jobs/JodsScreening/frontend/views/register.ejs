@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScenarioSim | Register</title>
+    <link rel="stylesheet" href="/css/style.css?v=10">
+</head>
+
+<body class="auth-wrapper">
+    <div class="auth-card">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <div
+                style="font-weight: 900; color: var(--primary-color); font-size: 1.5rem; letter-spacing: -1px; margin-bottom: 8px;">
+                ScenarioSim</div>
+            <h1>Create Account</h1>
+            <p>Join ScenarioSim and start your journey</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name"
+                    style="font-weight: 700; font-size: 0.85rem; color: var(--text-main); text-transform: uppercase;">Full
+                    Name</label>
+                <input type="text" id="name" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label for="email"
+                    style="font-weight: 700; font-size: 0.85rem; color: var(--text-main); text-transform: uppercase;">Email
+                    Address</label>
+                <input type="email" id="email" placeholder="john@company.com" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label for="password"
+                    style="font-weight: 700; font-size: 0.85rem; color: var(--text-main); text-transform: uppercase;">Password</label>
+                <input type="password" id="password" placeholder="At least 6 characters" required minlength="6">
+            </div>
+            <button type="submit" class="btn"
+                style="width: 100%; padding: 14px; font-weight: 700; font-size: 1rem;">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            Already have an account? <a href="/login">Sign In</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = e.target.querySelector('button');
+
+            try {
+                btn.innerText = 'Creating account...';
+                btn.disabled = true;
+
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem('user', JSON.stringify(data.data));
+                    window.location.href = '/api/applications/my-dashboard';
+                } else {
+                    alert(data.error || 'Registration failed');
+                    btn.innerText = 'Create Account';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Connection error');
+                btn.innerText = 'Create Account';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

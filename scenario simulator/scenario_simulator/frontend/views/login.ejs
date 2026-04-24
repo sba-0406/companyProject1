@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Role Simulation</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+    </div>
+
+    <div class="container" style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div class="card" style="width: 100%; max-width: 450px;">
+            <h2 style="text-align: center; margin-bottom: 10px;">Welcome Back</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">Enter your credentials to
+                access the simulation platform.</p>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="e.g. employee@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 10px;">Sign In</button>
+            </form>
+
+            <div
+                style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); text-align: center; font-size: 0.85em; color: var(--text-muted);">
+                <strong>Test Accounts:</strong><br>
+                Admin: admin@example.com / password123<br>
+                Manager: manager@example.com / password123<br>
+                Employee: employee@example.com / password123
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

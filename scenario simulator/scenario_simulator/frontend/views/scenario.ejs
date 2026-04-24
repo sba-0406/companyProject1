@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Simulation</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border);
+            z-index: 1;
+        }
+
+        .step {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--bg-dark);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .step.active {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .step.completed {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .option-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-card:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .option-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+            border-width: 2px;
+        }
+
+        .briefing-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--primary-color);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .role-identity {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+        <div id="nav-links">
+            <a href="/dashboard">Exit Simulation</a>
+        </div>
+    </div>
+
+    <div class="container" style="max-width: 800px;">
+        <div id="simulation-container">
+            <div style="text-align: center; padding: 100px;">
+                <p>Establishing secure simulation environment...</p>
+            </div>
+        </div>
+
+        <!-- AI Powered Footer -->
+        <div
+            style="margin-top: 50px; text-align: center; opacity: 0.5; font-size: 0.8em; border-top: 1px solid var(--border); padding-top: 20px;">
+            <p id="ai-powered-text">🛡️ AI Core: Connecting...</p>
+        </div>
+    </div>
+
+    <script>
+        let scenario = null;
+        let currentStep = -1; // -1 is Intro
+        let responses = [];
+
+        async function loadScenario() {
+            const id = "<%= scenarioId %>";
+            const res = await fetch(`/api/scenarios/${id}`, { credentials: 'include' });
+            const data = await res.json();
+            if (data.success) {
+                scenario = data.data;
+                renderStep();
+            }
+        }
+
+        function renderStep() {
+            const container = document.getElementById('simulation-container');
+
+            if (currentStep === -1) {
+                // RENDER INTRO
+                container.innerHTML = `
+                    <div class="briefing-box">
+                        <div class="role-identity">Mission Briefing: ${scenario.jobRole}</div>
+                        <h1 style="font-size: 2.5em; margin-bottom: 20px;">${scenario.title}</h1>
+                        <p style="font-size: 1.1em; line-height: 1.6; color: var(--text-muted); margin-bottom: 30px;">
+                            ${scenario.description}
+                        </p>
+                        <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 30px;">
+                        <h3 style="margin-bottom: 15px;">Your Objective:</h3>
+                        <p style="color: var(--text-main); margin-bottom: 30px;">
+                            Navigate through ${scenario.stages.length} interactive stages. Your decisions and responses will be analyzed by the AI Impact Engine to measure your competencies.
+                        </p>
+                        <button class="btn btn-primary" onclick="startSim()" style="width:100%; padding:18px; font-size:1.1em;">Start Interactive Simulation</button>
+                    </div>
+                `;
+                return;
+            }
+
+            // RENDER STAGES
+            const totalSteps = scenario.stages.length;
+            let stepsHtml = '<div class="step-indicator">';
+            for (let i = 0; i < totalSteps; i++) {
+                const status = i === currentStep ? 'active' : (i < currentStep ? 'completed' : '');
+                stepsHtml += `<div class="step ${status}">${i + 1}</div>`;
+            }
+            stepsHtml += '</div>';
+
+            const stage = scenario.stages[currentStep];
+
+            let inputHtml = '';
+            if (stage.type === 'text') {
+                inputHtml = `<textarea id="stageInput" rows="8" placeholder="Type your response here..." class="card" style="width:100%; margin-top:20px;"></textarea>`;
+            } else if (stage.type === 'mcq') {
+                inputHtml = `<div id="mcq-options" style="margin-top:20px;">
+                    ${stage.options.map((opt, idx) => `
+                        <div class="option-card" onclick="selectOption(${idx})">
+                            ${opt}
+                        </div>
+                    `).join('')}
+                </div><input type="hidden" id="stageInput">`;
+            } else if (stage.type === 'ranking') {
+                inputHtml = `<p style="color:var(--text-muted); font-size:0.9em;">Click items in order of priority</p>
+                <div id="ranking-options" style="margin-top:20px;">
+                    ${stage.options.map((opt, idx) => `
+                        <div class="option-card" data-idx="${idx}" onclick="rankOption(this)">
+                            ${opt}
+                        </div>
+                    `).join('')}
+                </div><div id="rank-display" style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;"></div>
+                <input type="hidden" id="stageInput">`;
+            }
+
+            container.innerHTML = `
+                <div style="margin-bottom: 20px; display: flex; align-items: center; gap:10px; opacity: 0.6;">
+                    <span class="badge" style="background:var(--primary-color)">${scenario.jobRole}</span>
+                    <span style="font-size: 0.8em; color: var(--text-muted);">// ${scenario.title}</span>
+                </div>
+                ${stepsHtml}
+                <div class="card" style="border-left: 4px solid var(--primary-color);">
+                    <span class="badge badge-warning">${stage.type.toUpperCase()} PHASE</span>
+                    <h2 style="margin-top:15px;">${stage.prompt}</h2>
+                </div>
+                ${inputHtml}
+                <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center;">
+                    <button class="btn btn-secondary" onclick="showHelp()" style="background:transparent; border:1px solid var(--border)">View Scenario Context</button>
+                    <button class="btn" onclick="nextStep()">${currentStep === totalSteps - 1 ? 'Finish Simulation' : 'Continue'}</button>
+                </div>
+            `;
+        }
+
+        function startSim() {
+            currentStep = 0;
+            renderStep();
+        }
+
+        function showHelp() {
+            alert(`SCENARIO CONTEXT:\n\n${scenario.description}`);
+        }
+
+        function selectOption(idx) {
+            document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.option-card')[idx].classList.add('selected');
+            document.getElementById('stageInput').value = scenario.stages[currentStep].options[idx];
+        }
+
+        let ranks = [];
+        function rankOption(el) {
+            const val = el.innerText;
+            if (ranks.includes(val)) return;
+            ranks.push(val);
+            el.style.opacity = '0.3';
+            el.style.pointerEvents = 'none';
+
+            const display = document.getElementById('rank-display');
+            const tag = document.createElement('span');
+            tag.className = 'badge badge-success';
+            tag.innerText = `${ranks.length}. ${val}`;
+            display.appendChild(tag);
+
+            document.getElementById('stageInput').value = ranks.join(' | ');
+        }
+
+        async function nextStep() {
+            const input = document.getElementById('stageInput').value;
+            if (!input) return alert("Please provide a response before continuing.");
+
+            responses.push({
+                stageIndex: currentStep,
+                type: scenario.stages[currentStep].type,
+                answer: input
+            });
+
+            if (currentStep < scenario.stages.length - 1) {
+                currentStep++;
+                ranks = [];
+                renderStep();
+            } else {
+                submitSimulation();
+            }
+        }
+
+        async function submitSimulation() {
+            document.getElementById('simulation-container').innerHTML = `
+                <div style="text-align:center; padding: 50px;">
+                    <h2 class="stat-value">Engine Analysis...</h2>
+                    <p>Submitting your transcript to the Impact Engine for competency mapping.</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch('/api/simulation/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        scenarioId: scenario._id,
+                        stageResponses: responses
+                    }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = '/report';
+                } else {
+                    alert("Submission failed: " + data.error);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadAIDiagnostics() {
+            try {
+                const res = await fetch('/api/ai/diagnostics', { credentials: 'include' });
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const s = data.data;
+                    document.getElementById('ai-powered-text').innerHTML = `🛡️ AI Powered by <strong>${s.provider}</strong> (${s.model})`;
+                }
+            } catch (e) {
+                console.warn("Could not load AI diagnostics");
+            }
+        }
+
+        window.onload = () => {
+            loadScenario();
+            loadAIDiagnostics();
+        };
+    </script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

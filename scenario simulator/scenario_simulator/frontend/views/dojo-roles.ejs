@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Dojo | Role Selection</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .roles-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            /* Keep original padding for .container if it's still used */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(to right, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #94a3b8;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .role-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            border-color: #6366f1;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .role-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .role-card h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .role-card p {
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .scenarios-list {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scenarios-list h4 {
+            color: #6366f1;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .scenarios-list ul {
+            list-style: none;
+            font-size: 0.9em;
+            color: #cbd5e1;
+        }
+
+        .scenarios-list li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .scenarios-list li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .enter-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+        <div id="nav-links">
+            <!-- Navbar built via main.js -->
+        </div>
+    </div>
+
+    <div class="roles-container">
+        <div class="header">
+            <h1>🥋 Leadership Dojo</h1>
+            <p>Choose your role and face 3 challenging scenarios</p>
+        </div>
+
+        <div class="role-grid">
+            <!-- Manager -->
+            <div class="role-card">
+                <div class="role-icon">👔</div>
+                <h2>Manager</h2>
+                <p>Lead teams through crisis, performance issues, and tough decisions</p>
+                <div class="scenarios-list">
+                    <h4>3 Scenarios</h4>
+                    <ul>
+                        <li>Angry Client Escalation</li>
+                        <li>Underperforming Team</li>
+                        <li>Budget Crisis</li>
+                    </ul>
+                </div>
+                <button class="enter-btn" onclick="enterSimulation('Manager')">Enter Simulation</button>
+            </div>
+
+            <!-- Developer -->
+            <div class="role-card">
+                <div class="role-icon">💻</div>
+                <h2>Developer</h2>
+                <p>Navigate technical disputes, scope creep, and mentorship challenges</p>
+                <div class="scenarios-list">
+                    <h4>3 Scenarios</h4>
+                    <ul>
+                        <li>Technical Disagreement</li>
+                        <li>Scope Pressure</li>
+                        <li>Struggling Junior Dev</li>
+                    </ul>
+                </div>
+                <button class="enter-btn" onclick="enterSimulation('Developer')">Enter Simulation</button>
+            </div>
+
+            <!-- HR -->
+            <div class="role-card">
+                <div class="role-icon">👥</div>
+                <h2>HR</h2>
+                <p>Handle harassment claims, salary negotiations, and team conflicts</p>
+                <div class="scenarios-list">
+                    <h4>3 Scenarios</h4>
+                    <ul>
+                        <li>Harassment Complaint</li>
+                        <li>Salary Negotiation</li>
+                        <li>Team Conflict</li>
+                    </ul>
+                </div>
+                <button class="enter-btn" onclick="enterSimulation('HR')">Enter Simulation</button>
+            </div>
+
+            <!-- Executive -->
+            <div class="role-card">
+                <div class="role-icon">🎯</div>
+                <h2>Executive</h2>
+                <p>Manage board challenges, major escalations, and high-stakes negotiations</p>
+                <div class="scenarios-list">
+                    <h4>3 Scenarios</h4>
+                    <ul>
+                        <li>Board Strategy Challenge</li>
+                        <li>Client CEO Escalation</li>
+                        <li>Union Negotiation</li>
+                    </ul>
+                </div>
+                <button class="enter-btn" onclick="enterSimulation('Executive')">Enter Simulation</button>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script>
+        async function enterSimulation(role) {
+            try {
+                const res = await fetch('/dojo/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role }),
+                    credentials: 'include'
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    window.location.href = `/dojo/simulation/${data.data._id}`;
+                } else {
+                    alert('Failed to start simulation');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error starting simulation');
+            }
+        }
+    </script>
+</body>
+
+</html>

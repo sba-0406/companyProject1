@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Report</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="navbar">
+        <h2>SimPlatform</h2>
+        <div id="nav-links">
+            <!-- Navbar built via main.js -->
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Competency Analysis</h1>
+
+        <div class="grid-2" style="margin-bottom: 30px;">
+            <div class="card stat-card">
+                <p>Simulations Completed</p>
+                <div class="stat-value" id="stat-total">0</div>
+            </div>
+            <div class="card stat-card">
+                <p>Average Score</p>
+                <div class="stat-value" id="stat-score"
+                    style="background: linear-gradient(to bottom, #6366f1, #8b5cf6); -webkit-background-clip: text; background-clip: text;">
+                    0%</div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 30px;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Skill Radar</h2>
+            <div style="max-width: 500px; margin: 0 auto; min-height: 300px;">
+                <canvas id="skillChart"></canvas>
+            </div>
+        </div>
+
+        <div id="manager-section" style="display:none; margin-bottom: 40px;">
+            <h2>Team Reports (Shared with you)</h2>
+            <div id="shared-list"></div>
+        </div>
+
+        <h2>Performance History</h2>
+        <div id="history-list">
+            <p>Loading your career journey...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let myRadarChart = null;
+
+        function renderChart(history) {
+            const ctx = document.getElementById('skillChart').getContext('2d');
+            const scores = {};
+
+            if (!history || history.length === 0) {
+                // Default empty state for chart
+                scores["No Data"] = { sum: 0, count: 1 };
+            } else {
+                history.forEach(h => {
+                    if (h.competencyScores && Array.isArray(h.competencyScores)) {
+                        // Standard Simulation
+                        h.competencyScores.forEach(c => {
+                            if (!scores[c.competency]) scores[c.competency] = { sum: 0, count: 0 };
+                            scores[c.competency].count++;
+                            if (c.status === 'Observed') scores[c.competency].sum += 100;
+                            else if (c.status === 'Partial') scores[c.competency].sum += 50;
+                        });
+                    } else if (h.finalReport && h.finalReport.competencyScores) {
+                        // Dojo Session
+                        Object.entries(h.finalReport.competencyScores).forEach(([name, val]) => {
+                            if (!scores[name]) scores[name] = { sum: 0, count: 0 };
+                            scores[name].count++;
+                            scores[name].sum += val;
+                        });
+                    }
+                });
+            }
+
+            const labels = Object.keys(scores);
+            const dataValues = labels.map(l => scores[l].count > 0 ? (scores[l].sum / scores[l].count) : 0);
+
+            if (myRadarChart) myRadarChart.destroy();
+
+            myRadarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Skill Proficiency (%)',
+                        data: dataValues,
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        borderColor: '#6366f1',
+                        pointBackgroundColor: '#8b5cf6',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                            pointLabels: { color: '#94a3b8', font: { size: 14 } }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        async function shareReport(id) {
+            const email = prompt("Enter Manager's Email to share with:");
+            if (!email) return;
+
+            try {
+                const res = await fetch(`/api/simulation/${id}/share`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ managerEmail: email }),
+                    credentials: 'include'
+                });
+                const data = await res.json();
+                if (data.success) alert("Shared successfully!");
+                else alert(data.error);
+            } catch (e) {
+                alert("Error sharing");
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 1. Fetch Personal History
+            try {
+                const res = await fetch('/api/reports/me', { credentials: 'include' });
+                const data = await res.json();
+                const list = document.getElementById('history-list');
+
+                if (data.success) {
+                    const stats = data.data.stats;
+                    const totalWeightedScore = data.data.history.reduce((sum, h) => {
+                        if (h.totalScore) return sum + h.totalScore;
+                        if (h.finalReport) {
+                            const scoresMap = h.finalReport.competencyScores || {};
+                            const vals = Object.values(scoresMap);
+                            const avgVal = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+                            return sum + avgVal;
+                        }
+                        return sum;
+                    }, 0);
+                    const avgScore = data.data.history.length > 0 ? Math.round(totalWeightedScore / data.data.history.length) : 0;
+
+                    document.getElementById('stat-total').innerText = stats.totalSimulations;
+                    document.getElementById('stat-score').innerText = avgScore + '%';
+
+                    renderChart(data.data.history);
+                    list.innerHTML = '';
+
+                    if (data.data.history.length === 0) {
+                        list.innerHTML = '<div class="card"><p style="text-align:center; color:var(--text-muted);">No simulations yet. Visit the dashboard to start!</p></div>';
+                    }
+
+                    data.data.history.forEach(h => {
+                        const div = document.createElement('div');
+                        div.className = 'card';
+                        div.style.marginBottom = '20px';
+
+                        if (h.finalReport) {
+                            // --- RENDER DOJO SESSION ---
+                            const report = h.finalReport || {};
+                            let compHtml = '';
+                            const compScores = report.competencyScores || {};
+                            Object.entries(compScores).forEach(([name, val]) => {
+                                const badgeClass = val >= 80 ? 'badge-success' : (val >= 60 ? 'badge-warning' : 'badge-danger');
+                                compHtml += `<span class="badge ${badgeClass}" style="margin-right:5px; margin-bottom:5px;">${name} (${val})</span>`;
+                            });
+
+                            let scenarioHtml = '<div style="margin-top:15px; display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:10px;">';
+                            const sceneResults = report.scenarioResults || [];
+                            sceneResults.forEach((s, i) => {
+                                const statusColor = (s && s.status === 'success') ? '#10b981' : '#ef4444';
+                                scenarioHtml += `
+                                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:8px; border-left:3px solid ${statusColor};">
+                                        <div style="font-size:0.7em; color:var(--text-muted);">SCENARIO ${i + 1}</div>
+                                        <div style="font-weight:600; font-size:0.9em;">${(s && s.name) || 'Unknown'}</div>
+                                        <div style="font-size:0.8em; color:${statusColor};">${(s && s.status || 'pending').toUpperCase()}</div>
+                                    </div>`;
+                            });
+                            scenarioHtml += '</div>';
+
+                            div.innerHTML = `
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <h3 style="display:inline-block; color:var(--primary-color);">🥋 Dojo: ${report.roleAssessed} Journey</h3>
+                                        <span class="badge badge-success" style="margin-left:10px;">PRO JOURNEY</span>
+                                    </div>
+                                    <div>
+                                        <span class="badge" style="background:#6366f1; margin-right:10px; font-size:1.4em; padding: 10px 20px;">GRADE: ${report.overallGrade}</span>
+                                    </div>
+                                </div>
+                                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px;">${new Date(h.completedAt || h.createdAt).toLocaleDateString()}</p>
+                                
+                                <div style="margin: 15px 0;">
+                                    <strong>Competency Breakdown:</strong>
+                                    <div style="margin-top: 8px;">${compHtml}</div>
+                                </div>
+
+                                ${scenarioHtml}
+
+                                <div class="ai-feedback-box" style="margin-top:15px;">
+                                    <strong>Career Insights & Recommendations:</strong><br>
+                                    <p style="margin-top:5px; color:#cbd5e1;">${report.recommendation || 'N/A'}</p>
+                                    <div style="margin-top:10px; font-size:0.9em;">
+                                        <span style="color:#10b981;">✔ Strengths:</span> ${(report.gapAnalysis && report.gapAnalysis.strengths || []).join(', ') || 'None identified'}<br>
+                                        <span style="color:#ef4444;">⚠ Focus Areas:</span> ${(report.gapAnalysis && report.gapAnalysis.improvements || []).join(', ') || 'N/A'}
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            // --- RENDER STANDARD SIMULATION ---
+                            let compHtml = '';
+                            const cScores = h.competencyScores || [];
+                            cScores.forEach(c => {
+                                const badgeClass = c.status === 'Observed' ? 'badge-success' : (c.status === 'Partial' ? 'badge-warning' : 'badge-danger');
+                                const scoreDisplay = c.score ? ` (${c.score}/10)` : '';
+                                compHtml += `<span class="badge ${badgeClass}" style="margin-right:5px; margin-bottom:5px;">${c.competency}${scoreDisplay}</span>`;
+                            });
+
+                            let stageHtml = '';
+                            if (h.stageResponses && h.stageResponses.length > 0) {
+                                stageHtml = '<details style="margin-top:15px; padding:10px; background:rgba(255,255,255,0.02); border-radius:8px;"><summary style="cursor:pointer; font-weight:600;">Stage Breakdown</summary>';
+                                h.stageResponses.forEach((s, idx) => {
+                                    const percentage = s.maxScore > 0 ? Math.round((s.scoreEarned / s.maxScore) * 100) : 0;
+                                    const scoreColor = percentage >= 70 ? '#10b981' : (percentage >= 50 ? '#f59e0b' : '#ef4444');
+                                    let methodBadge = s.type === 'text' ? '<span class="badge" style="background:#10b981; font-size:0.75em; margin-left:8px;">AI Evaluated</span>' : '<span class="badge" style="background:#6366f1; font-size:0.75em; margin-left:8px;">Logic Based</span>';
+
+                                    stageHtml += `<div style="margin-top:8px; padding:8px; border-left:3px solid ${scoreColor};">
+                                        <strong>Stage ${idx + 1}:</strong> ${s.scoreEarned}/${s.maxScore} pts (${percentage}%) ${methodBadge}
+                                    </div>`;
+                                });
+                                stageHtml += '</details>';
+                            }
+
+                            div.innerHTML = `
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <h3>${h.scenario ? h.scenario.title : 'Simulation Result'}</h3>
+                                    <span class="badge" style="background:var(--primary-color); font-size:1.1em;">${h.totalScore || 0}/100</span>
+                                </div>
+                                <p style="font-size: 0.85em; color: var(--text-muted); margin-bottom: 15px;">${new Date(h.completedAt || h.createdAt).toLocaleDateString()}</p>
+                                <div style="margin: 10px 0;">${compHtml}</div>
+                                ${stageHtml}
+                                <div class="ai-feedback-box">${h.aiFeedback}</div>
+                            `;
+                        }
+                        list.appendChild(div);
+                    });
+                } else {
+                    list.innerHTML = `<p style="color:var(--danger)">Error: ${data.error}</p>`;
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('history-list').innerHTML = '<p style="color:var(--danger)">Failed to load history.</p>';
+            }
+
+            // 2. Fetch Shared Reports (for Managers)
+            try {
+                const sharedRes = await fetch('/api/reports/shared', { credentials: 'include' });
+                if (sharedRes.ok) {
+                    const sharedData = await sharedRes.json();
+                    if (sharedData.success && sharedData.data.length > 0) {
+                        const managerSection = document.getElementById('manager-section');
+                        const sharedList = document.getElementById('shared-list');
+                        managerSection.style.display = 'block';
+
+                        sharedData.data.forEach(h => {
+                            const div = document.createElement('div');
+                            div.className = 'card';
+                            div.style.marginBottom = '20px';
+                            div.style.border = '1px solid var(--primary-color)';
+                            div.innerHTML = `
+                                <h3>${h.user.name}'s Performance</h3>
+                                <p style="color:var(--text-muted); font-size: 0.9em; margin-bottom:10px;">Employee: ${h.user.email}</p>
+                                <div class="ai-feedback-box">${h.aiFeedback}</div>
+                            `;
+                            sharedList.appendChild(div);
+                        });
+                    }
+                }
+            } catch (e) {
+                console.warn('Manager data not accessible or not a manager role.');
+            }
+        });
+    </script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
