@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisma — Prep Roadmap & Apply Order</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --s: #111118;
+      --s2: #18181f;
+      --b: rgba(255, 255, 255, 0.07);
+      --b2: rgba(255, 255, 255, 0.13);
+      --t: #f0f0f5;
+      --m: #888899;
+      --a: #7c6aff;
+      --a2: #c084fc;
+      --easy: #34d399;
+      --med: #fbbf24;
+      --hard: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--t);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    .nav {
+      background: var(--bg);
+      border-bottom: 1px solid var(--b);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--a);
+      padding: 1rem 1.5rem 1rem 0;
+      border-right: 1px solid var(--b);
+      margin-right: 1rem;
+    }
+
+    .nav-tab {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 1rem 1.1rem;
+      color: var(--m);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      transition: all .2s;
+    }
+
+    .nav-tab.active {
+      color: var(--a);
+      border-bottom-color: var(--a);
+    }
+
+    .pg {
+      display: none;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .pg.active {
+      display: block;
+    }
+
+    .prog-bar {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--m);
+    }
+
+    .prog-track {
+      width: 120px;
+      height: 6px;
+      background: var(--b2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: var(--a);
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    /* PREP */
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .page-sub {
+      color: var(--m);
+      font-size: 13px;
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat {
+      background: var(--s);
+      border: 1px solid var(--b2);
+      border-radius: 12px;
+      padding: .75rem 1rem;
+      text-align: center;
+    }
+
+    .stat .n {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .stat .l {
+      font-size: 10px;
+      color: var(--m);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-top: 2px;
+    }
+
+    .phase {
+      background: var(--s);
+      border: 1px solid var(--b);
+      border-radius: 14px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .ph-head {
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .ph-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .ph-info {
+      flex: 1;
+    }
+
+    .ph-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .ph-sub {
+      font-size: 11px;
+      color: var(--m);
+      margin-top: 2px;
+    }
+
+    .ph-dur {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .ph-chevron {
+      font-size: 11px;
+      color: var(--m);
+      transition: transform .2s;
+      margin-left: 8px;
+    }
+
+    .phase.open .ph-chevron {
+      transform: rotate(180deg);
+    }
+
+    .ph-body {
+      display: none;
+      padding: 0 1.2rem 1.2rem;
+    }
+
+    .phase.open .ph-body {
+      display: block;
+    }
+
+    .ph-prog {
+      height: 3px;
+      background: var(--b);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .ph-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    .ph-count {
+      font-size: 11px;
+      color: var(--m);
+      margin-bottom: 8px;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .topic {
+      background: var(--s2);
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: .65rem .85rem;
+      cursor: pointer;
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      transition: border-color .15s;
+    }
+
+    .topic:hover {
+      border-color: var(--b2);
+    }
+
+    .topic.done {
+      border-color: rgba(52, 211, 153, .3);
+      background: rgba(52, 211, 153, .04);
+    }
+
+    .chk {
+      width: 17px;
+      height: 17px;
+      border-radius: 4px;
+      border: 1.5px solid var(--b2);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      transition: all .15s;
+    }
+
+    .topic.done .chk {
+      background: var(--easy);
+      border-color: var(--easy);
+      color: #000;
+    }
+
+    .tn {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .td {
+      font-size: 11px;
+      color: var(--m);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    .unlock-box {
+      background: rgba(124, 106, 255, .07);
+      border: 1px solid rgba(124, 106, 255, .2);
+      border-radius: 9px;
+      padding: .6rem .85rem;
+    }
+
+    .unlock-box .ul {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--a);
+      margin-bottom: 3px;
+      font-weight: 700;
+    }
+
+    .unlock-box p {
+      font-size: 12px;
+      color: var(--m);
+    }
+
+    /* APPLY ORDER */
+    .wave {
+      margin-bottom: 2rem;
+    }
+
+    .wave-hd {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .wave-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 999px;
+    }
+
+    .wave-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .wave-desc {
+      font-size: 12px;
+      color: var(--m);
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .order-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 8px;
+    }
+
+    .ocard {
+      background: var(--s);
+      border: 1px solid var(--b);
+      border-radius: 12px;
+      padding: .85rem 1rem;
+      display: flex;
+      gap: 10px;
+    }
+
+    .onum {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      min-width: 30px;
+      line-height: 1;
+    }
+
+    .oi {
+      flex: 1;
+    }
+
+    .on {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .ow {
+      font-size: 11px;
+      color: var(--m);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    .obs {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    .ob {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .exact {
+      background: rgba(52, 211, 153, .1);
+      color: var(--easy);
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .transfer {
+      background: rgba(251, 191, 36, .1);
+      color: var(--med);
+      border: 1px solid rgba(251, 191, 36, .2);
+    }
+
+    .be {
+      background: rgba(52, 211, 153, .1);
+      color: var(--easy);
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .bm {
+      background: rgba(251, 191, 36, .1);
+      color: var(--med);
+      border: 1px solid rgba(251, 191, 36, .2);
+    }
+
+    .bh {
+      background: rgba(248, 113, 113, .1);
+      color: var(--hard);
+      border: 1px solid rgba(248, 113, 113, .2);
+    }
+
+    .direct {
+      background: rgba(52, 211, 153, .1);
+      color: var(--easy);
+      border: 1px solid rgba(52, 211, 153, .2);
+    }
+
+    .ref-opt {
+      background: rgba(251, 191, 36, .1);
+      color: var(--med);
+      border: 1px solid rgba(251, 191, 36, .2);
+    }
+
+    .ref-yes {
+      background: rgba(124, 106, 255, .1);
+      color: #a78bfa;
+      border: 1px solid rgba(124, 106, 255, .2);
+    }
+
+    @media(max-width:600px) {
+      .pg {
+        padding: 1rem;
+      }
+
+      .order-grid,
+      .topics {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="logo">Bisma · Job OS</div>
+    <button class="nav-tab active" onclick="showPage('prep',this)">📋 Prep Roadmap</button>
+    <button class="nav-tab" onclick="showPage('order',this)">🎯 Apply Order</button>
+    <div class="prog-bar">
+      <span id="progTxt">0% done</span>
+      <div class="prog-track">
+        <div class="prog-fill" id="progFill" style="width:0%"></div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="pg active" id="pg-prep">
+    <h2 class="page-title">Interview Prep Roadmap</h2>
+    <p class="page-sub">Tailored for your stack: Node.js · MongoDB · PostgreSQL · LLM/Groq · Darwinbox internship · 9.85
+      CGPA<br>Check off each topic as you complete it. Progress saves automatically.</p>
+    <div class="stats-row">
+      <div class="stat">
+        <div class="n" id="sTotal" style="color:var(--a)">0/0</div>
+        <div class="l">Total Done</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sDSA" style="color:var(--med)">0%</div>
+        <div class="l">DSA</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sBack" style="color:var(--easy)">0%</div>
+        <div class="l">Backend</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sSys" style="color:var(--a2)">0%</div>
+        <div class="l">System Design</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sLLM" style="color:#c084fc">0%</div>
+        <div class="l">LLM/AI</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sProj" style="color:var(--easy)">0%</div>
+        <div class="l">Projects</div>
+      </div>
+      <div class="stat">
+        <div class="n" id="sHR" style="color:#f97316">0%</div>
+        <div class="l">Behavioural</div>
+      </div>
+    </div>
+    <div id="phaseGrid"></div>
+  </div>
+
+  <div class="pg" id="pg-order">
+    <h2 class="page-title">Curated Apply Order</h2>
+    <p class="page-sub">Since you're starting prep from scratch, this sequence builds confidence + leverage before
+      harder companies.<br>
+      <span style="color:var(--easy)">■ Exact</span> = Node.js/Mongo/Postgres confirmed &nbsp;·&nbsp; <span
+        style="color:var(--med)">■ Transferable</span> = backend JS adaptable &nbsp;·&nbsp; <span
+        style="color:var(--hard)">■ Different</span> = Java/Go primary
+    </p>
+    <div id="orderGrid"></div>
+  </div>
+
+  <script>
+    const P = {};
+    try { Object.assign(P, JSON.parse(localStorage.getItem('bprep') || '{}')); } catch (e) { }
+    function save() { try { localStorage.setItem('bprep', JSON.stringify(P)); } catch (e) { } }
+
+    const phases = [
+      {
+        id: 'dsa', c: '#fbbf24', bg: 'rgba(251,191,36,0.1)', title: 'DSA Foundations', dur: 'Weeks 1–3', sub: '600 problems head start. Fill gaps systematically.',
+        unlock: 'Freshworks, Zoho, Keka, HSBC GCC — all easy-tier companies',
+        topics: [
+          { id: 'd1', n: 'Arrays & Strings', d: 'Two-pointer, sliding window, prefix sums. 20 LC mediums.' },
+          { id: 'd2', n: 'Hashing & HashMaps', d: 'Frequency maps, anagrams, subarray problems. 15 problems.' },
+          { id: 'd3', n: 'Linked Lists', d: 'Reverse, cycle detection, merge sorted lists. 10 problems.' },
+          { id: 'd4', n: 'Stacks & Queues', d: 'Monotonic stack, BFS patterns, next greater element. 10 problems.' },
+          { id: 'd5', n: 'Binary Trees', d: 'DFS/BFS traversals, height, path sum, LCA. 15 problems.' },
+          { id: 'd6', n: 'Binary Search', d: 'Rotated array, answer-range BS, peak element. 10 problems.' },
+          { id: 'd7', n: 'Graphs', d: 'BFS, DFS, cycle detection, topological sort. 15 problems.' },
+          { id: 'd8', n: 'Recursion & Backtracking', d: 'Subsets, permutations, N-queens pattern. 10 problems.' },
+          { id: 'd9', n: 'Dynamic Programming', d: 'Knapsack, LCS, coin change, house robber. 15 problems.' },
+          { id: 'd10', n: 'Sorting & Complexity', d: 'Merge sort, quick sort internals. Know all complexities cold.' }
+        ]
+      },
+      {
+        id: 'backend', c: '#34d399', bg: 'rgba(52,211,153,0.1)', title: 'Backend & Node.js Deep Dive', dur: 'Weeks 2–4', sub: 'You already know Node.js. Deepen it to interview level.',
+        unlock: 'CleverTap, MoEngage, WebEngage, Cashfree, all mid-tier SaaS',
+        topics: [
+          { id: 'b1', n: 'Node.js Event Loop', d: 'Event loop, libuv, non-blocking I/O, call stack vs task queue. Interviewers love this.' },
+          { id: 'b2', n: 'Express.js Middleware', d: 'Custom middleware, error middleware, execution order. Know this cold.' },
+          { id: 'b3', n: 'REST API Design', d: 'Idempotency, status codes, versioning, pagination, rate limiting.' },
+          { id: 'b4', n: 'JWT & RBAC Deep Dive', d: 'Access vs refresh tokens, rotation, RBAC — you built this at Darwinbox! Articulate clearly.' },
+          { id: 'b5', n: 'MongoDB Internals', d: 'Indexing, aggregation pipeline, schema design, sharding basics.' },
+          { id: 'b6', n: 'PostgreSQL Deep Dive', d: 'Transactions, ACID, indexes, joins, explain plan, connection pooling.' },
+          { id: 'b7', n: 'Caching Strategies', d: 'Cache-aside, TTL, invalidation. You did in-memory cache in Moodify — extend to Redis.' },
+          { id: 'b8', n: 'API Security', d: 'CORS, Helmet, CSP headers (you configured this!), SQL injection, XSS.' },
+          { id: 'b9', n: 'File Handling & S3', d: 'Multer + AWS S3 — you did this at Darwinbox! Presigned URLs, multipart upload.' },
+          { id: 'b10', n: 'Async/Await Patterns', d: 'Callbacks → Promises → async/await. Error handling in each. Common interview trap.' },
+          { id: 'b11', n: 'Unit Testing', d: 'Jest, describe/it, mocking. You wrote tests in Moodify — explain your approach.' },
+          { id: 'b12', n: 'Docker Basics', d: '.env management, Dockerfile, Docker Compose. You used Docker in Moodify!' }
+        ]
+      },
+      {
+        id: 'llm', c: '#c084fc', bg: 'rgba(192,132,252,0.1)', title: 'LLM & AI Integration — Your Edge', dur: 'Week 3', sub: 'Your generator-critic pipeline is rare for a fresher. Learn to explain it fluently.',
+        unlock: 'Yellow.ai, Haptik, Observe.AI, Embibe, Glider.ai, HireQuotient',
+        topics: [
+          { id: 'l1', n: 'LLM API Usage', d: 'Groq/OpenAI API, temperature, max_tokens, system messages. You used Groq at Darwinbox.' },
+          { id: 'l2', n: 'Prompt Engineering', d: 'Few-shot, chain-of-thought, system prompts. AI company interviewers ask this.' },
+          { id: 'l3', n: 'Generator-Critic Pattern', d: 'LLaMA 3.3-70B generates, 3.1-8B validates, 2X buffer. Practice 2-min explanation cold.' },
+          { id: 'l4', n: 'ResilientAIService Design', d: 'Model rotation, throttling, fallback engine. Frame this as a production design decision.' },
+          { id: 'l5', n: 'RAG Basics', d: 'Retrieval-augmented generation, embeddings, vector search. Common at AI companies.' },
+          { id: 'l6', n: 'LLM Quality Control', d: 'Why your critic validates output. Hallucination handling. Shows production-grade thinking.' }
+        ]
+      },
+      {
+        id: 'system', c: '#60a5fa', bg: 'rgba(96,165,250,0.1)', title: 'System Design', dur: 'Weeks 4–6', sub: 'Start simple, build up. Required for mid-tier and above.',
+        unlock: 'BrowserStack, Razorpay, Groww, CleverTap, Sprinklr, Deutsche Bank',
+        topics: [
+          { id: 's1', n: 'URL Shortener', d: 'Classic starter. Hashing, DB schema, redirect, rate limiting. Do this first.' },
+          { id: 's2', n: 'Design a REST API', d: 'You built this. Articulate: schema, endpoints, auth, pagination, errors, versioning.' },
+          { id: 's3', n: 'Notification System', d: 'Email + push. You used Nodemailer! Extend: queue, retry, delivery guarantee.' },
+          { id: 's4', n: 'Rate Limiter', d: 'Token bucket, sliding window algorithms. Very common at fintech companies.' },
+          { id: 's5', n: 'Leaderboard System', d: 'You built one with MongoDB aggregation at Darwinbox! This is your killer SD story.' },
+          { id: 's6', n: 'File Upload Service', d: 'Multer + S3 — you built this! Chunked upload, presigned URLs, CDN.' },
+          { id: 's7', n: 'Caching Layer', d: 'In-memory vs Redis, invalidation strategies, TTL, write-through vs write-back.' },
+          { id: 's8', n: 'SQL vs NoSQL Decision', d: 'When to use MongoDB vs PostgreSQL. Be ready to justify your own project choices.' },
+          { id: 's9', n: 'Load Balancing Basics', d: 'Round-robin, least connections, health checks. Conceptual level for freshers.' },
+          { id: 's10', n: 'Design the Assessment Platform', d: 'You built this at Darwinbox! Walk through schemas, LLM pipeline, RBAC, analytics. Your best SD story.' }
+        ]
+      },
+      {
+        id: 'project', c: '#5eead4', bg: 'rgba(94,234,212,0.1)', title: 'Project Presentation', dur: 'Week 2 (parallel)', sub: 'Your projects are stronger than most freshers. But can you explain them in 5 minutes?',
+        unlock: 'ALL companies — this is your biggest single differentiator',
+        topics: [
+          { id: 'p1', n: 'Darwinbox 2-min Pitch', d: '"Architected full-stack AI hiring platform: 10 Mongoose schemas, LLaMA generator-critic pipeline, RBAC, MongoDB aggregation analytics." Practice until smooth.' },
+          { id: 'p2', n: 'Moodify 2-min Pitch', d: '"Full-stack recommendation system: Gemini AI, Neon PostgreSQL, in-memory cache, JWT, CSP headers, deployed on Render." Practice.' },
+          { id: 'p3', n: 'STAR Format for Bullets', d: 'Every resume bullet needs Situation, Task, Action, Result + a number. "Reduced latency by X%" > "Improved performance."' },
+          { id: 'p4', n: 'GitHub README Cleanup', d: 'Add architecture diagram, screenshots, setup steps. Interviewers click links before calling you.' },
+          { id: 'p5', n: 'LinkedIn Optimization', d: 'Headline: "Backend Engineer | Node.js · MongoDB · LLM APIs | Darwinbox Intern | 9.85 CGPA". Add project links. Set Open to Work.' },
+          { id: 'p6', n: 'Darwinbox Internship Narrative', d: '"At Darwinbox, used by 700+ companies, I built AI-powered recruitment automation handling end-to-end hiring." Make it tangible.' }
+        ]
+      },
+      {
+        id: 'soft', c: '#f97316', bg: 'rgba(249,115,22,0.1)', title: 'Behavioural & HR Prep', dur: 'Week 5 (parallel)', sub: 'The deciding round most freshers skip. Often kills otherwise good candidates.',
+        unlock: 'BFSI/GCCs — HSBC, Standard Chartered, Deutsche Bank weight this heavily',
+        topics: [
+          { id: 'h1', n: 'Tell Me About Yourself', d: 'Background (Mohan Babu, CSE) + Experience (Darwinbox, what you built) + Why this role. Exactly 90 seconds.' },
+          { id: 'h2', n: 'Why This Company?', d: 'Research before every application. Name 2 specific things: product, tech blog, or recent news.' },
+          { id: 'h3', n: 'Biggest Technical Challenge', d: 'Use ResilientAIService story: AI models failing in prod, how you built rotation + fallback. Shows production thinking.' },
+          { id: 'h4', n: 'Strengths & Weaknesses', d: 'Strength: backend systems + AI integration (proof in projects). Weakness: something real but growth-framed.' },
+          { id: 'h5', n: '3-Year Plan', d: 'Backend engineer → distributed systems expertise → tech lead. Show ambition with realism.' },
+          { id: 'h6', n: 'Salary Negotiation', d: '"Based on internship experience and market research, targeting 10–12 LPA." Never volunteer a number first.' },
+          { id: 'h7', n: 'Questions to Ask', d: '"What does onboarding look like for new engineers?" and "What is the backend stack and team structure?"' }
+        ]
+      }
+    ];
+
+    const waves = [
+      {
+        wave: 1, c: '#34d399', bg: 'rgba(52,211,153,0.08)', title: 'Wave 1 — Apply NOW (Weeks 1–2)',
+        desc: 'Apply immediately, even before deep prep. Direct-apply, easy rounds. Darwinbox internship alone gets you shortlisted. Getting 2–3 live interviews IS part of your prep.',
+        items: [
+          { n: 1, name: 'Darwinbox FTE/PPO', why: 'You built their product. Highest conversion rate of all 210.', diff: 'easy', stack: 'exact', ref: 'no', pay: '9–12 LPA' },
+          { n: 2, name: 'Keka HR', why: 'Hyderabad HQ. Same HR-tech domain. Node.js/MongoDB exact match.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–10 LPA' },
+          { n: 3, name: 'Oorwin', why: 'Hyderabad HR SaaS. Local + domain advantage. Direct apply.', diff: 'easy', stack: 'exact', ref: 'no', pay: '7–10 LPA' },
+          { n: 4, name: 'Freshworks', why: 'Node.js/MongoDB confirmed. OA + 2 tech rounds. 600 DSA handles it.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–12 LPA' },
+          { n: 5, name: 'MoEngage', why: 'Node.js/MongoDB confirmed. Direct apply. Good for early practice.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 6, name: 'WebEngage', why: 'Node.js/MongoDB exact match. 2–3 rounds. Quick process.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–10 LPA' },
+          { n: 7, name: 'Netcore Cloud', why: 'MarTech SaaS. Fast process. Get an early offer for confidence.', diff: 'easy', stack: 'exact', ref: 'no', pay: '7–10 LPA' },
+          { n: 8, name: 'HSBC GCC Hyderabad', why: 'Local advantage. 9.85 CGPA clears any filter they have.', diff: 'easy', stack: 'transfer', ref: 'no', pay: '8–11 LPA' },
+          { n: 9, name: 'Standard Chartered GCC', why: 'High-volume GCC hiring. CGPA + Naukri direct apply.', diff: 'easy', stack: 'transfer', ref: 'no', pay: '9–12 LPA' },
+          { n: 10, name: 'Synchrony Hyderabad', why: 'Hyderabad GCC. Consumer finance. Direct apply.', diff: 'easy', stack: 'transfer', ref: 'no', pay: '8–11 LPA' }
+        ]
+      },
+      {
+        wave: 2, c: '#60a5fa', bg: 'rgba(96,165,250,0.08)', title: 'Wave 2 — After Basic Prep (Weeks 3–4)',
+        desc: 'Apply once DSA foundations + backend deep dive are done. Medium rounds: OA + 2 tech interviews. Your Darwinbox projects become the differentiator.',
+        items: [
+          { n: 11, name: 'Cashfree Payments', why: 'Node.js/Express.js confirmed. Easiest fintech win.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 12, name: 'Tanla Platforms', why: 'Hyderabad CPaaS. Local + Node.js stack advantage.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 13, name: 'Zenoti', why: 'Hyderabad SaaS. PostgreSQL/Node.js. Another local win.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 14, name: 'Haptik JioHaptik', why: 'Conversational AI. Your LLM pipeline IS their core product.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 15, name: 'Mercer Mettl', why: 'AI assessment SaaS. Your MCQ engine = their product.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 16, name: 'Glider.ai', why: 'AI hiring platform. Your Darwinbox project = their product.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 17, name: 'HireQuotient', why: 'AI interview platform. LLM + behavioral sim = their product.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 18, name: 'Multiplier', why: 'RBAC + PostgreSQL = your Darwinbox skills exactly.', diff: 'easy', stack: 'exact', ref: 'no', pay: '9–12 LPA' },
+          { n: 19, name: 'Whatfix', why: 'Node.js/MongoDB DAP SaaS. Direct apply.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 20, name: 'Yellow.ai', why: 'Your Groq API + LLaMA = direct hands-on experience.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '8–12 LPA' },
+          { n: 21, name: 'Leadsquared', why: 'Node.js/MongoDB CRM. Show analytics dashboard.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–10 LPA' },
+          { n: 22, name: 'Springworks', why: 'HR-tech startup. Domain + Node.js/MongoDB.', diff: 'easy', stack: 'exact', ref: 'no', pay: '8–11 LPA' },
+          { n: 23, name: 'PeopleStrong', why: 'Darwinbox competitor. HR-tech domain = instant cred.', diff: 'easy', stack: 'exact', ref: 'no', pay: '7–10 LPA' },
+          { n: 24, name: 'Pine Labs', why: 'Fintech. Less competitive than Razorpay.', diff: 'easy', stack: 'transfer', ref: 'no', pay: '8–11 LPA' },
+          { n: 25, name: 'PayU India', why: 'Payments fintech. Node.js API services. Naukri apply.', diff: 'easy', stack: 'transfer', ref: 'no', pay: '8–11 LPA' }
+        ]
+      },
+      {
+        wave: 3, c: '#a78bfa', bg: 'rgba(167,139,250,0.08)', title: 'Wave 3 — System Design Ready (Weeks 5–6)',
+        desc: 'Apply once 4–5 system design topics done. These have a dedicated SD round. By now aim for at least one Wave 1–2 offer for leverage.',
+        items: [
+          { n: 26, name: 'CleverTap', why: 'Node.js/MongoDB analytics. Your analytics dashboard = their product.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '9–12 LPA' },
+          { n: 27, name: 'BrowserStack', why: 'PostgreSQL/Node.js. Values deployed projects. Show GitHub links.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '9–13 LPA' },
+          { n: 28, name: 'Postman', why: 'They build the REST tool. Your API design is on-brand.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '10–14 LPA' },
+          { n: 29, name: 'Chargebee', why: 'Node.js/PostgreSQL billing SaaS. Neon PostgreSQL relevant.', diff: 'medium', stack: 'exact', ref: 'no', pay: '9–12 LPA' },
+          { n: 30, name: 'Razorpay', why: 'Node.js/PostgreSQL confirmed. JWT + REST = direct match.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '10–14 LPA' },
+          { n: 31, name: 'Groww', why: 'Node.js/PostgreSQL WealthTech. Analytics relevant.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '10–15 LPA' },
+          { n: 32, name: 'Sprinklr', why: 'Node.js/MongoDB confirmed. LLM integration differentiates.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '10–14 LPA' },
+          { n: 33, name: 'Rippling India', why: 'HR SaaS. Node.js + PostgreSQL + RBAC = perfect match.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '10–14 LPA' },
+          { n: 34, name: 'Embibe', why: 'AI EdTech. Your LLM assessment engine = their product.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '9–13 LPA' },
+          { n: 35, name: 'HireVue India', why: 'AI video interviews. Generator-critic pipeline = their core.', diff: 'medium', stack: 'exact', ref: 'opt', pay: '9–12 LPA' }
+        ]
+      },
+      {
+        wave: 4, c: '#f59e0b', bg: 'rgba(245,158,11,0.08)', title: 'Wave 4 — Stretch Targets (Week 6+)',
+        desc: 'Apply with full prep + offers already in hand. Hard rounds. Referral critical. Even one offer here changes your salary trajectory.',
+        items: [
+          { n: 36, name: 'PhonePe', why: 'Node.js/PostgreSQL confirmed. Hard DSA + SD + referral.', diff: 'hard', stack: 'exact', ref: 'yes', pay: '12–18 LPA' },
+          { n: 37, name: 'Atlassian India', why: 'Node.js/PostgreSQL. RBAC + audit log is very Jira-esque.', diff: 'hard', stack: 'exact', ref: 'yes', pay: '18–25 LPA' },
+          { n: 38, name: 'Salesforce Hyderabad', why: 'LLM project is a talking point. Hyd team active.', diff: 'hard', stack: 'transfer', ref: 'yes', pay: '14–18 LPA' },
+          { n: 39, name: 'Swiggy', why: 'Node.js/MongoDB + your caching layer = SD story.', diff: 'hard', stack: 'exact', ref: 'opt', pay: '12–18 LPA' },
+          { n: 40, name: 'Amazon', why: 'Node.js + AWS S3 = genuine hands-on experience. 14-LP + 2 DSA.', diff: 'hard', stack: 'exact', ref: 'opt', pay: '18–26 LPA' }
+        ]
+      }
+    ];
+
+    function showPage(id, btn) {
+      document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('pg-' + id).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function togglePhase(id) { document.getElementById('ph-' + id).classList.toggle('open'); }
+
+    function tick(tid, phid) {
+      P[tid] = !P[tid]; save();
+      const el = document.getElementById('t-' + tid);
+      el.classList.toggle('done', P[tid]);
+      el.querySelector('.chk').textContent = P[tid] ? '✓' : '';
+      updatePhase(phid); updateStats();
+    }
+
+    function updatePhase(phid) {
+      const ph = phases.find(p => p.id === phid);
+      const done = ph.topics.filter(t => P[t.id]).length;
+      const pct = Math.round(done / ph.topics.length * 100);
+      document.getElementById('pf-' + phid).style.width = pct + '%';
+      document.getElementById('pc-' + phid).textContent = done + '/' + ph.topics.length + ' completed';
+    }
+
+    function updateStats() {
+      let tot = 0, totD = 0;
+      const map = { dsa: [0, 0], backend: [0, 0], llm: [0, 0], system: [0, 0], project: [0, 0], soft: [0, 0] };
+      phases.forEach(ph => {
+        ph.topics.forEach(t => {
+          tot++; if (P[t.id]) totD++;
+          const k = ph.id; map[k][1]++; if (P[t.id]) map[k][0]++;
+        });
+      });
+      const pct = (k) => map[k][1] ? Math.round(map[k][0] / map[k][1] * 100) + '%' : '0%';
+      document.getElementById('sTotal').textContent = totD + '/' + tot;
+      document.getElementById('sDSA').textContent = pct('dsa');
+      document.getElementById('sBack').textContent = pct('backend');
+      document.getElementById('sSys').textContent = pct('system');
+      document.getElementById('sLLM').textContent = pct('llm');
+      document.getElementById('sProj').textContent = pct('project');
+      document.getElementById('sHR').textContent = pct('soft');
+      const overall = tot ? Math.round(totD / tot * 100) : 0;
+      document.getElementById('progTxt').textContent = overall + '% done';
+      document.getElementById('progFill').style.width = overall + '%';
+    }
+
+    // Render phases
+    const grid = document.getElementById('phaseGrid');
+    phases.forEach((ph, i) => {
+      const done = ph.topics.filter(t => P[t.id]).length;
+      const pct = Math.round(done / ph.topics.length * 100);
+      grid.innerHTML += `<div class="phase" id="ph-${ph.id}">
+    <div class="ph-head" onclick="togglePhase('${ph.id}')">
+      <div class="ph-num" style="background:${ph.bg};color:${ph.c}">${i + 1}</div>
+      <div class="ph-info"><div class="ph-title">${ph.title}</div><div class="ph-sub">${ph.sub}</div></div>
+      <span class="ph-dur" style="background:${ph.bg};color:${ph.c}">${ph.dur}</span>
+      <span class="ph-chevron">▼</span>
+    </div>
+    <div class="ph-body">
+      <div class="ph-count" id="pc-${ph.id}">${done}/${ph.topics.length} completed</div>
+      <div class="ph-prog"><div class="ph-fill" id="pf-${ph.id}" style="width:${pct}%;background:${ph.c}"></div></div>
+      <div class="topics">${ph.topics.map(t => `
+        <div class="topic${P[t.id] ? ' done' : ''}" id="t-${t.id}" onclick="tick('${t.id}','${ph.id}')">
+          <div class="chk">${P[t.id] ? '✓' : ''}</div>
+          <div><div class="tn">${t.n}</div><div class="td">${t.d}</div></div>
+        </div>`).join('')}</div>
+      <div class="unlock-box"><div class="ul">Unlocks</div><p>${ph.unlock}</p></div>
+    </div>
+  </div>`;
+    });
+
+    // Render apply order
+    const og = document.getElementById('orderGrid');
+    waves.forEach(w => {
+      const items = w.items.map((it, i) => `
+    <div class="ocard">
+      <div class="onum" style="color:${w.c}">${(w.wave - 1) * 10 + i + 1}</div>
+      <div class="oi">
+        <div class="on">${it.name}</div>
+        <div class="ow">${it.why}</div>
+        <div class="obs">
+          <span class="ob ${it.stack === 'exact' ? 'exact' : 'transfer'}">${it.stack === 'exact' ? 'Exact stack' : 'Transferable'}</span>
+          <span class="ob ${it.diff === 'easy' ? 'be' : it.diff === 'medium' ? 'bm' : 'bh'}">${it.diff}</span>
+          <span class="ob" style="background:rgba(255,255,255,0.05);color:var(--m);border:1px solid var(--b)">${it.pay}</span>
+          <span class="ob ${it.ref === 'no' ? 'direct' : it.ref === 'opt' ? 'ref-opt' : 'ref-yes'}">${it.ref === 'no' ? 'Direct apply' : it.ref === 'opt' ? 'Referral helps' : 'Referral critical'}</span>
+        </div>
+      </div>
+    </div>`).join('');
+      og.innerHTML += `<div class="wave">
+    <div class="wave-hd">
+      <span class="wave-badge" style="background:${w.bg};color:${w.c};border:1px solid ${w.c}40">Wave ${w.wave}</span>
+      <span class="wave-title">${w.title}</span>
+    </div>
+    <p class="wave-desc">${w.desc}</p>
+    <div class="order-grid">${items}</div>
+  </div>`;
+    });
+
+    updateStats();
+  </script>
+</body>
+
+</html>

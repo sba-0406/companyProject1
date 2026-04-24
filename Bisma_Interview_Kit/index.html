@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisma — Interview Prep Index</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #18181f;
+      --border: rgba(255, 255, 255, .08);
+      --text: #f0f0f5;
+      --muted: #888899;
+      --accent: #7c6aff;
+      --accent2: #c084fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      margin-bottom: 3.5rem;
+    }
+
+    .hero-tag {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: .75rem;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      max-width: 560px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 12px;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem 1.1rem;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .stat strong {
+      color: var(--text);
+      font-weight: 600;
+      display: block;
+      font-size: 15px;
+      font-family: 'Fraunces', serif;
+    }
+
+    .parts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .part-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+      transition: border-color .2s, transform .15s;
+    }
+
+    .part-card:hover {
+      border-color: rgba(255, 255, 255, .18);
+      transform: translateY(-2px);
+    }
+
+    .part-card-top {
+      padding: 1.5rem 1.5rem 1rem;
+    }
+
+    .part-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: .5rem;
+    }
+
+    .part-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: .5rem;
+    }
+
+    .part-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .part-card-bottom {
+      padding: .9rem 1.5rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .topic-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .pill {
+      font-size: 10px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .part-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: .9rem;
+    }
+
+    .topic-count {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .open-btn {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+
+    .open-btn:hover {
+      opacity: .8;
+    }
+
+    /* Accent colours per part */
+    .p1 .part-title {
+      color: #e8783a;
+    }
+
+    .p1 .open-btn {
+      background: #e8783a;
+      color: #000;
+    }
+
+    .p1 .pill {
+      background: rgba(232, 120, 58, .12);
+      color: #e8783a;
+    }
+
+    .p1 {
+      border-top: 3px solid #e8783a;
+    }
+
+    .p2 .part-title {
+      color: #e67e22;
+    }
+
+    .p2 .open-btn {
+      background: #e67e22;
+      color: #000;
+    }
+
+    .p2 .pill {
+      background: rgba(230, 126, 34, .12);
+      color: #e67e22;
+    }
+
+    .p2 {
+      border-top: 3px solid #e67e22;
+    }
+
+    .p3 .part-title {
+      color: #58a6ff;
+    }
+
+    .p3 .open-btn {
+      background: #58a6ff;
+      color: #000;
+    }
+
+    .p3 .pill {
+      background: rgba(88, 166, 255, .12);
+      color: #58a6ff;
+    }
+
+    .p3 {
+      border-top: 3px solid #58a6ff;
+    }
+
+    .p4 .part-title {
+      color: #ff8906;
+    }
+
+    .p4 .open-btn {
+      background: #ff8906;
+      color: #000;
+    }
+
+    .p4 .pill {
+      background: rgba(255, 137, 6, .12);
+      color: #ff8906;
+    }
+
+    .p4 {
+      border-top: 3px solid #ff8906;
+    }
+
+    /* Prep order section */
+    .order-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+    }
+
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .order-num {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      min-width: 32px;
+      line-height: 1;
+    }
+
+    .order-info h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .order-info p {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Company tracker */
+    .tracker-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .tracker-title {
+      font-family: 'Fraunces', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin-bottom: .35rem;
+    }
+
+    .tracker-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 1.1rem;
+    }
+
+    .tracker-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      background: rgba(124, 106, 255, .1);
+      border: 1px solid rgba(124, 106, 255, .2);
+      padding: 7px 14px;
+      border-radius: 999px;
+      transition: opacity .15s;
+    }
+
+    .tracker-link:hover {
+      opacity: .8;
+    }
+
+    @media(max-width:600px) {
+      .parts {
+        grid-template-columns: 1fr;
+      }
+
+      .order-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="hero-tag">Bisma Alisha · 2026 Batch · Mohan Babu University</div>
+      <h1>Your <span>Interview Prep</span><br>Command Centre</h1>
+      <p>Complete theory preparation for your job hunt. Built around your Darwinbox internship, Moodify project, and
+        9.85 CGPA. Read all 4 parts and you're interview-ready.</p>
+      <div class="hero-stats">
+        <div class="stat"><strong>4</strong>Study files</div>
+        <div class="stat"><strong>150+</strong>Topics covered</div>
+        <div class="stat"><strong>OS · DBMS · CN · OOP</strong>Core CS</div>
+        <div class="stat"><strong>52</strong>Java topics</div>
+        <div class="stat"><strong>36</strong>Stack topics</div>
+        <div class="stat"><strong>22</strong>SD + DSA topics</div>
+      </div>
+    </div>
+
+    <!-- PART CARDS -->
+    <div class="parts">
+
+      <a class="part-card p1" href="bisma_interview_prep_core_cs.html">
+        <div class="part-card-top">
+          <div class="part-num">Part 01</div>
+          <div class="part-title">Core CS Theory</div>
+          <div class="part-desc">OS, DBMS, Computer Networks, OOP — the foundational CS subjects asked in every
+            technical interview round.</div>
+        </div>
+        <div class="part-card-bottom">
+          <div class="topic-pills">
+            <span class="pill">Processes & Threads</span>
+            <span class="pill">Deadlocks</span>
+            <span class="pill">ACID & Transactions</span>
+            <span class="pill">Indexing</span>
+            <span class="pill">SQL Joins</span>
+            <span class="pill">CAP Theorem</span>
+            <span class="pill">HTTP & HTTPS</span>
+            <span class="pill">SOLID Principles</span>
+            <span class="pill">Design Patterns</span>
+            <span class="pill">+33 more</span>
+          </div>
+          <div class="part-footer">
+            <span class="topic-count">42 topics · OS · DBMS · CN · OOP</span>
+            <span class="open-btn">Open →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="part-card p2" href="bisma_interview_prep_java.html">
+        <div class="part-card-top">
+          <div class="part-num">Part 02</div>
+          <div class="part-title">Java Deep Dive</div>
+          <div class="part-desc">Complete Java interview prep — fundamentals, OOP in Java, Collections, Java 8+,
+            Multithreading, Memory & GC. All 52 topics with code examples.</div>
+        </div>
+        <div class="part-card-bottom">
+          <div class="topic-pills">
+            <span class="pill">JVM Internals</span>
+            <span class="pill">String & Pool</span>
+            <span class="pill">HashMap Internals</span>
+            <span class="pill">Streams API</span>
+            <span class="pill">equals() & hashCode()</span>
+            <span class="pill">Immutable Class</span>
+            <span class="pill">wait() / notify()</span>
+            <span class="pill">ReentrantLock</span>
+            <span class="pill">Reflection</span>
+            <span class="pill">+43 more</span>
+          </div>
+          <div class="part-footer">
+            <span class="topic-count">52 topics · Java fundamentals to advanced</span>
+            <span class="open-btn">Open →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="part-card p3" href="bisma_interview_prep_stack.html">
+        <div class="part-card-top">
+          <div class="part-num">Part 03</div>
+          <div class="part-title">Your Stack Theory</div>
+          <div class="part-desc">Tied directly to your Darwinbox internship and Moodify project. Node.js Event Loop,
+            MongoDB Aggregation, JWT RBAC, your Generator-Critic pipeline, ResilientAIService, Docker + Render
+            deployment.</div>
+        </div>
+        <div class="part-card-bottom">
+          <div class="topic-pills">
+            <span class="pill">Event Loop</span>
+            <span class="pill">Express Middleware</span>
+            <span class="pill">Aggregation Pipeline</span>
+            <span class="pill">JWT Internals</span>
+            <span class="pill">RBAC (Darwinbox)</span>
+            <span class="pill">Generator-Critic</span>
+            <span class="pill">ResilientAIService</span>
+            <span class="pill">AWS S3</span>
+            <span class="pill">Neon + Render</span>
+            <span class="pill">+27 more</span>
+          </div>
+          <div class="part-footer">
+            <span class="topic-count">36 topics · Node.js · MongoDB · PostgreSQL · LLM · Docker</span>
+            <span class="open-btn">Open →</span>
+          </div>
+        </div>
+      </a>
+
+      <a class="part-card p4" href="bisma_interview_prep_systemdesign.html">
+        <div class="part-card-top">
+          <div class="part-num">Part 04</div>
+          <div class="part-title">System Design & DSA Theory</div>
+          <div class="part-desc">How to answer SD questions, core concepts, 4 design problems (including your
+            Darwinbox), and DSA theory for explaining your solutions verbally.</div>
+        </div>
+        <div class="part-card-bottom">
+          <div class="topic-pills">
+            <span class="pill">SD Framework</span>
+            <span class="pill">Load Balancing</span>
+            <span class="pill">Sharding</span>
+            <span class="pill">Message Queues</span>
+            <span class="pill">Consistent Hashing</span>
+            <span class="pill">URL Shortener</span>
+            <span class="pill">Job Portal (Yours)</span>
+            <span class="pill">Big O</span>
+            <span class="pill">Dynamic Programming</span>
+            <span class="pill">+13 more</span>
+          </div>
+          <div class="part-footer">
+            <span class="topic-count">22 topics · System Design + DSA Theory</span>
+            <span class="open-btn">Open →</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- RECOMMENDED ORDER -->
+    <div class="order-section">
+      <div class="section-label">Recommended Study Order</div>
+      <div class="order-grid">
+        <div class="order-card">
+          <div class="order-num" style="color:#e8783a">1</div>
+          <div class="order-info">
+            <h3>Part 3 — Your Stack (first)</h3>
+            <p>Start here. You know this material best. Reading it first gives you confidence and reminds you of
+              everything you've already built. Most interviewers ask about your projects first.</p>
+          </div>
+        </div>
+        <div class="order-card">
+          <div class="order-num" style="color:#e67e22">2</div>
+          <div class="order-info">
+            <h3>Part 1 — Core CS Theory</h3>
+            <p>OS, DBMS, CN, OOP. These are foundational. Go topic by topic, tick each when done. Focus on DBMS and OS
+              first — they're asked most frequently.</p>
+          </div>
+        </div>
+        <div class="order-card">
+          <div class="order-num" style="color:#58a6ff">3</div>
+          <div class="order-info">
+            <h3>Part 2 — Java Deep Dive</h3>
+            <p>Java fundamentals through advanced. Start from the top — JVM, String, exceptions. Collections and
+              Multithreading are the highest-value sections.</p>
+          </div>
+        </div>
+        <div class="order-card">
+          <div class="order-num" style="color:#ff8906">4</div>
+          <div class="order-info">
+            <h3>Part 4 — System Design & DSA</h3>
+            <p>Do this last — after you have Wave 1 interviews scheduled. Read the SD framework first, then the Job
+              Portal problem (your Darwinbox), then DSA theory.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPANY TRACKER LINK -->
+    <div class="tracker-section">
+      <div class="tracker-title">Company Tracker & Apply Order</div>
+      <div class="tracker-sub">210 companies curated for your stack. Best Fit page shows the 53 companies that use
+        Node.js · MongoDB · PostgreSQL · LLM — sorted in the exact order to apply.</div>
+      <a class="tracker-link" href="bisma_companies_final.html">Open Company Tracker →</a>
+    </div>
+
+  </div>
+</body>
+
+</html>

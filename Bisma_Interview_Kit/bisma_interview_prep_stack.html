@@ -1,0 +1,2991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bisma — Part 3: Your Stack Theory</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --muted2: #656d76;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --orange: #f0883e;
+      --purple: #bc8cff;
+      --red: #f85149;
+      --yellow: #e3b341;
+      --node: #68a063;
+      --mongo: #4db33d;
+      --pg: #79b8d8;
+      --jwt: #d63aff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 265px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .sb-logo {
+      padding: 1.2rem 1.25rem .9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sb-logo h1 {
+      font-family: 'Fraunces', serif;
+      font-size: .95rem;
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .sb-logo p {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .part-link {
+      display: block;
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .sb-section {
+      padding: .55rem 0;
+    }
+
+    .sb-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted2);
+      padding: 0 1.25rem .3rem;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: .38rem 1.25rem;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+      border-left: 2px solid transparent;
+    }
+
+    .sb-item:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .sb-item.active {
+      border-left-color: var(--accent);
+      background: rgba(88, 166, 255, .07);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .sb-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .sb-progress {
+      padding: .9rem 1.25rem;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .sb-prog-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .sb-prog-bar {
+      height: 3px;
+      background: var(--surface2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .sb-prog-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 999px;
+      transition: width .4s;
+    }
+
+    .sb-prog-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .main {
+      margin-left: 265px;
+      flex: 1;
+      padding: 2.5rem 3rem 4rem;
+      max-width: 900px;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .subject-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: .7rem;
+    }
+
+    .page-header h2 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.85rem;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: .4rem;
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .yours-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      background: rgba(63, 185, 80, .1);
+      color: var(--green);
+      border: 1px solid rgba(63, 185, 80, .2);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-top: .5rem;
+    }
+
+    .topic-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: .9rem;
+      overflow: hidden;
+    }
+
+    .topic-head {
+      padding: .85rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .topic-head:hover {
+      background: var(--surface2);
+    }
+
+    .topic-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--muted2);
+      min-width: 24px;
+    }
+
+    .topic-title {
+      font-family: 'Fraunces', serif;
+      font-size: .93rem;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    .topic-tags {
+      display: flex;
+      gap: 4px;
+    }
+
+    .ttag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 500;
+    }
+
+    .t-must {
+      background: rgba(63, 185, 80, .15);
+      color: var(--green);
+    }
+
+    .t-freq {
+      background: rgba(240, 136, 62, .15);
+      color: var(--orange);
+    }
+
+    .t-yours {
+      background: rgba(188, 140, 255, .15);
+      color: var(--purple);
+    }
+
+    .topic-chk {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      cursor: pointer;
+      color: transparent;
+    }
+
+    .topic-card.done .topic-chk {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000;
+    }
+
+    .topic-chevron {
+      font-size: 10px;
+      color: var(--muted2);
+      transition: transform .2s;
+      margin-left: 3px;
+    }
+
+    .topic-card.open .topic-chevron {
+      transform: rotate(180deg);
+    }
+
+    .topic-body {
+      display: none;
+      padding: 0 1.1rem 1.1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .topic-card.open .topic-body {
+      display: block;
+    }
+
+    .def-box {
+      background: var(--surface2);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: .75rem .9rem;
+      margin: .9rem 0;
+    }
+
+    .def-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .def-box p {
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .section-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+      font-weight: 600;
+      margin: 1rem 0 .45rem;
+    }
+
+    .point-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .point {
+      display: flex;
+      gap: 9px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .point-bullet {
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .interview-box {
+      background: rgba(88, 166, 255, .06);
+      border: 1px solid rgba(88, 166, 255, .2);
+      border-radius: 9px;
+      padding: .75rem .9rem;
+      margin: .9rem 0;
+    }
+
+    .ib-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .iq {
+      font-size: 12px;
+      padding: .28rem 0;
+      border-bottom: 1px solid rgba(88, 166, 255, .1);
+      line-height: 1.5;
+    }
+
+    .iq:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .iq::before {
+      content: "Q: ";
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .say-box {
+      background: rgba(63, 185, 80, .06);
+      border: 1px solid rgba(63, 185, 80, .2);
+      border-radius: 9px;
+      padding: .75rem .9rem;
+      margin: .9rem 0;
+    }
+
+    .say-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--green);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .say-box p {
+      font-size: 12px;
+      color: #7ee787;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    .your-box {
+      background: rgba(188, 140, 255, .06);
+      border: 1px solid rgba(188, 140, 255, .2);
+      border-radius: 9px;
+      padding: .75rem .9rem;
+      margin: .9rem 0;
+    }
+
+    .your-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--purple);
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .your-box p {
+      font-size: 12px;
+      color: #d2a8ff;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: #010409;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 1.1rem 1.2rem;
+      margin: .8rem 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: 'DM Mono', monospace;
+      font-size: 12.5px;
+      color: #e6edf3;
+      line-height: 2;
+      white-space: pre;
+      display: block;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: .7rem 0;
+      font-size: 12px;
+    }
+
+    .compare-table th {
+      background: var(--surface2);
+      padding: .4rem .65rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .compare-table td {
+      padding: .4rem .65rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .compare-table tr:nth-child(even) td {
+      background: rgba(255, 255, 255, .02);
+    }
+
+    .content-page {
+      display: none;
+    }
+
+    .content-page.active {
+      display: block;
+    }
+
+    .mob-nav-btn {
+      display: none;
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 200;
+    }
+
+    @media(max-width:768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform .3s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+        padding: 1.5rem 1rem 5rem;
+      }
+
+      .mob-nav-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-logo">
+        <h1>Part 3 — Your Stack</h1>
+        <p>Tied directly to your projects</p>
+        <a class="part-link" href="bisma_interview_prep_java.html">← Part 2: Java</a>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#68a063">Node.js & Express</div>
+        <div class="sb-item active" onclick="showPage('n1',this)">
+          <div class="sb-dot" style="background:#68a063"></div>Event Loop Deep Dive
+        </div>
+        <div class="sb-item" onclick="showPage('n2',this)">
+          <div class="sb-dot" style="background:#68a063"></div>Streams, Buffers & EventEmitter
+        </div>
+        <div class="sb-item" onclick="showPage('n3',this)">
+          <div class="sb-dot" style="background:#68a063"></div>Express Middleware & Lifecycle
+        </div>
+        <div class="sb-item" onclick="showPage('n4',this)">
+          <div class="sb-dot" style="background:#68a063"></div>Error Handling in Node.js
+        </div>
+        <div class="sb-item" onclick="showPage('n5',this)">
+          <div class="sb-dot" style="background:#68a063"></div>Clustering & Worker Threads
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#4db33d">MongoDB</div>
+        <div class="sb-item" onclick="showPage('m1',this)">
+          <div class="sb-dot" style="background:#4db33d"></div>Schema Design — Embed vs Reference
+        </div>
+        <div class="sb-item" onclick="showPage('m2',this)">
+          <div class="sb-dot" style="background:#4db33d"></div>Mongoose — Models, Hooks, Virtuals
+        </div>
+        <div class="sb-item" onclick="showPage('m3',this)">
+          <div class="sb-dot" style="background:#4db33d"></div>Aggregation Pipeline
+        </div>
+        <div class="sb-item" onclick="showPage('m4',this)">
+          <div class="sb-dot" style="background:#4db33d"></div>Indexing in MongoDB
+        </div>
+        <div class="sb-item" onclick="showPage('m5',this)">
+          <div class="sb-dot" style="background:#4db33d"></div>Transactions in MongoDB
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#79b8d8">PostgreSQL</div>
+        <div class="sb-item" onclick="showPage('p1',this)">
+          <div class="sb-dot" style="background:#79b8d8"></div>PG vs MySQL vs MongoDB
+        </div>
+        <div class="sb-item" onclick="showPage('p2',this)">
+          <div class="sb-dot" style="background:#79b8d8"></div>Transactions, ACID & MVCC
+        </div>
+        <div class="sb-item" onclick="showPage('p3',this)">
+          <div class="sb-dot" style="background:#79b8d8"></div>Indexing & EXPLAIN ANALYZE
+        </div>
+        <div class="sb-item" onclick="showPage('p4',this)">
+          <div class="sb-dot" style="background:#79b8d8"></div>Connection Pooling & Neon
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#d63aff">Auth & Security</div>
+        <div class="sb-item" onclick="showPage('a1',this)">
+          <div class="sb-dot" style="background:#d63aff"></div>JWT — Structure & Internals
+        </div>
+        <div class="sb-item" onclick="showPage('a2',this)">
+          <div class="sb-dot" style="background:#d63aff"></div>Access vs Refresh Tokens
+        </div>
+        <div class="sb-item" onclick="showPage('a3',this)">
+          <div class="sb-dot" style="background:#d63aff"></div>RBAC — Your Darwinbox System
+        </div>
+        <div class="sb-item" onclick="showPage('a4',this)">
+          <div class="sb-dot" style="background:#d63aff"></div>Helmet, CORS & CSP
+        </div>
+        <div class="sb-item" onclick="showPage('a5',this)">
+          <div class="sb-dot" style="background:#d63aff"></div>Session vs Token Auth
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#f0883e">REST API Design</div>
+        <div class="sb-item" onclick="showPage('r1',this)">
+          <div class="sb-dot" style="background:#f0883e"></div>REST Principles & URL Design
+        </div>
+        <div class="sb-item" onclick="showPage('r2',this)">
+          <div class="sb-dot" style="background:#f0883e"></div>Pagination, Filtering & Versioning
+        </div>
+        <div class="sb-item" onclick="showPage('r3',this)">
+          <div class="sb-dot" style="background:#f0883e"></div>Rate Limiting & Throttling
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#e3b341">Files & Storage</div>
+        <div class="sb-item" onclick="showPage('f1',this)">
+          <div class="sb-dot" style="background:#e3b341"></div>Multer & Multipart/form-data
+        </div>
+        <div class="sb-item" onclick="showPage('f2',this)">
+          <div class="sb-dot" style="background:#e3b341"></div>AWS S3 & Presigned URLs
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#58a6ff">Caching</div>
+        <div class="sb-item" onclick="showPage('c1',this)">
+          <div class="sb-dot" style="background:#58a6ff"></div>In-Memory Cache (Your Moodify)
+        </div>
+        <div class="sb-item" onclick="showPage('c2',this)">
+          <div class="sb-dot" style="background:#58a6ff"></div>Redis & Cache Strategies
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#ff6b6b">LLM & AI Integration</div>
+        <div class="sb-item" onclick="showPage('l1',this)">
+          <div class="sb-dot" style="background:#ff6b6b"></div>Generator-Critic Pipeline (Yours)
+        </div>
+        <div class="sb-item" onclick="showPage('l2',this)">
+          <div class="sb-dot" style="background:#ff6b6b"></div>ResilientAIService (Yours)
+        </div>
+        <div class="sb-item" onclick="showPage('l3',this)">
+          <div class="sb-dot" style="background:#ff6b6b"></div>Prompt Engineering
+        </div>
+        <div class="sb-item" onclick="showPage('l4',this)">
+          <div class="sb-dot" style="background:#ff6b6b"></div>RAG & LLM Concepts
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-label" style="color:#bc8cff">Docker & Deployment</div>
+        <div class="sb-item" onclick="showPage('d1',this)">
+          <div class="sb-dot" style="background:#bc8cff"></div>Docker — Image, Container, Dockerfile
+        </div>
+        <div class="sb-item" onclick="showPage('d2',this)">
+          <div class="sb-dot" style="background:#bc8cff"></div>docker-compose & Env Variables
+        </div>
+        <div class="sb-item" onclick="showPage('d3',this)">
+          <div class="sb-dot" style="background:#bc8cff"></div>Render & Neon — Your Architecture
+        </div>
+      </div>
+      <div class="sb-progress">
+        <div class="sb-prog-label">Topics completed</div>
+        <div class="sb-prog-bar">
+          <div class="sb-prog-fill" id="progFill" style="width:0%"></div>
+        </div>
+        <div class="sb-prog-count" id="progCount">0 / 30</div>
+      </div>
+    </aside>
+    <main class="main">
+
+      <div class="content-page active" id="page-n1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(104,160,99,.15);color:#68a063">Node.js & Express.js</span>
+          <h2>Event Loop Deep Dive</h2>
+          <p>The #1 most asked Node.js question. Every Node.js company will ask this. Know every phase cold.</p>
+          <div class="yours-badge">⭐ Both Darwinbox & Moodify run on this</div>
+        </div>
+        <div class="topic-card" id="tc-n1-1">
+          <div class="topic-head" onclick="toggleTopic('n1-1')">
+            <span class="topic-num">01</span><span class="topic-title">What is the Event Loop?</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('n1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Event Loop</div>
+              <p>Node.js runs JavaScript on a single thread. The event loop is the mechanism that lets Node.js handle
+                concurrent operations without blocking — it offloads I/O to the OS or libuv thread pool, then picks up
+                callbacks when work is done.</p>
+            </div>
+            <div class="section-title">6 Phases — Run In Order, Repeatedly</div>
+            <div class="code-block"><code>1. TIMERS       — setTimeout() and setInterval() callbacks
+2. PENDING I/O  — I/O callbacks deferred from previous iteration
+3. IDLE/PREPARE — internal only
+4. POLL         — retrieve new I/O events; execute I/O callbacks
+                  (your file reads, DB queries, HTTP requests land here)
+5. CHECK        — setImmediate() callbacks
+6. CLOSE        — socket.on('close') callbacks
+
+Between EVERY phase: drain microtask queues
+  → process.nextTick() — highest priority, before Promises
+  → Promise .then() callbacks — after nextTick queue is empty</code></div>
+            <div class="section-title">Classic Output Order Question</div>
+            <div class="code-block"><code>console.log('1');
+setTimeout(() => console.log('2 - setTimeout'), 0);
+setImmediate(() => console.log('3 - setImmediate'));
+Promise.resolve().then(() => console.log('4 - Promise'));
+process.nextTick(() => console.log('5 - nextTick'));
+console.log('6');
+
+// Output:
+// 1  (sync)
+// 6  (sync)
+// 5  (nextTick — highest priority microtask)
+// 4  (Promise microtask)
+// 2  (timers phase — even delay=0 waits for event loop)
+// 3  (check phase — setImmediate)</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"Node.js uses the event loop to handle concurrency on a single thread. When you call fs.readFile(),
+                libuv handles the actual I/O on a thread pool — the JS thread is free to serve other requests. When I/O
+                completes, the callback enters the event loop queue and runs during the poll phase. Microtasks like
+                nextTick and Promises have higher priority than regular callbacks and drain between phases. This is why
+                Node.js is excellent for I/O-bound workloads — the thread is never blocked waiting for disk or network."
+              </p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the event loop in Node.js?</div>
+              <div class="iq">What is the difference between setTimeout(fn,0) and setImmediate()?</div>
+              <div class="iq">What is process.nextTick()? When would you use it?</div>
+              <div class="iq">Why is Node.js single-threaded? How does it handle concurrent requests?</div>
+              <div class="iq">What is libuv?</div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-card" id="tc-n1-2">
+          <div class="topic-head" onclick="toggleTopic('n1-2')">
+            <span class="topic-num">02</span><span class="topic-title">Blocking vs Non-Blocking</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('n1-2',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// BLOCKING — freezes the event loop — never do this in production
+const data = fs.readFileSync('huge.txt'); // ALL requests wait here!
+
+// NON-BLOCKING — event loop stays free
+fs.readFile('huge.txt', (err, data) => { processData(data); });
+// or with async/await (syntactic sugar over Promises)
+const data = await fs.promises.readFile('huge.txt');
+
+// What BLOCKS the event loop (avoid):
+// - *Sync file operations: readFileSync, writeFileSync
+// - JSON.parse on massive payloads (100MB+)
+// - Heavy computation loops — use Worker Threads instead
+// - Slow unindexed DB queries</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Projects</div>
+              <p>All your Mongoose calls use async/await — they return Promises which go through the event loop. Your
+                Groq API calls are async too. async/await is NOT new threads — it's syntactic sugar that keeps the event
+                loop free during I/O waits. This is why your Express server can serve multiple HR managers
+                simultaneously even though Node.js is single-threaded.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-n2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(104,160,99,.15);color:#68a063">Node.js & Express.js</span>
+          <h2>Streams, Buffers & EventEmitter</h2>
+          <p>Core Node.js primitives. Your Multer resume uploads use streams internally. EventEmitter powers all of
+            Node.js.</p>
+        </div>
+        <div class="topic-card" id="tc-n2-1">
+          <div class="topic-head" onclick="toggleTopic('n2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Buffer — Raw Binary Data</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('n2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Buffer</div>
+              <p>A fixed-size chunk of memory allocated outside the V8 heap. Used for raw binary data — file contents,
+                network packets, uploaded files. Before ES6, JavaScript had no way to handle binary data.</p>
+            </div>
+            <div class="code-block"><code>const buf = Buffer.from('hello');
+buf.toString();         // 'hello'
+buf.toString('base64'); // 'aGVsbG8='
+buf.toString('hex');    // '68656c6c6f'
+buf.length;             // 5
+
+// When a candidate uploads a resume PDF via your Darwinbox platform:
+// HTTP multipart request → Multer → Buffer of raw PDF bytes
+// → passed to aws-sdk S3 upload AND pdf-parse for text extraction</code></div>
+          </div>
+        </div>
+        <div class="topic-card" id="tc-n2-2">
+          <div class="topic-head" onclick="toggleTopic('n2-2')">
+            <span class="topic-num">02</span><span class="topic-title">Streams — Process Large Data in Chunks</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('n2-2',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Streams</div>
+              <p>Process data piece-by-piece instead of loading everything into memory at once. A 500MB video file read
+                as a stream uses only a few KB of RAM at a time.</p>
+            </div>
+            <table class="compare-table">
+              <tr>
+                <th>Type</th>
+                <th>Direction</th>
+                <th>Example</th>
+              </tr>
+              <tr>
+                <td>Readable</td>
+                <td>Read from source</td>
+                <td>fs.createReadStream(), HTTP request</td>
+              </tr>
+              <tr>
+                <td>Writable</td>
+                <td>Write to destination</td>
+                <td>fs.createWriteStream(), HTTP response</td>
+              </tr>
+              <tr>
+                <td>Duplex</td>
+                <td>Both</td>
+                <td>TCP socket</td>
+              </tr>
+              <tr>
+                <td>Transform</td>
+                <td>Duplex that modifies data</td>
+                <td>zlib.createGzip(), crypto stream</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// Without streams — 500MB into RAM
+const data = fs.readFileSync('video.mp4');
+res.send(data); // loads all into memory first
+
+// With streams — memory efficient
+fs.createReadStream('video.mp4').pipe(res); // chunks flow directly to response
+
+// Transform stream — compress on the fly
+fs.createReadStream('file.txt')
+  .pipe(zlib.createGzip())
+  .pipe(fs.createWriteStream('file.txt.gz'));</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Darwinbox Project</div>
+              <p>Multer processes file uploads as a stream pipeline: HTTP request stream → Multer parser (multipart
+                boundary detection) → Buffer in memory (memoryStorage) → AWS S3 upload. This is why large resume PDFs
+                upload smoothly without memory spikes.</p>
+            </div>
+          </div>
+        </div>
+        <div class="topic-card" id="tc-n2-3">
+          <div class="topic-head" onclick="toggleTopic('n2-3')">
+            <span class="topic-num">03</span><span class="topic-title">EventEmitter — Observer Pattern in Node.js</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('n2-3',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>const EventEmitter = require('events');
+class JobProcessor extends EventEmitter {
+  process(candidate) {
+    // do work...
+    this.emit('scored', { candidate, score: 85 });
+    this.emit('email', candidate.email);
+  }
+}
+const proc = new JobProcessor();
+proc.on('scored', (data) => console.log(`${data.candidate}: ${data.score}`));
+proc.once('email', sendEmail); // fires only once, then removed
+
+// Node.js streams, http.Server, process — all extend EventEmitter
+// process.on('uncaughtException') uses EventEmitter under the hood</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is EventEmitter? How is it different from Promises?</div>
+              <div class="iq">What is the difference between on() and once()?</div>
+              <div class="iq">What is backpressure in streams?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-n3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(104,160,99,.15);color:#68a063">Node.js & Express.js</span>
+          <h2>Express Middleware & Request Lifecycle</h2>
+          <p>You built 8 controllers and 9 service modules. Know exactly how every request flows through your Express
+            app.</p>
+          <div class="yours-badge">⭐ Core of your Darwinbox architecture</div>
+        </div>
+        <div class="topic-card" id="tc-n3-1">
+          <div class="topic-head" onclick="toggleTopic('n3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Middleware — Complete Guide</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('n3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Middleware</div>
+              <p>A function with access to req, res, and next(). It can execute code, modify req/res, end the request,
+                or call next() to pass to the next middleware. This is the Chain of Responsibility design pattern.</p>
+            </div>
+            <div class="code-block"><code>// Standard middleware
+function logger(req, res, next) {
+  console.log(req.method, req.url);
+  next(); // pass to next — if you don't call this, request hangs!
+}
+
+// Error-handling middleware — 4 params, must be registered LAST
+function errorHandler(err, req, res, next) {
+  res.status(err.statusCode || 500).json({ error: err.message });
+}
+
+// Your Darwinbox request flow (order matters):
+app.use(cors());               // 1. CORS headers
+app.use(helmet());             // 2. Security headers
+app.use(express.json());       // 3. Parse JSON body
+app.use(morgan('dev'));         // 4. Request logging
+app.use('/api', authMiddleware); // 5. JWT verification
+app.use('/api', rbacMiddleware); // 6. Role check
+app.use('/api', router);         // 7. Route handlers
+app.use(errorHandler);           // 8. Error handler — always last</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Darwinbox Project</div>
+              <p>Your JWT auth middleware verifies the token and attaches req.user = {userId, role}. Your RBAC
+                middleware then checks if req.user.role is in the allowed roles for that route. If JWT is invalid →
+                next(new Error('401')), if role is wrong → next(new Error('403')). The error handler at the end catches
+                both and returns the right status code. Classic Chain of Responsibility.</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is middleware in Express? How does next() work?</div>
+              <div class="iq">What happens if you forget to call next() in middleware?</div>
+              <div class="iq">How does error-handling middleware differ from regular middleware?</div>
+              <div class="iq">What design pattern does Express middleware implement?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-n4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(104,160,99,.15);color:#68a063">Node.js & Express.js</span>
+          <h2>Error Handling in Node.js</h2>
+          <p>Proper error handling is what separates production code from prototype code.</p>
+        </div>
+        <div class="topic-card" id="tc-n4-1">
+          <div class="topic-head" onclick="toggleTopic('n4-1')">
+            <span class="topic-num">01</span><span class="topic-title">Complete Error Handling Patterns</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('n4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Custom error class — best practice
+class AppError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = true; // vs programming bugs
+  }
+}
+
+// Async route — always wrap in try-catch
+app.get('/jobs', async (req, res, next) => {
+  try {
+    const jobs = await Job.find({});
+    res.json(jobs);
+  } catch (err) {
+    next(err); // passes to error handler middleware
+  }
+});
+
+// Centralized error handler
+app.use((err, req, res, next) => {
+  const code = err.statusCode || 500;
+  res.status(code).json({
+    error: err.isOperational ? err.message : 'Internal Server Error'
+    // Never expose stack traces in production!
+  });
+});
+
+// Global safety nets
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled rejection:', reason);
+  server.close(() => process.exit(1));
+});
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught exception:', err);
+  process.exit(1); // always exit — state may be corrupt
+});</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Projects</div>
+              <p>Your ResilientAIService catches Groq API errors (rate limit 429, timeout, network failure) and rotates
+                to a backup model — that is operational error handling. Your Express error middleware catches errors
+                from all controllers. Moodify's JWT middleware throws AppError(401) which bubbles up to the error
+                handler.</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">How do you handle errors in async Express routes?</div>
+              <div class="iq">What is the difference between operational and programming errors?</div>
+              <div class="iq">What happens if you throw inside async route without try-catch?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-n5">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(104,160,99,.15);color:#68a063">Node.js & Express.js</span>
+          <h2>Clustering & Worker Threads</h2>
+          <p>How to use all CPU cores. Important for system design interviews.</p>
+        </div>
+        <div class="topic-card" id="tc-n5-1">
+          <div class="topic-head" onclick="toggleTopic('n5-1')">
+            <span class="topic-num">01</span><span class="topic-title">Cluster Module vs Worker Threads</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('n5-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Cluster Module</th>
+                <th>Worker Threads</th>
+              </tr>
+              <tr>
+                <td>How</td>
+                <td>Forks multiple OS processes</td>
+                <td>Multiple threads in same process</td>
+              </tr>
+              <tr>
+                <td>Memory</td>
+                <td>Separate memory per process</td>
+                <td>Shared memory possible</td>
+              </tr>
+              <tr>
+                <td>Best for</td>
+                <td>Scaling HTTP server across CPU cores</td>
+                <td>CPU-intensive tasks (image processing, ML)</td>
+              </tr>
+              <tr>
+                <td>Crash isolation</td>
+                <td>Yes — worker crash doesn't kill master</td>
+                <td>No — thread crash can kill process</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// Cluster — one process per CPU core
+const cluster = require('cluster');
+if (cluster.isMaster) {
+  require('os').cpus().forEach(() => cluster.fork());
+  cluster.on('exit', () => cluster.fork()); // restart dead workers
+} else {
+  app.listen(3000); // each worker listens on same port
+}
+
+// Worker Thread — offload CPU work without blocking event loop
+const { Worker } = require('worker_threads');
+const worker = new Worker('./heavy-compute.js');
+worker.postMessage({ data: largeArray });
+worker.on('message', result => res.json(result));</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"By default Node.js uses only one CPU core. The cluster module forks multiple processes — one per core
+                — all sharing the same port. The OS distributes connections between them. In production I'd use PM2
+                which handles clustering automatically. Worker threads are for CPU-heavy tasks like running ML inference
+                or parsing large CSVs — you offload the heavy work to a thread so the event loop stays free."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-m1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(77,179,61,.12);color:#4db33d">MongoDB</span>
+          <h2>Schema Design — Embedding vs Referencing</h2>
+          <p>You designed 10 Mongoose schemas. Be ready to justify every design decision in the interview.</p>
+          <div class="yours-badge">⭐ 10 schemas in Darwinbox — know your choices</div>
+        </div>
+        <div class="topic-card" id="tc-m1-1">
+          <div class="topic-head" onclick="toggleTopic('m1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Embedding vs Referencing — When to Use
+              Each</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('m1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Embedding (denormalized)</th>
+                <th>Referencing (normalized)</th>
+              </tr>
+              <tr>
+                <td>Storage</td>
+                <td>Data inside parent document</td>
+                <td>Separate collection, linked by _id</td>
+              </tr>
+              <tr>
+                <td>Read</td>
+                <td>Single query — all together</td>
+                <td>Multiple queries or $lookup</td>
+              </tr>
+              <tr>
+                <td>Write</td>
+                <td>Must update all copies if data changes</td>
+                <td>Update once in its own collection</td>
+              </tr>
+              <tr>
+                <td>Limit</td>
+                <td>16MB document size limit</td>
+                <td>Parent stays small</td>
+              </tr>
+              <tr>
+                <td>Use when</td>
+                <td>Always accessed together, rarely changes, 1-to-few</td>
+                <td>Accessed independently, changes often, 1-to-many</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// EMBEDDING — skills inside candidate (always needed together)
+const CandidateSchema = new Schema({
+  name: String,
+  skills: [String],         // small array — embed it
+  address: { city: String, pin: String }  // always with candidate — embed
+});
+
+// REFERENCING — application links candidate + job separately
+const ApplicationSchema = new Schema({
+  candidateId: { type: Schema.Types.ObjectId, ref: 'Candidate' },
+  jobId:       { type: Schema.Types.ObjectId, ref: 'Job' },
+  score: Number,
+  status: String
+});
+
+// Populate (like a JOIN)
+await Application.findById(id).populate('candidateId', 'name email').populate('jobId', 'title');</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Darwinbox Project</div>
+              <p>Your 10 schemas likely include: Job, Application, Candidate, Company, Assessment, Question, AuditLog,
+                Leaderboard, HR User, Config. Assessment questions were embedded in Assessment (bounded, accessed
+                together). Applications referenced Candidates and Jobs (many-to-many, accessed independently). AuditLog
+                referenced Users for traceability. These are the right choices for the access patterns.</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">When would you embed vs reference in MongoDB?</div>
+              <div class="iq">What is the 16MB document size limit in MongoDB?</div>
+              <div class="iq">How do you model a many-to-many relationship in MongoDB?</div>
+              <div class="iq">What is $lookup? How is it different from SQL JOIN?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-m2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(77,179,61,.12);color:#4db33d">MongoDB</span>
+          <h2>Mongoose — Models, Hooks & Virtuals</h2>
+          <p>You used Mongoose for all 10 schemas. Know hooks, virtuals, validators, and instance/static methods.</p>
+          <div class="yours-badge">⭐ Used in every Darwinbox schema</div>
+        </div>
+        <div class="topic-card" id="tc-m2-1">
+          <div class="topic-head" onclick="toggleTopic('m2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Mongoose Schema, Hooks & Methods — Full
+              Guide</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('m2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>const CandidateSchema = new mongoose.Schema({
+  name:   { type: String, required: true, trim: true },
+  email:  { type: String, required: true, unique: true, lowercase: true },
+  score:  { type: Number, min: 0, max: 100, default: 0 },
+  status: { type: String, enum: ['applied','shortlisted','rejected'], default: 'applied' },
+  skills: [String],
+  jobId:  { type: mongoose.Schema.Types.ObjectId, ref: 'Job' }
+}, { timestamps: true }); // auto adds createdAt, updatedAt
+
+// VIRTUAL — computed, not stored in DB
+CandidateSchema.virtual('label').get(function() {
+  return `${this.name} (${this.status})`;
+});
+
+// PRE HOOK — runs BEFORE operation
+CandidateSchema.pre('save', async function(next) {
+  if (this.isModified('email')) this.email = this.email.toLowerCase();
+  next();
+});
+
+// POST HOOK — runs AFTER operation (good for audit logs, emails)
+CandidateSchema.post('save', function(doc) {
+  AuditLog.create({ action: 'candidate_saved', candidateId: doc._id });
+});
+
+// Pre find hook — soft delete filter on all queries
+CandidateSchema.pre('find', function() {
+  this.where({ isDeleted: { $ne: true } });
+});
+
+// INSTANCE METHOD — on individual document
+CandidateSchema.methods.shortlist = function() {
+  this.status = 'shortlisted';
+  return this.save();
+};
+
+// STATIC METHOD — on the model
+CandidateSchema.statics.findByJob = function(jobId) {
+  return this.find({ jobId }).populate('jobId', 'title');
+};
+
+const Candidate = mongoose.model('Candidate', CandidateSchema);
+
+// Usage
+await Candidate.findByIdAndUpdate(id, { score: 90 }, { new: true }); // new:true returns updated doc
+await Candidate.find({ score: { $gte: 80 } }).sort('-score').limit(10).skip(0);</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between Mongoose Schema and Model?</div>
+              <div class="iq">When would you use a pre hook vs post hook?</div>
+              <div class="iq">What does { new: true } do in findByIdAndUpdate?</div>
+              <div class="iq">What is a virtual in Mongoose? Is it stored in the database?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-m3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(77,179,61,.12);color:#4db33d">MongoDB</span>
+          <h2>Aggregation Pipeline</h2>
+          <p>You built MongoDB aggregation-powered leaderboards and analytics dashboards. This is your strongest MongoDB
+            talking point.</p>
+          <div class="yours-badge">⭐ You built leaderboards with this — explain it</div>
+        </div>
+        <div class="topic-card" id="tc-m3-1">
+          <div class="topic-head" onclick="toggleTopic('m3-1')">
+            <span class="topic-num">01</span><span class="topic-title">All Key Stages + Your Leaderboard Example</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('m3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Aggregation Pipeline</div>
+              <p>A sequence of stages where each stage's output becomes the next stage's input. Like a Unix pipe. More
+                powerful than SQL GROUP BY.</p>
+            </div>
+            <div class="code-block"><code>// KEY STAGES
+{ $match: { status: 'shortlisted', score: { $gte: 60 } } }  // filter early!
+{ $group: { _id: '$jobId', avg: { $avg: '$score' }, total: { $sum: 1 } } }
+{ $sort: { avg: -1 } }
+{ $limit: 10 }, { $skip: 0 }
+{ $project: { name: 1, score: 1, _id: 0 } }
+{ $lookup: { from: 'jobs', localField: 'jobId', foreignField: '_id', as: 'job' } }
+{ $unwind: '$job' }   // flatten array from $lookup
+{ $addFields: { rank: { $multiply: ['$score', 1.1] } } }
+{ $count: 'totalResults' }
+
+// YOUR DARWINBOX LEADERBOARD (what it likely looks like):
+const leaderboard = await Application.aggregate([
+  { $match: { jobId: mongoose.Types.ObjectId(jobId) } }, // filter by job FIRST
+  { $group: {
+      _id: '$candidateId',
+      totalScore: { $sum: '$score' },
+      attempts:   { $sum: 1 }
+  }},
+  { $lookup: { from: 'candidates', localField: '_id', foreignField: '_id', as: 'candidate' }},
+  { $unwind: '$candidate' },
+  { $project: {
+      name:       '$candidate.name',
+      email:      '$candidate.email',
+      totalScore: 1,
+      attempts:   1
+  }},
+  { $sort: { totalScore: -1 } },
+  { $limit: 10 }
+]);</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I built the candidate leaderboard using MongoDB's aggregation pipeline. The key performance insight: I
+                put $match first to filter by jobId before grouping — this reduces the documents the $group stage has to
+                process from the entire collection down to just that job's applications. Then $lookup joins candidate
+                details, $project reshapes the output, and $sort + $limit gives the ranked top 10. Moving $match later
+                would mean grouping all documents in the collection — much slower."</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the MongoDB aggregation pipeline?</div>
+              <div class="iq">Why should $match come before $group?</div>
+              <div class="iq">What is $lookup? What does $unwind do after it?</div>
+              <div class="iq">How would you implement pagination using the aggregation pipeline?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-m4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(77,179,61,.12);color:#4db33d">MongoDB</span>
+          <h2>Indexing in MongoDB</h2>
+          <p>Without indexes, every query scans the entire collection. With them, O(log n). Critical for production
+            performance.</p>
+        </div>
+        <div class="topic-card" id="tc-m4-1">
+          <div class="topic-head" onclick="toggleTopic('m4-1')">
+            <span class="topic-num">01</span><span class="topic-title">MongoDB Index Types & Best Practices</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('m4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Single field
+CandidateSchema.index({ email: 1 });   // 1=asc, -1=desc
+CandidateSchema.index({ score: -1 });  // sorted descending for leaderboard
+
+// Unique index
+CandidateSchema.index({ email: 1 }, { unique: true });
+
+// Compound index — order matters (leftmost prefix rule)
+CandidateSchema.index({ jobId: 1, score: -1 });
+// Covers: find({jobId}) and find({jobId}).sort({score:-1})
+// Does NOT cover: find({score}) alone
+
+// Text index — full text search
+JobSchema.index({ title: 'text', description: 'text' });
+// Job.find({ $text: { $search: "Node.js developer" } })
+
+// TTL index — auto-delete documents after time (sessions, temp data)
+TokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 }); // 24h
+
+// Sparse index — only index docs where field exists
+CandidateSchema.index({ linkedinUrl: 1 }, { sparse: true });
+
+// Check if query uses index
+db.candidates.find({ email: 'a@b.com' }).explain('executionStats')
+// Look for: IXSCAN (good) vs COLLSCAN (bad)</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the leftmost prefix rule for compound indexes?</div>
+              <div class="iq">What is a TTL index? When would you use it?</div>
+              <div class="iq">What is a covered query in MongoDB?</div>
+              <div class="iq">How do you use explain() to diagnose slow queries?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-m5">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(77,179,61,.12);color:#4db33d">MongoDB</span>
+          <h2>Transactions in MongoDB</h2>
+          <p>Multi-document ACID transactions since v4.0. Know when to use them and their tradeoffs.</p>
+        </div>
+        <div class="topic-card" id="tc-m5-1">
+          <div class="topic-head" onclick="toggleTopic('m5-1')">
+            <span class="topic-num">01</span><span class="topic-title">Multi-Document Transactions</span>
+            <div class="topic-tags"><span class="ttag t-freq">Often Asked</span></div>
+            <div class="topic-chk" onclick="markDone('m5-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>MongoDB is atomic for single-document operations by
+                default — no transaction needed</div>
+              <div class="point"><span class="point-bullet">→</span>Multi-document transactions (v4.0+) require a
+                replica set</div>
+              <div class="point"><span class="point-bullet">→</span>More expensive than PostgreSQL transactions — design
+                schema to minimize their need</div>
+            </div>
+            <div class="code-block"><code>const session = await mongoose.startSession();
+session.startTransaction();
+try {
+  await Application.create([{ candidateId, jobId, score }], { session });
+  await Job.findByIdAndUpdate(jobId, { $inc: { applicantCount: 1 } }, { session });
+  await AuditLog.create([{ action: 'application_submitted' }], { session });
+  await session.commitTransaction();
+} catch (err) {
+  await session.abortTransaction(); // rollback all
+  throw err;
+} finally {
+  session.endSession();
+}</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"MongoDB is atomic at the single-document level — embedding related data removes the need for
+                multi-document transactions in many cases. For example, embedding assessment questions inside the
+                Assessment document means saving an assessment is one atomic write. When I genuinely need multi-document
+                atomicity — like recording an application and updating the job's applicant count together — I use
+                sessions and transactions. But I design schemas to minimize this need because transactions are more
+                expensive in MongoDB than PostgreSQL."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-p1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(51,103,145,.2);color:#79b8d8">PostgreSQL</span>
+          <h2>PostgreSQL vs MySQL vs MongoDB</h2>
+          <p>You chose PostgreSQL for Moodify and MongoDB for Darwinbox. Be ready to justify both choices confidently.
+          </p>
+          <div class="yours-badge">⭐ You used both — know why you chose each</div>
+        </div>
+        <div class="topic-card" id="tc-p1-1">
+          <div class="topic-head" onclick="toggleTopic('p1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Database Comparison — Justify Your Choices</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('p1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>PostgreSQL</th>
+                <th>MySQL</th>
+                <th>MongoDB</th>
+              </tr>
+              <tr>
+                <td>Type</td>
+                <td>Relational (SQL)</td>
+                <td>Relational (SQL)</td>
+                <td>Document (NoSQL)</td>
+              </tr>
+              <tr>
+                <td>ACID</td>
+                <td>Full, strongest</td>
+                <td>Full (InnoDB)</td>
+                <td>Single-doc by default, multi-doc v4.0+</td>
+              </tr>
+              <tr>
+                <td>Schema</td>
+                <td>Strict</td>
+                <td>Strict</td>
+                <td>Flexible</td>
+              </tr>
+              <tr>
+                <td>JSON support</td>
+                <td>Excellent — JSONB type, indexed</td>
+                <td>Basic</td>
+                <td>Native document</td>
+              </tr>
+              <tr>
+                <td>Complex queries</td>
+                <td>Best — CTEs, window functions, full-text</td>
+                <td>Good</td>
+                <td>Aggregation pipeline</td>
+              </tr>
+              <tr>
+                <td>Scaling</td>
+                <td>Vertical, Citus for horizontal</td>
+                <td>Vertical + replicas</td>
+                <td>Horizontal (sharding built-in)</td>
+              </tr>
+            </table>
+            <div class="your-box">
+              <div class="your-label">Your Project Justifications</div>
+              <p><strong>Moodify → PostgreSQL:</strong> Users, moods, songs, and recommendations are clearly relational
+                with defined foreign keys. ACID is important for user auth integrity. PostgreSQL's rich query support is
+                good for analytics (most popular moods, song frequency). Neon provides serverless PostgreSQL — scales to
+                zero when idle, perfect for a project without 24/7 traffic.<br><br><strong>Darwinbox → MongoDB:</strong>
+                HR workflows are schema-flexible — different companies have different job fields and hiring stages.
+                MongoDB's document model maps naturally to nested job descriptions and candidate profiles. High write
+                throughput for candidate submissions. Schema evolves frequently in an enterprise product — adding new
+                fields is trivial in MongoDB.</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">Why PostgreSQL for Moodify and MongoDB for Darwinbox?</div>
+              <div class="iq">What is JSONB in PostgreSQL? How is it different from JSON?</div>
+              <div class="iq">What are the main differences between PostgreSQL and MySQL?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-p2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(51,103,145,.2);color:#79b8d8">PostgreSQL</span>
+          <h2>Transactions, ACID & MVCC</h2>
+          <p>PostgreSQL has the strongest ACID implementation. MVCC is how it achieves high concurrency without locking
+            reads.</p>
+        </div>
+        <div class="topic-card" id="tc-p2-1">
+          <div class="topic-head" onclick="toggleTopic('p2-1')">
+            <span class="topic-num">01</span><span class="topic-title">MVCC — How PostgreSQL Handles Concurrency</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('p2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">MVCC — Multi-Version Concurrency Control</div>
+              <p>PostgreSQL never overwrites existing rows. When you UPDATE, it creates a new version of the row and
+                marks the old one as expired. Readers see a consistent snapshot as of when their transaction started.
+                Result: readers never block writers, writers never block readers.</p>
+            </div>
+            <div class="code-block"><code>-- Basic transaction
+BEGIN;
+  INSERT INTO moods (user_id, mood) VALUES (1, 'happy');
+  UPDATE user_stats SET mood_count = mood_count + 1 WHERE user_id = 1;
+COMMIT;  -- or ROLLBACK on failure
+
+-- Savepoints — partial rollback
+BEGIN;
+  INSERT INTO songs VALUES (...);
+  SAVEPOINT sp1;
+  INSERT INTO recommendations VALUES (...); -- this might fail
+  ROLLBACK TO sp1;                          -- keeps the song insert
+COMMIT;
+
+-- Isolation levels (default in PG is Read Committed)
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- VACUUM — PostgreSQL periodically cleans old row versions
+-- AUTOVACUUM runs automatically in background</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"PostgreSQL uses MVCC — when you update a row, it keeps the old version for readers who started before
+                the update. Each transaction sees a consistent snapshot. This means readers never block writers and vice
+                versa — multiple users can read mood recommendations in Moodify while a background job updates
+                recommendation scores, all without locking. PostgreSQL periodically runs VACUUM to clean up old row
+                versions."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-p3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(51,103,145,.2);color:#79b8d8">PostgreSQL</span>
+          <h2>Indexing & EXPLAIN ANALYZE</h2>
+          <p>How to make PostgreSQL queries fast and how to diagnose slow ones.</p>
+        </div>
+        <div class="topic-card" id="tc-p3-1">
+          <div class="topic-head" onclick="toggleTopic('p3-1')">
+            <span class="topic-num">01</span><span class="topic-title">PostgreSQL Indexes & Query Plans</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('p3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>-- B-tree (default) — for =, <, >, BETWEEN, ORDER BY, LIKE 'prefix%'
+CREATE INDEX idx_moods_user ON moods(user_id);
+CREATE INDEX idx_moods_user_date ON moods(user_id, created_at DESC); -- compound
+
+-- Unique index
+CREATE UNIQUE INDEX idx_users_email ON users(email);
+
+-- Partial index — index only a subset (more efficient)
+CREATE INDEX idx_active_users ON users(email) WHERE is_active = true;
+
+-- GIN — full text search and JSONB operators
+CREATE INDEX idx_songs_tags ON songs USING GIN(tags);
+
+-- EXPLAIN — see query plan (no execution)
+EXPLAIN SELECT * FROM moods WHERE user_id = 1;
+
+-- EXPLAIN ANALYZE — execute AND show actual timing
+EXPLAIN ANALYZE SELECT * FROM moods WHERE user_id = 1 ORDER BY created_at DESC;
+
+-- What to look for:
+-- Seq Scan  → full table scan (bad for large tables — add index)
+-- Index Scan → uses index (good)
+-- Index Only Scan → covered index, no table access (best)
+
+-- Common pitfall — function on indexed column breaks index use
+WHERE LOWER(email) = 'a@b.com'  -- can't use index on email
+-- Fix: CREATE INDEX idx_email_lower ON users(LOWER(email));  -- functional index
+
+-- LIKE with leading wildcard also breaks B-tree
+WHERE name LIKE '%alice%'  -- use GIN full-text instead</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What does EXPLAIN ANALYZE show you?</div>
+              <div class="iq">What is the difference between Seq Scan and Index Scan?</div>
+              <div class="iq">Why can LIKE '%term%' not use a B-tree index?</div>
+              <div class="iq">What is a partial index and when would you use one?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-p4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(51,103,145,.2);color:#79b8d8">PostgreSQL</span>
+          <h2>Connection Pooling & Neon</h2>
+          <p>Every production PostgreSQL app needs connection pooling. Neon (your Moodify DB) has built-in PgBouncer
+            pooling.</p>
+          <div class="yours-badge">⭐ Neon PostgreSQL in your Moodify deployment</div>
+        </div>
+        <div class="topic-card" id="tc-p4-1">
+          <div class="topic-head" onclick="toggleTopic('p4-1')">
+            <span class="topic-num">01</span><span class="topic-title">Why Connection Pooling is Critical</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('p4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Creating a PostgreSQL connection takes 50–100ms —
+                too slow per query</div>
+              <div class="point"><span class="point-bullet">→</span>PostgreSQL default max connections: 100. 1000 app
+                instances × 1 conn each = database crash</div>
+              <div class="point"><span class="point-bullet">→</span>Connection pool: reusable established connections,
+                checked out per query, returned after</div>
+            </div>
+            <div class="code-block"><code>const { Pool } = require('pg');
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }, // required for Neon (TLS)
+  max: 20,                    // max connections in pool
+  idleTimeoutMillis: 30000,   // close idle connections after 30s
+  connectionTimeoutMillis: 2000
+});
+
+// Pool automatically manages connections
+const result = await pool.query(
+  'SELECT * FROM moods WHERE user_id = $1',  // parameterized — prevents SQL injection!
+  [userId]
+);
+// NEVER: `WHERE user_id = ${userId}` — SQL injection vulnerability!
+
+// Neon serverless PostgreSQL:
+// - Scales to ZERO when idle (no cost when not used)
+// - Built-in PgBouncer pooler via ?pgbouncer=true in connection string
+// - Branching: create DB branches like Git (dev, staging, prod)
+// postgresql://user:pass@ep-name.us-east-2.aws.neon.tech/moodify?sslmode=require</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Moodify Project</div>
+              <p>Neon's pooled connection URL (with pgbouncer=true) means your Render app doesn't create a new DB
+                connection per request. Multiple concurrent users all share from the pool. In serverless environments
+                especially this is critical — without pooling, each function invocation creates and destroys a
+                connection, which hits PostgreSQL's connection limit very quickly.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-a1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(214,58,255,.12);color:#d63aff">Auth & Security</span>
+          <h2>JWT — Structure & Internals</h2>
+          <p>You implemented JWT-based RBAC in Darwinbox and JWT auth in Moodify. Know exactly how it works inside.</p>
+          <div class="yours-badge">⭐ Core of auth in both your projects</div>
+        </div>
+        <div class="topic-card" id="tc-a1-1">
+          <div class="topic-head" onclick="toggleTopic('a1-1')">
+            <span class="topic-num">01</span><span class="topic-title">JWT — Header.Payload.Signature</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('a1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">JWT — JSON Web Token</div>
+              <p>Three Base64URL-encoded parts separated by dots: Header.Payload.Signature. Used for stateless
+                authentication — the server doesn't store sessions, it just verifies the signature on each request.</p>
+            </div>
+            <div class="code-block"><code>// JWT = eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiIxMjMiLCJyb2xlIjoiSFIifQ.SflKxwRJ...
+//        [   HEADER         ].[       PAYLOAD                    ].[  SIGNATURE  ]
+
+// 1. HEADER
+{ "alg": "HS256", "typ": "JWT" }
+
+// 2. PAYLOAD — claims
+{
+  "userId": "64abc123",
+  "role": "HR_MANAGER",      // your RBAC role
+  "email": "hr@company.com",
+  "iat": 1714000000,         // issued at
+  "exp": 1714086400          // expires in 24h
+}
+// ⚠️ Payload is BASE64 ENCODED, NOT ENCRYPTED
+// Anyone can decode it — NEVER put passwords or secrets in payload!
+
+// 3. SIGNATURE — tamper detection
+HMACSHA256(base64url(header) + "." + base64url(payload), SECRET_KEY)
+// Only server knows SECRET_KEY — cannot forge without it
+
+// How server verifies:
+// 1. Split token into 3 parts
+// 2. Re-compute signature from header + payload + secret
+// 3. If computed === token signature → valid and unmodified
+// 4. Check exp → not expired
+
+const jwt = require('jsonwebtoken');
+const token = jwt.sign({ userId, role }, process.env.JWT_SECRET, { expiresIn: '24h' });
+const decoded = jwt.verify(token, process.env.JWT_SECRET);
+// throws TokenExpiredError or JsonWebTokenError on failure</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What are the three parts of a JWT?</div>
+              <div class="iq">Is JWT payload encrypted? Can anyone read it?</div>
+              <div class="iq">How does the server verify a JWT without storing it?</div>
+              <div class="iq">What is the difference between HS256 and RS256?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-a2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(214,58,255,.12);color:#d63aff">Auth & Security</span>
+          <h2>Access vs Refresh Tokens</h2>
+          <p>Production JWT systems always use both. Know the rotation pattern and why short-lived access tokens matter.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-a2-1">
+          <div class="topic-head" onclick="toggleTopic('a2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Token Rotation Pattern</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('a2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Access Token</th>
+                <th>Refresh Token</th>
+              </tr>
+              <tr>
+                <td>Expiry</td>
+                <td>Short — 15 min to 1 hour</td>
+                <td>Long — 7 to 30 days</td>
+              </tr>
+              <tr>
+                <td>Sent with</td>
+                <td>Every API request (Authorization header)</td>
+                <td>Only to /auth/refresh endpoint</td>
+              </tr>
+              <tr>
+                <td>Storage</td>
+                <td>Memory or localStorage (risky) or httpOnly cookie</td>
+                <td>httpOnly cookie (secure) or DB</td>
+              </tr>
+              <tr>
+                <td>If compromised</td>
+                <td>Small damage window — expires soon</td>
+                <td>High risk — generate new access tokens</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// Login → issue both tokens
+const accessToken  = jwt.sign({ userId, role }, ACCESS_SECRET,  { expiresIn: '15m' });
+const refreshToken = jwt.sign({ userId },       REFRESH_SECRET, { expiresIn: '7d' });
+
+// Store refresh token in httpOnly cookie
+res.cookie('refreshToken', refreshToken, {
+  httpOnly: true,    // JS cannot read — prevents XSS theft
+  secure: true,      // HTTPS only
+  sameSite: 'strict' // prevents CSRF
+});
+
+// POST /auth/refresh
+const { refreshToken } = req.cookies;
+const decoded = jwt.verify(refreshToken, REFRESH_SECRET);
+// Check token not blacklisted in Redis
+const newAccessToken = jwt.sign({ userId: decoded.userId, role }, ACCESS_SECRET, { expiresIn: '15m' });</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"Access tokens are short-lived — 15 minutes. If an attacker gets one, the damage window is small.
+                Refresh tokens are long-lived but only sent to one endpoint, reducing exposure. In production I store
+                refresh tokens as httpOnly cookies — JavaScript cannot read them, preventing XSS-based theft. For
+                immediate revocation (logout must work instantly), I'd maintain a Redis blacklist of invalidated refresh
+                tokens."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-a3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(214,58,255,.12);color:#d63aff">Auth & Security</span>
+          <h2>RBAC — Your Darwinbox Implementation</h2>
+          <p>You enforced JWT-based RBAC across HR and candidate workflows. This is your best auth talking point.</p>
+          <div class="yours-badge">⭐ You built this — practice explaining it</div>
+        </div>
+        <div class="topic-card" id="tc-a3-1">
+          <div class="topic-head" onclick="toggleTopic('a3-1')">
+            <span class="topic-num">01</span><span class="topic-title">RBAC — Full Implementation</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('a3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// 1. Roles defined
+const ROLES = { SUPER_ADMIN: 'super_admin', HR_MANAGER: 'hr_manager',
+                HR_RECRUITER: 'hr_recruiter', CANDIDATE: 'candidate' };
+
+// 2. JWT payload includes role
+jwt.sign({ userId: user._id, role: user.role }, SECRET, { expiresIn: '24h' });
+
+// 3. Auth middleware — verify token
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1]; // "Bearer TOKEN"
+  if (!token) return res.status(401).json({ error: 'No token provided' });
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET); // attaches {userId, role}
+    next();
+  } catch { res.status(401).json({ error: 'Invalid or expired token' }); }
+};
+
+// 4. RBAC middleware — check role
+const authorize = (...roles) => (req, res, next) => {
+  if (!roles.includes(req.user.role))
+    return res.status(403).json({ error: 'Access denied — insufficient permissions' });
+  next();
+};
+
+// 5. Apply to routes
+router.post('/jobs',        authenticate, authorize('super_admin','hr_manager'), createJob);
+router.get('/applications', authenticate, authorize('hr_manager','hr_recruiter'), getApplications);
+router.post('/apply',       authenticate, authorize('candidate'), submitApplication);
+router.get('/leaderboard',  authenticate, authorize('hr_manager','hr_recruiter'), getLeaderboard);
+
+// KEY DISTINCTION:
+// 401 Unauthorized → not authenticated (no token / invalid token)
+// 403 Forbidden    → authenticated but lacks permission for this resource</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I implemented RBAC with two separate middleware layers. authenticate verifies the JWT and attaches
+                req.user — it returns 401 if the token is missing or invalid. authorize checks req.user.role against the
+                allowed roles for that route — it returns 403 if the role doesn't have permission. The 401/403
+                distinction is important: 401 means prove who you are, 403 means I know who you are but you can't do
+                this. Since the role is in the JWT payload, no database lookup is needed per request — making
+                authorization zero-latency."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-a4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(214,58,255,.12);color:#d63aff">Auth & Security</span>
+          <h2>Helmet, CORS & CSP</h2>
+          <p>You configured Helmet and custom CSP in Moodify. Know what each header does and the attack it prevents.</p>
+          <div class="yours-badge">⭐ You configured CSP in Moodify — your security story</div>
+        </div>
+        <div class="topic-card" id="tc-a4-1">
+          <div class="topic-head" onclick="toggleTopic('a4-1')">
+            <span class="topic-num">01</span><span class="topic-title">Helmet Security Headers + CORS Explained</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('a4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Helmet sets multiple HTTP security headers automatically
+app.use(helmet());
+
+// WHAT HELMET SETS:
+// Content-Security-Policy (CSP) — tells browser which sources to trust
+//   → prevents XSS: injected script can't load/call untrusted origin
+// X-Frame-Options: DENY — prevents clickjacking (embedding in iframe)
+// X-Content-Type-Options: nosniff — prevents MIME type sniffing attacks
+// Strict-Transport-Security (HSTS) — forces HTTPS for future requests
+// Referrer-Policy — controls Referer header contents
+
+// YOUR MOODIFY CSP (what it likely looked like):
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc:  ["'self'"],
+    scriptSrc:   ["'self'", "'unsafe-inline'"],
+    styleSrc:    ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+    fontSrc:     ["'self'", "https://fonts.gstatic.com"],
+    imgSrc:      ["'self'", "data:", "https:"],
+    connectSrc:  ["'self'", "https://generativelanguage.googleapis.com"] // Gemini API
+    // This allows your frontend JS to call Gemini but blocks calls to unknown domains
+  }
+}));
+
+// CORS — who can make requests to your API from a browser
+app.use(cors({
+  origin: ['https://moodify.onrender.com'],  // only your own frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // allow cookies cross-origin
+}));
+// Note: CORS is browser-enforced only — server-to-server calls are not restricted by CORS</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"In Moodify I used Helmet to add security headers. The most important was Content Security Policy — it
+                tells the browser which domains are trusted for scripts, styles, and API connections. I configured
+                connectSrc to only allow calls to Gemini's API domain — even if an XSS attack injected malicious script,
+                it couldn't exfiltrate data to a random server. X-Frame-Options prevents clickjacking. HSTS forces all
+                future requests to use HTTPS."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-a5">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(214,58,255,.12);color:#d63aff">Auth & Security</span>
+          <h2>Session vs Token Authentication</h2>
+          <p>Classic interview question. Know the tradeoffs and when to choose each.</p>
+        </div>
+        <div class="topic-card" id="tc-a5-1">
+          <div class="topic-head" onclick="toggleTopic('a5-1')">
+            <span class="topic-num">01</span><span class="topic-title">Sessions vs JWT — Full Comparison</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('a5-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Session-based</th>
+                <th>JWT Token-based</th>
+              </tr>
+              <tr>
+                <td>State</td>
+                <td>Stateful — server stores sessions (Redis/DB)</td>
+                <td>Stateless — data is in the token itself</td>
+              </tr>
+              <tr>
+                <td>Scalability</td>
+                <td>Harder — all servers need shared session store</td>
+                <td>Easier — any server can verify token independently</td>
+              </tr>
+              <tr>
+                <td>Revocation</td>
+                <td>Easy — delete session from store instantly</td>
+                <td>Hard — can't invalidate before expiry without blacklist</td>
+              </tr>
+              <tr>
+                <td>Payload size</td>
+                <td>Only session ID sent (tiny)</td>
+                <td>Full token every request (larger)</td>
+              </tr>
+              <tr>
+                <td>Microservices</td>
+                <td>Needs shared store between all services</td>
+                <td>Each service independently verifies — better</td>
+              </tr>
+              <tr>
+                <td>Mobile apps</td>
+                <td>Cookies tricky on mobile</td>
+                <td>Authorization header is simpler</td>
+              </tr>
+            </table>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I chose JWT for Darwinbox because it's stateless — HR managers, recruiters, and candidates all
+                authenticate via the same token, and any service can verify it without calling a central session store.
+                The tradeoff is revocation: you can't immediately invalidate a JWT before expiry without a Redis
+                blacklist. For Darwinbox, 24-hour tokens were acceptable. If immediate logout was required I'd either
+                add a Redis blacklist or use short 15-minute access tokens with refresh token rotation."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-r1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(240,136,62,.12);color:#f0883e">REST API Design</span>
+          <h2>REST Principles & URL Design</h2>
+          <p>You built REST APIs in both projects. Know the principles, naming conventions, and idempotency rules cold.
+          </p>
+          <div class="yours-badge">⭐ Core of both Darwinbox and Moodify backends</div>
+        </div>
+        <div class="topic-card" id="tc-r1-1">
+          <div class="topic-head" onclick="toggleTopic('r1-1')">
+            <span class="topic-num">01</span><span class="topic-title">REST Constraints + URL Best Practices</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Always
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('r1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// 6 REST Constraints:
+// 1. Client-Server — UI and backend are separated
+// 2. Stateless     — each request has all info needed; no server state between requests
+//                    (JWT is stateless; sessions are stateful)
+// 3. Cacheable     — GET responses should be cacheable
+// 4. Uniform Interface — consistent URL structure and methods
+// 5. Layered System — client doesn't know if it talks to server or load balancer
+// 6. Code on Demand (optional) — server can send executable code
+
+// URL DESIGN RULES:
+// Use nouns (resources), not verbs
+// BAD:  GET /getJobs  POST /createJob  DELETE /deleteJob/123
+// GOOD: GET /jobs     POST /jobs       DELETE /jobs/123
+
+// Nested resources
+GET    /jobs                          // all jobs
+POST   /jobs                          // create job
+GET    /jobs/:jobId                   // specific job
+PUT    /jobs/:jobId                   // replace entire job
+PATCH  /jobs/:jobId                   // partial update
+DELETE /jobs/:jobId                   // delete job
+GET    /jobs/:jobId/applications      // applications for a job
+POST   /jobs/:jobId/applications      // submit application
+
+// Actions that don't fit CRUD
+POST /jobs/:jobId/publish             // publish action
+POST /applications/:id/shortlist      // shortlist action
+POST /auth/login                      // not a resource, action verb OK
+
+// Query params for filtering/sorting/pagination
+GET /jobs?status=active&location=hyderabad&sort=-createdAt&page=1&limit=20
+
+// Idempotency — calling N times = same result as calling once
+// GET    → idempotent + safe (no side effects)
+// PUT    → idempotent (replace resource — same result each time)
+// DELETE → idempotent (deleting already-deleted = same state)
+// POST   → NOT idempotent (creates new resource each time)
+// PATCH  → NOT guaranteed idempotent</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between PUT and PATCH?</div>
+              <div class="iq">What does stateless mean in REST?</div>
+              <div class="iq">Which HTTP methods are idempotent?</div>
+              <div class="iq">Design a REST API for a job portal (your Darwinbox).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-r2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(240,136,62,.12);color:#f0883e">REST API Design</span>
+          <h2>Pagination, Filtering & Versioning</h2>
+          <p>Production APIs always need pagination. Know offset vs cursor and when to use each.</p>
+        </div>
+        <div class="topic-card" id="tc-r2-1">
+          <div class="topic-head" onclick="toggleTopic('r2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Pagination Strategies & API Versioning</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('r2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// OFFSET PAGINATION — simple, has problems
+// GET /jobs?page=2&limit=10
+const jobs = await Job.find().skip((page-1)*limit).limit(limit);
+// Problem: items added while paginating = duplicates/missed items
+// Also slow for large offsets: SKIP 10000 scans 10000 docs
+
+// CURSOR PAGINATION — better for large datasets
+// GET /jobs?cursor=64abc123&limit=10
+const jobs = await Job.find({ _id: { $gt: cursor } }).limit(limit).sort('_id');
+res.json({
+  data: jobs,
+  nextCursor: jobs[jobs.length-1]?._id,
+  hasMore: jobs.length === limit
+});
+// Benefits: stable on insertions/deletions, O(log n) with index
+
+// API RESPONSE ENVELOPE (standard structure)
+{
+  "success": true,
+  "data": [...],
+  "meta": { "page": 1, "limit": 10, "total": 150, "totalPages": 15 },
+  "error": null
+}
+
+// API VERSIONING
+// URL versioning (most common, clearest)
+/api/v1/jobs
+/api/v2/jobs  // breaking changes here
+
+// Header versioning (less common)
+GET /api/jobs  Accept: application/vnd.myapi.v2+json</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-r3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(240,136,62,.12);color:#f0883e">REST API Design</span>
+          <h2>Rate Limiting & Throttling</h2>
+          <p>You implemented request throttling in ResilientAIService. Know the algorithms behind rate limiting.</p>
+          <div class="yours-badge">⭐ You implemented throttling in Darwinbox</div>
+        </div>
+        <div class="topic-card" id="tc-r3-1">
+          <div class="topic-head" onclick="toggleTopic('r3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Rate Limiting Algorithms & Implementation</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('r3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th>Algorithm</th>
+                <th>How it works</th>
+                <th>Tradeoff</th>
+              </tr>
+              <tr>
+                <td>Fixed Window</td>
+                <td>100 req per minute window. Reset at 00:00.</td>
+                <td>Burst at boundary: 100 at 00:59 + 100 at 01:00 = 200 in 2s</td>
+              </tr>
+              <tr>
+                <td>Sliding Window</td>
+                <td>Rolling time window — no hard boundary</td>
+                <td>More accurate. Higher memory (track all timestamps).</td>
+              </tr>
+              <tr>
+                <td>Token Bucket</td>
+                <td>Bucket of N tokens. Each request uses 1. Refill at fixed rate.</td>
+                <td>Allows burst up to bucket size. Used by AWS, Stripe.</td>
+              </tr>
+              <tr>
+                <td>Leaky Bucket</td>
+                <td>Requests queue, processed at fixed rate. Overflow dropped.</td>
+                <td>Perfectly smooth. Queue can fill up under burst.</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// Express rate limiter
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min window
+  max: 100,                  // 100 requests per window per IP
+  standardHeaders: true,
+  // Use Redis store for multi-server (in-memory store is per-process only)
+  store: new RedisStore({ client: redisClient })
+});
+app.use('/api', limiter);
+
+// Different limits per route
+const authLimiter = rateLimit({ windowMs: 60000, max: 5 }); // 5 login attempts/min
+app.use('/auth/login', authLimiter);</code></div>
+            <div class="your-box">
+              <div class="your-label">In Your Darwinbox ResilientAIService</div>
+              <p>Your request throttling limits how fast your server sends requests TO the Groq API — so you don't
+                exceed their rate limits. This is the Token Bucket pattern: you maintain a token count; each LLM call
+                costs a token; tokens refill at Groq's allowed rate. When tokens run out, the service waits or falls
+                back to a smaller model. This is throttling from the client side, not server-side rate limiting.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-f1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(227,179,65,.12);color:#e3b341">Files & Storage</span>
+          <h2>Multer & Multipart/form-data</h2>
+          <p>You used Multer in Darwinbox for resume PDF uploads. Know how multipart works and exactly what Multer does.
+          </p>
+          <div class="yours-badge">⭐ Resume uploads in Darwinbox — explain the pipeline</div>
+        </div>
+        <div class="topic-card" id="tc-f1-1">
+          <div class="topic-head" onclick="toggleTopic('f1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Multer — File Upload Pipeline</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('f1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">multipart/form-data</div>
+              <p>An HTTP encoding format for sending binary files alongside text fields in one request. The body is
+                split into "parts" by a boundary string. Express's JSON parser can't handle this — Multer can.</p>
+            </div>
+            <div class="code-block"><code>const multer = require('multer');
+
+// memoryStorage — file in Buffer (for S3 upload — your Darwinbox approach)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') cb(null, true);
+    else cb(new Error('Only PDF files allowed'), false);
+  }
+});
+
+router.post('/resume',
+  authenticate,
+  upload.single('resume'),  // 'resume' = form field name
+  async (req, res) => {
+    const file = req.file; // { buffer, originalname, mimetype, size }
+    // 1. Upload buffer to S3
+    const s3Url = await uploadToS3(file.buffer, file.originalname);
+    // 2. Parse PDF text using pdf-parse
+    const pdfData = await pdfParse(file.buffer);
+    const extractedText = pdfData.text; // full text content of resume
+    // 3. Send text to LLaMA to extract skills, experience
+    const parsed = await llmParseResume(extractedText);
+    res.json({ s3Url, skills: parsed.skills });
+  }
+);
+
+// diskStorage — saves to local disk
+const diskStorage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+});
+// upload.array('docs', 5)  — multiple files, max 5</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is multipart/form-data? How is it different from JSON?</div>
+              <div class="iq">What is the difference between memoryStorage and diskStorage in Multer?</div>
+              <div class="iq">How do you validate file types in Multer?</div>
+              <div class="iq">What does pdf-parse do? How did you use it in Darwinbox?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-f2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(227,179,65,.12);color:#e3b341">Files & Storage</span>
+          <h2>AWS S3 & Presigned URLs</h2>
+          <p>You used AWS S3 for file storage in Darwinbox. Know bucket policies, presigned URLs, and security best
+            practices.</p>
+          <div class="yours-badge">⭐ Resume file storage in Darwinbox</div>
+        </div>
+        <div class="topic-card" id="tc-f2-1">
+          <div class="topic-head" onclick="toggleTopic('f2-1')">
+            <span class="topic-num">01</span><span class="topic-title">S3 Upload + Presigned URLs</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('f2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>const AWS = require('aws-sdk');
+const s3 = new AWS.S3({ region: process.env.AWS_REGION });
+
+// Upload to S3 (from Multer memoryStorage buffer)
+const uploadToS3 = async (buffer, filename, mimetype) => {
+  const result = await s3.upload({
+    Bucket: process.env.S3_BUCKET,
+    Key: `resumes/${Date.now()}-${filename}`,
+    Body: buffer,
+    ContentType: mimetype
+    // Do NOT set ACL: 'public-read' for sensitive documents!
+  }).promise();
+  return result.Key; // store Key (path) in MongoDB, not full URL
+};
+
+// Presigned URL — temporary access to private S3 object
+// HR wants to view a resume → generate time-limited URL
+const getPresignedUrl = (s3Key) => {
+  return s3.getSignedUrl('getObject', {
+    Bucket: process.env.S3_BUCKET,
+    Key: s3Key,
+    Expires: 3600 // URL valid for 1 hour only
+  });
+};
+// Returns: https://bucket.s3.amazonaws.com/resumes/file.pdf?X-Amz-Signature=...&X-Amz-Expires=3600</code></div>
+            <div class="section-title">Security Best Practices</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span>Keep bucket private — never make resume buckets
+                public</div>
+              <div class="point"><span class="point-bullet">→</span>Store S3 key in DB, generate presigned URL on demand
+              </div>
+              <div class="point"><span class="point-bullet">→</span>IAM role with least privilege — only specific bucket
+                operations</div>
+              <div class="point"><span class="point-bullet">→</span>Never commit AWS credentials to Git — use
+                environment variables</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"In Darwinbox, candidates upload resumes through our Express server. Multer processes the multipart
+                data into a Buffer. We upload that Buffer to a private S3 bucket and store only the S3 key in MongoDB —
+                not the URL. When an HR manager requests a resume, we generate a presigned URL valid for 1 hour. This
+                way sensitive documents are never publicly accessible, and even if someone intercepts the URL, it
+                expires in an hour."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-c1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(88,166,255,.12);color:#58a6ff">Caching</span>
+          <h2>In-Memory Cache — Your Moodify Implementation</h2>
+          <p>You built an in-memory cache for sentiment analysis results. Know how to explain the design and its
+            limitations.</p>
+          <div class="yours-badge">⭐ You built this in Moodify — your caching story</div>
+        </div>
+        <div class="topic-card" id="tc-c1-1">
+          <div class="topic-head" onclick="toggleTopic('c1-1')">
+            <span class="topic-num">01</span><span class="topic-title">In-Memory Cache Design & Limitations</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('c1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// Your Moodify cache (likely similar to this)
+class SentimentCache {
+  constructor(ttlMs = 30 * 60 * 1000, maxSize = 1000) {
+    this.cache = new Map();
+    this.ttlMs = ttlMs;     // 30 min TTL
+    this.maxSize = maxSize;
+  }
+  get(mood) {
+    const entry = this.cache.get(mood);
+    if (!entry) return null;
+    if (Date.now() - entry.timestamp > this.ttlMs) {
+      this.cache.delete(mood);
+      return null; // expired
+    }
+    return entry.value;
+  }
+  set(mood, recommendations) {
+    if (this.cache.size >= this.maxSize) {
+      // LRU-style: evict oldest entry
+      this.cache.delete(this.cache.keys().next().value);
+    }
+    this.cache.set(mood, { value: recommendations, timestamp: Date.now() });
+  }
+}
+const cache = new SentimentCache();
+
+// In route handler
+async function getMoodRecommendations(req, res) {
+  const mood = req.query.mood;
+  const cached = cache.get(mood);
+  if (cached) return res.json({ source: 'cache', data: cached });
+  // Cache miss — call Gemini AI (~2 seconds)
+  const recommendations = await geminiAI.recommend(mood);
+  cache.set(mood, recommendations);
+  res.json({ source: 'api', data: recommendations });
+}</code></div>
+            <div class="section-title">Limitations of In-Memory Cache</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Not shared</strong> — each Node.js process
+                has its own cache. Multiple server instances = cache misses across processes</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Lost on restart</strong> — process restart
+                clears all cached data</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Memory bound</strong> — limited by available
+                RAM</div>
+              <div class="point"><span class="point-bullet">→</span>For multi-server production → use Redis (shared
+                across all processes)</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"I cached Gemini AI sentiment results in Moodify using an in-memory Map. The key insight is that
+                'feeling anxious' and 'feeling happy' are predictable mood strings — the same mood generates similar
+                recommendations, so caching by mood string eliminates redundant LLM calls and cuts latency from 2
+                seconds to milliseconds. I implemented TTL validation and LRU-style eviction. The main limitation is
+                it's per-process — for multi-server production I'd replace it with Redis for a shared cache."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-c2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(88,166,255,.12);color:#58a6ff">Caching</span>
+          <h2>Redis & Cache Strategies</h2>
+          <p>Redis is the industry-standard distributed cache. Know data structures, cache patterns, and invalidation.
+          </p>
+        </div>
+        <div class="topic-card" id="tc-c2-1">
+          <div class="topic-head" onclick="toggleTopic('c2-1')">
+            <span class="topic-num">01</span><span class="topic-title">Redis Data Structures & Cache Patterns</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('c2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th>Structure</th>
+                <th>Use case</th>
+                <th>Key commands</th>
+              </tr>
+              <tr>
+                <td>String</td>
+                <td>Simple cache, counters, session tokens</td>
+                <td>GET, SET, SETEX, INCR, EXPIRE</td>
+              </tr>
+              <tr>
+                <td>Hash</td>
+                <td>Object storage (user profile)</td>
+                <td>HGET, HSET, HGETALL</td>
+              </tr>
+              <tr>
+                <td>List</td>
+                <td>Queues, activity feeds</td>
+                <td>LPUSH, RPOP, LRANGE</td>
+              </tr>
+              <tr>
+                <td>Set</td>
+                <td>Unique items, tags, online users</td>
+                <td>SADD, SMEMBERS, SISMEMBER</td>
+              </tr>
+              <tr>
+                <td>Sorted Set</td>
+                <td>Leaderboards, priority queues</td>
+                <td>ZADD, ZRANK, ZREVRANGE</td>
+              </tr>
+            </table>
+            <div class="code-block"><code>// Cache-aside pattern (most common)
+async function getJobs() {
+  const cached = await redis.get('jobs:active');
+  if (cached) return JSON.parse(cached);
+  const jobs = await Job.find({ status: 'active' });
+  await redis.setex('jobs:active', 3600, JSON.stringify(jobs)); // TTL 1hr
+  return jobs;
+}
+// Invalidate on write
+await Job.findByIdAndUpdate(id, updates);
+await redis.del('jobs:active'); // bust the cache
+
+// Leaderboard with Sorted Set
+await redis.zadd('leaderboard:job123', score, candidateId);
+const top10 = await redis.zrevrange('leaderboard:job123', 0, 9, 'WITHSCORES');
+
+// Rate limiting with Redis (sliding window)
+const key = `ratelimit:${ip}`;
+const count = await redis.incr(key);
+if (count === 1) await redis.expire(key, 60);
+if (count > 100) throw new AppError('Rate limit exceeded', 429);</code></div>
+            <div class="section-title">Cache Invalidation Strategies</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>TTL</strong> — cache expires automatically.
+                Simple. May serve stale data.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cache-aside (lazy loading)</strong> — read
+                from cache, miss → read DB → populate cache. Most flexible. Your Moodify pattern.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Write-through</strong> — update cache AND DB
+                together on write. Always fresh. Double write overhead.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Write-behind</strong> — write cache first,
+                DB asynchronously. Fast writes. Risk of data loss.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-l1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,107,107,.12);color:#ff6b6b">LLM & AI Integration</span>
+          <h2>Generator-Critic Pipeline — Your Darwinbox System</h2>
+          <p>This is your single biggest differentiator as a fresher. Practise this 2-minute explanation until it flows
+            naturally.</p>
+          <div class="yours-badge">⭐ Your strongest differentiator — master this cold</div>
+        </div>
+        <div class="topic-card" id="tc-l1-1">
+          <div class="topic-head" onclick="toggleTopic('l1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Generator-Critic — Architecture + Your 2-Min
+              Pitch</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Will Be
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('l1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">Generator-Critic Architecture</div>
+              <p>A two-model LLM pipeline where a large, powerful model generates output, and a smaller, faster model
+                evaluates quality. Only output that passes the critic reaches the user. Catches LLM hallucinations and
+                low-quality outputs before they cause problems.</p>
+            </div>
+            <div class="code-block"><code>// Your Darwinbox implementation (conceptual)
+async function generateAssessmentQuestions(jobDescription, skillWeights) {
+  const required = calculateRequired(skillWeights);
+  const toGenerate = required * 2; // 2X BUFFER — generate double, keep best
+
+  // STEP 1: GENERATOR — LLaMA 3.3-70B (large, creative, powerful)
+  const rawQuestions = await groqAPI.chat({
+    model: 'llama-3.3-70b-versatile',
+    messages: [{ role: 'user', content: buildGeneratorPrompt(jobDescription, toGenerate) }]
+  });
+  const parsed = parseQuestionsJSON(rawQuestions);
+
+  // STEP 2: CRITIC — LLaMA 3.1-8B (smaller, faster, cheaper)
+  const approved = [];
+  for (const q of parsed) {
+    const eval = await groqAPI.chat({
+      model: 'llama-3.1-8b-instant',
+      messages: [{ role: 'user', content: buildCriticPrompt(q, jobDescription) }]
+    });
+    const { passes, score } = parseEval(eval);
+    if (passes && score >= 0.7) approved.push({ ...q, score });
+  }
+
+  // STEP 3: Filter — top N by quality score + per-skill quota
+  return approved
+    .sort((a, b) => b.score - a.score)
+    .slice(0, required);
+}</code></div>
+            <div class="section-title">Why This Architecture Works</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Quality control</strong> — LLMs hallucinate.
+                Generator might produce ambiguous or irrelevant questions. Critic catches them before candidates see
+                them.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>2X buffer</strong> — generate double to
+                ensure enough pass filtering</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Cost + speed</strong> — critic uses 8B model
+                (10x cheaper and faster than 70B)</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Separation of concerns</strong> — generator
+                optimises for creativity; critic optimises for accuracy</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">Your 2-minute interview explanation</div>
+              <p>"I built a generator-critic LLM pipeline for dynamic MCQ generation in Darwinbox. LLaMA 3.3-70B
+                generates questions from the job description — it's creative and context-aware. But LLMs can
+                hallucinate: produce questions that sound plausible but are ambiguous or irrelevant. So LLaMA 3.1-8B
+                acts as a critic — it evaluates each question for clarity, job relevance, and difficulty. I use a 2X
+                buffer strategy: generate twice what's needed, critic filters them, and only questions that pass the
+                quality threshold go into the assessment. This means candidates always get well-formed questions, and HR
+                teams don't need to review every generated question manually. The critic uses the smaller 8B model
+                because evaluation is simpler than generation — it's faster and about 10x cheaper."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-l2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,107,107,.12);color:#ff6b6b">LLM & AI Integration</span>
+          <h2>ResilientAIService — Your Production Pattern</h2>
+          <p>Model rotation, throttling, fallback engine, metrics tracking. This shows senior-level production thinking
+            for a fresher.</p>
+          <div class="yours-badge">⭐ Production AI engineering — extremely rare for freshers</div>
+        </div>
+        <div class="topic-card" id="tc-l2-1">
+          <div class="topic-head" onclick="toggleTopic('l2-1')">
+            <span class="topic-num">01</span><span class="topic-title">ResilientAIService — Design Patterns
+              Inside</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span><span class="ttag t-freq">Will Be
+                Asked</span></div>
+            <div class="topic-chk" onclick="markDone('l2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>class ResilientAIService {
+  constructor() {
+    this.models = [
+      { name: 'llama-3.3-70b-versatile', available: true, priority: 1 },
+      { name: 'llama-3.1-8b-instant',    available: true, priority: 2 }
+    ];
+    this.tokens = 60;         // token bucket — 60 requests/min (Groq limit)
+    this.lastRefill = Date.now();
+    this.metrics = { success: 0, failure: 0, fallback: 0, totalLatency: 0 };
+  }
+
+  // TOKEN BUCKET THROTTLING — stay within Groq's rate limits
+  async acquireToken() {
+    const elapsed = Date.now() - this.lastRefill;
+    this.tokens = Math.min(60, this.tokens + (elapsed / 1000));
+    this.lastRefill = Date.now();
+    if (this.tokens < 1) await sleep(1000); // wait for refill
+    this.tokens--;
+  }
+
+  // MODEL ROTATION — circuit breaker pattern
+  async call(prompt) {
+    await this.acquireToken();
+    for (const model of this.models.filter(m => m.available)) {
+      try {
+        const start = Date.now();
+        const result = await groqAPI.chat({ model: model.name, messages: [{role:'user',content:prompt}] });
+        this.metrics.success++;
+        this.metrics.totalLatency += Date.now() - start;
+        if (model.priority > 1) this.metrics.fallback++;
+        return result;
+      } catch (err) {
+        if (err.status === 429) {             // rate limited
+          model.available = false;
+          setTimeout(() => model.available = true, 60000); // try again in 1 min
+        }
+        this.metrics.failure++;
+      }
+    }
+    // All models failed — rule-based fallback
+    return this.ruleBasedFallback(prompt);
+  }
+
+  ruleBasedFallback(prompt) {
+    return this.questionBank.getTemplateFor(prompt); // pre-written questions
+  }
+}</code></div>
+            <div class="section-title">Design Patterns You Used</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Circuit Breaker</strong> — marks model
+                unavailable on failure, recovers after timeout</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Token Bucket</strong> — request throttling
+                to stay within Groq's rate limits</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Fallback Pattern</strong> — rule-based
+                backup when all AI models fail</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Proxy Pattern</strong> — wraps Groq API,
+                adds reliability transparently</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Observability</strong> — success rate, avg
+                latency, fallback rate for monitoring</div>
+            </div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"The ResilientAIService is a production-hardened proxy around the Groq API. It implements three
+                patterns: token bucket throttling to stay within rate limits, circuit breaker-style model rotation (if
+                the 70B model gets rate-limited, it automatically falls back to the 8B), and a rule-based fallback for
+                when all AI fails. It tracks success rate, latency, and fallback frequency — so we can observe when AI
+                infrastructure is degraded. This kind of reliability engineering is what separates a production system
+                from a prototype."</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-l3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,107,107,.12);color:#ff6b6b">LLM & AI Integration</span>
+          <h2>Prompt Engineering</h2>
+          <p>You used prompts to extract seniority, skills, and weights from JDs and to generate MCQs. Translate your
+            experience to theory.</p>
+          <div class="yours-badge">⭐ You did this in Darwinbox — explain the techniques</div>
+        </div>
+        <div class="topic-card" id="tc-l3-1">
+          <div class="topic-head" onclick="toggleTopic('l3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Prompt Techniques — What You Used</span>
+            <div class="topic-tags"><span class="ttag t-freq">Asked at AI Companies</span></div>
+            <div class="topic-chk" onclick="markDone('l3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// 1. ZERO-SHOT — no examples
+`Generate 5 MCQ questions for a Node.js developer role at senior level.`
+
+// 2. FEW-SHOT — examples in prompt (better quality, more tokens)
+`Generate MCQ questions in this format:
+Q: What is the event loop?
+A) ... B) ... C) ... D) ...
+Answer: B
+Difficulty: medium
+
+Now generate 3 questions for: ${skill}`
+
+// 3. CHAIN-OF-THOUGHT — ask model to reason step by step
+`Given this JD: ${jobDescription}
+Step 1: Identify the top 5 technical skills mentioned.
+Step 2: Determine seniority level from experience requirements.
+Step 3: Assign a weight 1-10 to each skill based on prominence.
+Think step by step, then output JSON.`
+
+// 4. SYSTEM PROMPT — set persona and constraints
+messages: [
+  { role: 'system', content: `You are a technical interview question generator.
+    Always output ONLY valid JSON. Never include markdown or explanations.
+    Each question must have exactly one correct answer and three plausible distractors.` },
+  { role: 'user', content: `Generate questions for: ${topic}` }
+]
+
+// 5. STRUCTURED OUTPUT — force specific format (prevents hallucination)
+`Return ONLY this JSON, no other text:
+{ "questions": [{ "question": "...", "options": ["A","B","C","D"],
+  "correctAnswer": 0, "difficulty": "medium", "skill": "Node.js" }] }`
+
+// Key parameters
+// temperature: 0.0 = deterministic, 0.7 = creative, 2.0 = chaotic
+// For MCQ generation: 0.4-0.6 (some variety, still accurate)
+// max_tokens: set based on expected output size</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-l4">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(255,107,107,.12);color:#ff6b6b">LLM & AI Integration</span>
+          <h2>RAG & Core LLM Concepts</h2>
+          <p>AI companies expect you to know these even if you haven't implemented them. Know the theory from first
+            principles.</p>
+        </div>
+        <div class="topic-card" id="tc-l4-1">
+          <div class="topic-head" onclick="toggleTopic('l4-1')">
+            <span class="topic-num">01</span><span class="topic-title">RAG, Embeddings & LLM Limitations</span>
+            <div class="topic-tags"><span class="ttag t-freq">Asked at AI Companies</span></div>
+            <div class="topic-chk" onclick="markDone('l4-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="def-box">
+              <div class="def-label">RAG — Retrieval-Augmented Generation</div>
+              <p>LLMs have a knowledge cutoff and don't know your private data. RAG solves this: retrieve relevant
+                documents from your knowledge base, inject them into the prompt as context, let the LLM answer using
+                that context.</p>
+            </div>
+            <div class="code-block"><code>// RAG Pipeline
+// 1. Indexing (one-time)
+const embedding = await openai.embeddings.create({ input: document }); // [0.12, -0.45, ...]
+await vectorDB.upsert({ id: docId, vector: embedding, metadata: document });
+
+// 2. Query (per request)
+const queryEmbedding = await openai.embeddings.create({ input: userQuestion });
+const relevant = await vectorDB.query({ vector: queryEmbedding, topK: 5 });
+const context = relevant.map(r => r.metadata).join('
+');
+
+// 3. Generate with context
+const answer = await llm.chat({
+  messages: [
+    { role: 'system', content: 'Answer based only on the provided context.' },
+    { role: 'user', content: `Context:
+${context}
+
+Question: ${userQuestion}` }
+  ]
+});</code></div>
+            <div class="section-title">LLM Limitations — Know These</div>
+            <div class="point-list">
+              <div class="point"><span class="point-bullet">→</span><strong>Hallucination</strong> — confidently
+                generates false information. Your critic model catches this for MCQs.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Context window limit</strong> — LLaMA
+                3.3-70B has 128K token context. Long documents must be chunked for RAG.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Knowledge cutoff</strong> — training data
+                has end date. Solved by RAG for private/recent data.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Non-determinism</strong> — same prompt →
+                different outputs. Temperature=0 reduces but doesn't eliminate.</div>
+              <div class="point"><span class="point-bullet">→</span><strong>Prompt injection</strong> — malicious user
+                input hijacks model behaviour. Sanitise inputs before injecting into prompts.</div>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is RAG and when would you use it?</div>
+              <div class="iq">What are embeddings? How are they used in semantic search?</div>
+              <div class="iq">What is LLM hallucination? How did you handle it in Darwinbox?</div>
+              <div class="iq">What is the difference between fine-tuning and RAG?</div>
+              <div class="iq">What is prompt injection?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-d1">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(188,140,255,.12);color:#bc8cff">Docker & Deployment</span>
+          <h2>Docker — Image, Container & Dockerfile</h2>
+          <p>You containerised Moodify with Docker. Know core concepts and how to write a production Dockerfile.</p>
+          <div class="yours-badge">⭐ Used in your Moodify deployment</div>
+        </div>
+        <div class="topic-card" id="tc-d1-1">
+          <div class="topic-head" onclick="toggleTopic('d1-1')">
+            <span class="topic-num">01</span><span class="topic-title">Docker Core Concepts + Production
+              Dockerfile</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('d1-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <table class="compare-table">
+              <tr>
+                <th></th>
+                <th>Image</th>
+                <th>Container</th>
+              </tr>
+              <tr>
+                <td>What</td>
+                <td>Blueprint/template — read-only layers</td>
+                <td>Running instance of an image</td>
+              </tr>
+              <tr>
+                <td>State</td>
+                <td>Immutable</td>
+                <td>Has filesystem, running process</td>
+              </tr>
+              <tr>
+                <td>Analogy</td>
+                <td>Class definition</td>
+                <td>Object instance</td>
+              </tr>
+              <tr>
+                <td>Created from</td>
+                <td>Dockerfile + docker build</td>
+                <td>docker run image-name</td>
+              </tr>
+            </table>
+            <div class="code-block"><code># Production Dockerfile for Moodify (multi-stage)
+# Stage 1 — install dependencies
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production  # clean install, no devDependencies, uses lockfile
+
+# Stage 2 — lean production image
+FROM node:20-alpine AS production
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+EXPOSE 3000
+USER node  # run as non-root (security!)
+CMD ["node", "server.js"]
+
+# Why Alpine? ~5MB vs Ubuntu ~70MB — much smaller image
+# Multi-stage: builder stage installs packages, production copies only node_modules
+# Result: no build tools (npm, gcc) in production image
+
+# .dockerignore — don't copy these into container
+# node_modules   (we install fresh)
+# .env           (never bake secrets into image!)
+# .git
+
+# Key commands:
+# docker build -t moodify:latest .
+# docker run -p 3000:3000 --env-file .env moodify
+# docker exec -it container_id sh   # shell into container
+# docker logs container_id          # view logs</code></div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">What is the difference between a Docker image and a container?</div>
+              <div class="iq">What is a multi-stage Dockerfile and why use it?</div>
+              <div class="iq">Why use Alpine as base image?</div>
+              <div class="iq">What is Docker layer caching? How do you optimise for it?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-d2">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(188,140,255,.12);color:#bc8cff">Docker & Deployment</span>
+          <h2>docker-compose & Environment Variables</h2>
+          <p>docker-compose orchestrates multi-container apps locally. Proper env var management is critical for
+            security.</p>
+        </div>
+        <div class="topic-card" id="tc-d2-1">
+          <div class="topic-head" onclick="toggleTopic('d2-1')">
+            <span class="topic-num">01</span><span class="topic-title">docker-compose & Env Secrets Management</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('d2-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code># docker-compose.yml for Moodify local development
+version: '3.8'
+services:
+  app:
+    build: .
+    ports: ["3000:3000"]
+    env_file: [.env]       # load from .env file
+    depends_on: [postgres]
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: moodify
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${DB_PASS}  # from .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # persist data across restarts!
+    ports: ["5432:5432"]
+
+volumes:
+  pgdata:  # named volume — survives container restarts
+
+# Commands
+# docker-compose up -d     — start all services background
+# docker-compose down      — stop all
+# docker-compose down -v   — stop + delete volumes
+# docker-compose logs app  — logs for specific service</code></div>
+            <div class="code-block"><code>// Environment variable best practices
+
+// .env (NEVER commit to Git — add to .gitignore)
+PORT=3000
+NODE_ENV=production
+DATABASE_URL=postgresql://user:pass@localhost:5432/moodify
+JWT_SECRET=a-very-long-random-secret-key
+GEMINI_API_KEY=AIzaSy...
+
+// .env.example (COMMIT THIS — documents needed vars without values)
+PORT=
+NODE_ENV=
+DATABASE_URL=
+JWT_SECRET=
+GEMINI_API_KEY=
+
+// Validate on startup — fail fast if missing
+const required = ['DATABASE_URL', 'JWT_SECRET', 'GEMINI_API_KEY'];
+required.forEach(key => {
+  if (!process.env[key]) throw new Error(`Missing required: ${key}`);
+});</code></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-page" id="page-d3">
+        <div class="page-header">
+          <span class="subject-tag" style="background:rgba(188,140,255,.12);color:#bc8cff">Docker & Deployment</span>
+          <h2>Render & Neon — Your Moodify Architecture</h2>
+          <p>You deployed on Render with Neon PostgreSQL. Know every layer of your architecture and why you made each
+            choice.</p>
+          <div class="yours-badge">⭐ Your live production project — explain it confidently</div>
+        </div>
+        <div class="topic-card" id="tc-d3-1">
+          <div class="topic-head" onclick="toggleTopic('d3-1')">
+            <span class="topic-num">01</span><span class="topic-title">Moodify Deployment Architecture — Every
+              Layer</span>
+            <div class="topic-tags"><span class="ttag t-must">Must Know</span></div>
+            <div class="topic-chk" onclick="markDone('d3-1',event)">✓</div><span class="topic-chevron">▼</span>
+          </div>
+          <div class="topic-body">
+            <div class="code-block"><code>// MOODIFY ARCHITECTURE
+
+Browser (HTML/CSS/JS frontend)
+    ↓ HTTPS
+Render (Web Service)
+  ├── Docker container: Node.js + Express app
+  ├── Auto-deploys from GitHub on every push (CI/CD)
+  ├── Provides: HTTPS, custom domain, env vars, logs
+  └── Free tier: spins down after 15 min inactivity (~30s cold start)
+    ↓ Pooled connection (PgBouncer)     ↓ HTTPS API call
+Neon PostgreSQL                        Gemini AI (Google Cloud)
+  ├── Serverless PostgreSQL            └── Mood → song recommendations
+  ├── Scales to ZERO when idle
+  ├── Built-in PgBouncer pooling
+  ├── Branching: dev/staging/prod branches
+  └── Connection: postgresql://...neon.tech/moodify?sslmode=require
+
+// WHY THESE CHOICES:
+// Render: free tier, GitHub auto-deploy, Docker support, simple dashboard
+// Neon: free tier, scales to zero (no DB cost when idle), PgBouncer built-in
+//       serverless = perfect for hobby projects with unpredictable traffic
+// Separation: app and DB in different services = can scale independently
+
+// KEY CONCEPTS:
+// Stateless app — Render can spin up/down containers freely
+//   because state (data) lives in Neon, not in the container
+// Cold start — Render free tier spins down after 15 min
+//   First request after idle takes ~30s while container spins up
+//   Not a problem for portfolio project; paid tier has always-on</code></div>
+            <div class="say-box">
+              <div class="say-label">How to say it in an interview</div>
+              <p>"Moodify is deployed on Render as a containerised Node.js service. I separated app and database — app
+                on Render, PostgreSQL on Neon — because they scale differently and should fail independently. Neon's
+                serverless PostgreSQL scales to zero when idle so there's no compute cost when nobody's using the app.
+                It has built-in PgBouncer connection pooling, which is critical — without it, each Render request would
+                open a new DB connection and hit PostgreSQL's connection limit quickly. The app is stateless: Render can
+                restart the container at any time without data loss because all state is in Neon."</p>
+            </div>
+            <div class="interview-box">
+              <div class="ib-label">Likely Interview Questions</div>
+              <div class="iq">Why did you separate app and database into different services?</div>
+              <div class="iq">What is a cold start? How does it affect Render free tier?</div>
+              <div class="iq">What does "serverless" mean for Neon PostgreSQL?</div>
+              <div class="iq">How does CI/CD work with your Render deployment?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <button class="mob-nav-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+  <script>
+    const done = {};
+    try { Object.assign(done, JSON.parse(localStorage.getItem('prep_stack_done') || '{}')); } catch (e) { }
+    function save() { try { localStorage.setItem('prep_stack_done', JSON.stringify(done)); } catch (e) { } }
+    function markDone(id, e) {
+      e.stopPropagation(); done[id] = !done[id]; save();
+      const card = document.getElementById('tc-' + id);
+      card.classList.toggle('done', done[id]);
+      card.querySelector('.topic-chk').textContent = done[id] ? '✓' : '';
+      updateProgress();
+    }
+    function toggleTopic(id) { document.getElementById('tc-' + id).classList.toggle('open'); }
+    function showPage(pageId, el) {
+      document.querySelectorAll('.content-page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+      const pg = document.getElementById('page-' + pageId);
+      if (pg) pg.classList.add('active');
+      el.classList.add('active');
+      document.getElementById('sidebar').classList.remove('open');
+      window.scrollTo(0, 0);
+    }
+    function updateProgress() {
+      const cards = document.querySelectorAll('[id^="tc-"]');
+      const total = cards.length;
+      const doneCount = Object.values(done).filter(Boolean).length;
+      const pct = total ? Math.round(doneCount / total * 100) : 0;
+      document.getElementById('progFill').style.width = pct + '%';
+      document.getElementById('progCount').textContent = doneCount + ' / ' + total;
+    }
+    document.querySelectorAll('[id^="tc-"]').forEach(card => {
+      const id = card.id.replace('tc-', '');
+      if (done[id]) { card.classList.add('done'); const chk = card.querySelector('.topic-chk'); if (chk) chk.textContent = '✓'; }
+    });
+    updateProgress();
+  </script>
+</body>
+
+</html>
