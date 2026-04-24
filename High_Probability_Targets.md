@@ -73,6 +73,21 @@ Based on your **9.85 CGPA**, **Darwinbox Internship**, and **600+ DSA solved**, 
 
 ---
 
+## 🌊 Wave 3: Post-May/June Reach (Strategic Targets)
+*Focus: Replacement hiring, late-summer MNC drives, and growth-scale startups.*
+
+| Company | Focus | 2026 Hiring Window | Requirements |
+| :--- | :--- | :--- | :--- |
+| **Zomato / Blinkit**| FoodTech / QC | **July - Sept** | Strong DSA + High-scale Backend |
+| **Swiggy** | FoodTech | **July - Sept** | DSA / Node.js / System Design |
+| **CRED** | Fintech / Luxury | **August - Oct** | Premium Projects + High CGPA |
+| **Dream11** | Fantasy Sports | **July - Sept** | Exceptionally Strong DSA |
+| **PhonePe** | Payments | **Aug - Sept** | Off-Campus SDE Drive |
+| **Meesho** | E-commerce | **Continuous** | Node.js / Mongo / DSA |
+| **Cisco / SAP** | Enterprise | **July (Wave 2)** | Graduate Hire Programs |
+
+---
+
 ## 🔗 Actionable Links & Monitoring
 - **Job Boards:** [Unstop](https://unstop.com), [Instahyre](https://www.instahyre.com), [Wellfound](https://wellfound.com).
 - **Referrals:** Reach out to Darwinbox alumni at these firms first.
