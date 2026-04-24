@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  display: flex;
+}
+
+/* Sidebar */
+
+.sidebar {
+  width: 240px;
+  background: #0f172a;
+  color: white;
+  height: 100vh;
+  padding: 20px;
+}
+
+.logo {
+  margin-bottom: 40px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.nav a {
+  color: #cbd5f5;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.nav a:hover {
+  color: white;
+}
+
+/* Content */
+
+.content {
+  flex: 1;
+  padding: 40px;
+  background: #f5f7fb;
+}

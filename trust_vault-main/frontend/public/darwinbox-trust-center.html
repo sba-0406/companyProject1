@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darwinbox Trust Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/*
+ ╔══════════════════════════════════════════════════════════════╗
+ ║  DARWINBOX DESIGN SYSTEM — Exact colour extraction           ║
+ ║  Source: darwinbox.com screenshot analysis                   ║
+ ║                                                              ║
+ ║  Primary Navy:   #0C2340  (hero/header deep blue)           ║
+ ║  Mid Navy:       #0E2D52  (sections, cards on dark bg)      ║
+ ║  Accent Blue:    #1B6EF3  (pill CTAs, links)                ║
+ ║  Bright Blue:    #2684FF  (hover states)                    ║
+ ║  Orange:         #F15A24  (logo mark, small accents)        ║
+ ║  Body bg:        #F5F7FA                                    ║
+ ║  Card bg:        #FFFFFF                                    ║
+ ║  Text dark:      #0C2340                                    ║
+ ║  Text body:      #344563                                    ║
+ ║  Text muted:     #6B778C                                    ║
+ ║  Border:         #DFE1E6                                    ║
+ ║  Success:        #00875A                                    ║
+ ╚══════════════════════════════════════════════════════════════╝
+*/
+:root {
+  /* ── Core brand palette ── */
+  --navy:          #0C2340;
+  --navy-mid:      #0E2D52;
+  --navy-light:    #1A3A5C;
+  --blue-accent:   #1B6EF3;
+  --blue-hover:    #1558D6;
+  --blue-pill:     #1B6EF3;
+  --blue-pill-bg:  #EBF2FF;
+  --orange:        #F15A24;
+  --orange-dark:   #C8441A;
+  --orange-bg:     #FEF0EB;
+
+  /* ── Surface palette ── */
+  --bg:            #F5F7FA;
+  --white:         #FFFFFF;
+  --surface-2:     #F0F3F8;
+
+  /* ── Typography ── */
+  --text-1:        #0C2340;
+  --text-2:        #344563;
+  --text-3:        #6B778C;
+  --text-4:        #97A0AF;
+
+  /* ── UI chrome ── */
+  --border:        #DFE1E6;
+  --border-2:      #C1C7D0;
+  --divider:       #EBECF0;
+
+  /* ── Semantic ── */
+  --green:         #00875A;
+  --green-bg:      #E3FCEF;
+  --green-dark:    #006644;
+  --amber:         #FF8B00;
+  --amber-bg:      #FFF7D6;
+  --red:           #DE350B;
+  --red-bg:        #FFEBE6;
+
+  /* ── Shadows ── */
+  --shadow-xs:  0 1px 2px rgba(12,35,64,.06);
+  --shadow-sm:  0 2px 8px rgba(12,35,64,.08), 0 1px 3px rgba(12,35,64,.05);
+  --shadow-md:  0 4px 16px rgba(12,35,64,.10), 0 2px 6px rgba(12,35,64,.06);
+  --shadow-lg:  0 12px 36px rgba(12,35,64,.13), 0 4px 12px rgba(12,35,64,.07);
+  --shadow-xl:  0 24px 64px rgba(12,35,64,.18), 0 8px 24px rgba(12,35,64,.10);
+
+  /* ── Geometry ── */
+  --r-xs:  4px;
+  --r-sm:  6px;
+  --r:     8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  24px;
+  --r-pill:100px;
+
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-2);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ════════════════════════════════════════
+   ADMIN BAR
+════════════════════════════════════════ */
+.admin-bar {
+  display: none;
+  background: var(--orange);
+  padding: 9px 32px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px; font-weight: 600; color: white;
+}
+.admin-bar.on { display: flex; }
+.admin-pill {
+  background: rgba(255,255,255,.25);
+  font-size: 9px; font-weight: 800;
+  padding: 2px 7px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: .08em;
+  margin-right: 8px;
+}
+.admin-actions { display: flex; gap: 6px; align-items: center; }
+.admin-btn {
+  font-family: var(--font);
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.3);
+  color: white; font-size: 12px; font-weight: 600;
+  padding: 5px 13px; border-radius: var(--r-pill);
+  cursor: pointer; transition: background .15s;
+  position: relative;
+}
+.admin-btn:hover { background: rgba(255,255,255,.3); }
+.notif-bubble {
+  position: absolute; top: -5px; right: -5px;
+  width: 17px; height: 17px; border-radius: 50%;
+  background: white; color: var(--orange);
+  font-size: 9px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ════════════════════════════════════════
+   HEADER  — exact darwinbox.com dark navy
+════════════════════════════════════════ */
+.header {
+  background: #FFFFFF;
+  position: sticky; top: 0; z-index: 300;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(12,35,64,.07);
+}
+.header-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 32px;
+  display: flex; align-items: center;
+  justify-content: space-between;
+  height: 64px; gap: 16px;
+}
+
+/* ── Darwinbox logo on white header ──
+   Icon sits directly on white — no box bg needed, clean blue border + black d
+   "darwin" near-black  |  "box" blue #1B6EF3  — exact brand match */
+.logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
+.logo-img {
+  height: 36px; width: auto;
+  display: block; flex-shrink: 0;
+}
+.logo-icon { display: none; }
+.logo-wordmark { display: none; }
+.logo-darwin { display: none; }
+.logo-box-word { display: none; }
+.logo-divider {
+  width: 1px; height: 18px;
+  background: var(--border-2);
+  margin: 0 4px; align-self: center;
+  flex-shrink: 0;
+}
+.logo-tag {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-3);
+  letter-spacing: .01em;
+  white-space: nowrap;
+}
+
+.hdr-nav { display: flex; align-items: center; gap: 2px; }
+.hdr-a {
+  font-size: 13px; font-weight: 500;
+  color: var(--text-3);
+  padding: 6px 11px; border-radius: var(--r-sm);
+  text-decoration: none; transition: all .15s;
+  white-space: nowrap;
+}
+.hdr-a:hover { color: var(--text-1); background: var(--surface-2); }
+.hdr-sep { color: var(--border-2); padding: 0 2px; font-size: 12px; }
+
+.hdr-cta { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* Buttons */
+.btn { font-family: var(--font); cursor: pointer; border: none; font-weight: 600; transition: all .18s; display: inline-flex; align-items: center; gap: 6px; }
+
+/* Primary blue pill — stays blue on white */
+.btn-blue-pill {
+  background: var(--blue-accent); color: white;
+  font-size: 13px; padding: 9px 22px;
+  border-radius: var(--r-pill);
+  letter-spacing: -.1px;
+}
+.btn-blue-pill:hover { background: var(--blue-hover); }
+.btn-blue-pill:focus-visible { outline: 2px solid var(--blue-accent); outline-offset: 3px; }
+
+/* Admin — dark outline on white bg */
+.btn-outline-white {
+  background: transparent; color: var(--text-2);
+  font-size: 13px; padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--border-2);
+  font-weight: 500;
+}
+.btn-outline-white:hover { color: var(--text-1); border-color: var(--text-3); background: var(--surface-2); }
+
+/* ════════════════════════════════════════
+   SECTION NAV
+════════════════════════════════════════ */
+.sec-nav {
+  background: var(--navy-mid);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.sec-nav-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+}
+.sec-tab {
+  font-family: var(--font); font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,.45);
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 13px 16px; cursor: pointer;
+  transition: all .18s; white-space: nowrap;
+}
+.sec-tab:hover { color: rgba(255,255,255,.8); }
+.sec-tab.on { color: white; border-bottom-color: var(--blue-accent); font-weight: 600; }
+.sec-tab:focus-visible { outline: 2px solid var(--blue-accent); outline-offset: -2px; }
+
+/* ════════════════════════════════════════
+   HERO  — deep navy matching screenshot
+════════════════════════════════════════ */
+.hero {
+  background: var(--navy);
+  padding: 72px 32px 80px;
+  position: relative; overflow: hidden;
+}
+/* Subtle radial glows */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 55%, rgba(27,110,243,.12) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 60% at 15% 25%, rgba(27,110,243,.07) 0%, transparent 55%);
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(27,110,243,.5) 50%, transparent 100%);
+}
+.hero-inner { max-width: 1280px; margin: 0 auto; position: relative; }
+.hero-grid  { display: grid; grid-template-columns: 1fr 390px; gap: 72px; align-items: center; }
+
+.hero-kicker {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(27,110,243,.16);
+  border: 1px solid rgba(27,110,243,.35);
+  padding: 5px 13px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 700;
+  color: #7BB3FF; margin-bottom: 22px;
+  text-transform: uppercase; letter-spacing: .08em;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #36B37E;
+  animation: livepulse 2s ease-in-out infinite;
+}
+@keyframes livepulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(54,179,126,.5); }
+  50%      { box-shadow: 0 0 0 5px rgba(54,179,126,0); }
+}
+
+.hero h1 {
+  font-size: clamp(28px, 3.4vw, 46px);
+  font-weight: 800; line-height: 1.14;
+  color: white; letter-spacing: -.8px;
+  margin-bottom: 18px;
+}
+.hero h1 em { font-style: normal; color: #7BB3FF; }
+.hero-desc {
+  font-size: 15px; color: rgba(255,255,255,.5);
+  line-height: 1.78; margin-bottom: 36px; max-width: 500px;
+}
+.hero-stats { display: flex; gap: 40px; }
+.stat-n { font-size: 30px; font-weight: 800; color: white; letter-spacing: -1px; }
+.stat-l { font-size: 11.5px; font-weight: 500; color: rgba(255,255,255,.36); margin-top: 3px; }
+
+/* Hero floating card */
+.hero-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: var(--r-lg); padding: 24px;
+  backdrop-filter: blur(14px);
+}
+.hc-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .09em; color: rgba(255,255,255,.3);
+  margin-bottom: 14px;
+}
+.cert-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+.cpill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.11);
+  padding: 5px 11px; border-radius: var(--r-pill);
+  font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,.72);
+  transition: all .15s;
+}
+.cpill:hover { background: rgba(27,110,243,.2); border-color: rgba(27,110,243,.4); color: white; }
+.cdot { width: 5px; height: 5px; border-radius: 50%; background: #36B37E; flex-shrink: 0; }
+.cpill-soon { background: rgba(255,139,0,.09); border-color: rgba(255,139,0,.25); }
+.cpill-soon .cdot { background: var(--amber); }
+
+/* ════════════════════════════════════════
+   MAIN BODY
+════════════════════════════════════════ */
+.main { max-width: 1280px; margin: 0 auto; padding: 48px 32px 100px; }
+
+.section { margin-bottom: 56px; }
+.sec-hd { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.sec-title { font-size: 19px; font-weight: 700; color: var(--text-1); letter-spacing: -.3px; }
+.sec-link {
+  font-size: 13px; font-weight: 600; color: var(--blue-accent);
+  background: none; border: none; cursor: pointer;
+  text-decoration: none; transition: color .15s;
+}
+.sec-link:hover { color: var(--blue-hover); text-decoration: underline; }
+
+/* ════════════════════════════════════════
+   COMPLIANCE LOGOS GRID
+════════════════════════════════════════ */
+.compliance-logo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.comp-logo-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 18px 14px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  transition: box-shadow .2s, border-color .2s, transform .2s;
+  cursor: default; min-height: 108px;
+}
+.comp-logo-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--blue-accent);
+  transform: translateY(-2px);
+}
+.comp-logo-icon { width: 56px; height: 40px; object-fit: contain; display: block; }
+.comp-logo-name { font-size: 11.5px; font-weight: 700; color: var(--text-1); text-align: center; line-height: 1.3; }
+.comp-badge {
+  font-size: 9.5px; font-weight: 700;
+  padding: 2px 8px; border-radius: var(--r-pill);
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.cb-green { background: var(--green-bg); color: var(--green-dark); }
+.cb-amber { background: var(--amber-bg); color: #7A4A00; }
+
+/* SVG logo placeholders embedded inline */
+.logo-svg { width: 56px; height: 40px; flex-shrink: 0; }
+
+/* ════════════════════════════════════════
+   TRUSTED BY
+════════════════════════════════════════ */
+.trust-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.trust-chip {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 11px 18px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 600; color: var(--text-1);
+  transition: box-shadow .18s, transform .18s;
+}
+.trust-chip:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.trust-av {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; color: white; flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   CONTROLS
+════════════════════════════════════════ */
+.mon-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--green-bg); color: var(--green-dark);
+  font-size: 11px; font-weight: 700;
+  padding: 5px 12px; border-radius: var(--r-pill);
+  margin-bottom: 20px;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.blink { animation: blink 1.9s ease-in-out infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.ctrl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(298px, 1fr)); gap: 14px; }
+.ctrl-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-md); padding: 20px 22px;
+  transition: box-shadow .18s, transform .18s;
+}
+.ctrl-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.ctrl-head { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+.ctrl-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.ctrl-name { font-size: 14px; font-weight: 700; color: var(--text-1); }
+.ctrl-items { display: flex; flex-direction: column; gap: 9px; }
+.ctrl-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--text-3); line-height: 1.4; }
+.ctrl-check { color: var(--green); font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+.ctrl-more { background: none; border: none; color: var(--blue-accent); font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; font-family: var(--font); }
+.ctrl-more:hover { text-decoration: underline; }
+
+/* ════════════════════════════════════════
+   RESOURCES
+════════════════════════════════════════ */
+.res-tab-bar { display: flex; gap: 6px; margin-bottom: 18px; }
+.rtab {
+  font-size: 13px; font-weight: 500; padding: 7px 18px;
+  border-radius: var(--r-pill); border: 1.5px solid var(--border);
+  background: var(--white); color: var(--text-3);
+  cursor: pointer; transition: all .15s; font-family: var(--font);
+}
+.rtab:hover { color: var(--text-1); border-color: var(--border-2); }
+.rtab.on { background: var(--blue-accent); color: white; border-color: var(--blue-accent); font-weight: 600; }
+
+.res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 12px; }
+.res-item {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r); padding: 15px 17px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  transition: box-shadow .18s, transform .18s;
+}
+.res-item:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.res-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.res-icon {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: var(--blue-pill-bg); display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.res-name { font-size: 13px; font-weight: 600; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.res-type { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.res-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  width: 34px; height: 34px; border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; transition: all .15s; flex-shrink: 0;
+}
+.res-btn:hover { background: var(--blue-pill-bg); color: var(--blue-accent); }
+.res-btn.locked { color: var(--blue-accent); }
+
+/* ════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════ */
+.footer { background: var(--navy); }
+.footer-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 28px 32px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-links { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,.42); font-size: 13px; text-decoration: none; padding: 0 3px; transition: color .15s; }
+.footer-links a:hover { color: rgba(255,255,255,.85); }
+.footer-sep { color: rgba(255,255,255,.16); }
+.footer-pw { font-size: 12px; color: rgba(255,255,255,.25); }
+.footer-pw strong { color: rgba(255,255,255,.45); }
+
+
+/* ════════════════════════════════════════
+   MODAL SYSTEM
+════════════════════════════════════════ */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(12,35,64,.65);
+  backdrop-filter: blur(6px);
+  z-index: 500;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+
+.modal {
+  background: var(--white);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-xl);
+  width: 100%; max-width: 460px;
+  max-height: 92vh; overflow-y: auto;
+  animation: mIn .22s cubic-bezier(.16,1,.3,1);
+}
+@keyframes mIn {
+  from { opacity:0; transform: translateY(16px) scale(.97); }
+  to   { opacity:1; transform: none; }
+}
+.modal-hd {
+  padding: 20px 24px 16px; border-bottom: 1px solid var(--divider);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: var(--white); z-index: 1;
+}
+.modal-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
+.modal-x {
+  width: 32px; height: 32px; border-radius: var(--r-sm);
+  background: none; border: none; cursor: pointer;
+  color: var(--text-3); font-size: 22px; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.modal-x:hover { background: var(--surface-2); }
+.modal-body { padding: 22px 24px; }
+.modal-foot { padding: 14px 24px; border-top: 1px solid var(--divider); display: flex; gap: 8px; justify-content: flex-end; }
+
+/* Modal buttons */
+.mb-primary {
+  background: var(--blue-accent); color: white;
+  font-size: 13px; font-weight: 600; padding: 9px 22px;
+  border-radius: var(--r-pill);
+}
+.mb-primary:hover { background: var(--blue-hover); }
+.mb-ghost {
+  background: var(--surface-2); color: var(--text-2);
+  font-size: 13px; font-weight: 500; padding: 9px 18px;
+  border-radius: var(--r-pill); border: 1px solid var(--border);
+}
+.mb-ghost:hover { background: var(--divider); }
+
+/* Inline alerts */
+.alert {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 11px 14px; border-radius: var(--r-sm);
+  font-size: 13px; line-height: 1.5; margin-bottom: 18px;
+}
+.a-blue  { background: #EBF2FF; border: 1px solid #BFD4FF; color: #1747A6; }
+.a-green { background: var(--green-bg); border: 1px solid #ABF5D1; color: #006644; }
+.a-amber { background: var(--amber-bg); border: 1px solid #FFE380; color: #7A4A00; }
+.a-red   { background: var(--red-bg);   border: 1px solid #FFBDAD; color: #AE2A19; }
+
+/* Forms */
+.fg { margin-bottom: 16px; }
+.fl { display: block; font-size: 11.5px; font-weight: 700; color: var(--text-2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+.fl em { color: var(--blue-accent); font-style: normal; }
+.fi {
+  width: 100%; padding: 10px 13px;
+  font-size: 14px; font-family: var(--font);
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  color: var(--text-1); outline: none; background: white;
+  transition: border-color .15s, box-shadow .15s;
+}
+.fi:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(27,110,243,.12); }
+.fi.err { border-color: var(--red); }
+.fi.err:focus { box-shadow: 0 0 0 3px rgba(222,53,11,.12); }
+.ferr { font-size: 12px; color: var(--red); margin-top: 5px; display: none; }
+.fsel {
+  width: 100%; padding: 10px 13px;
+  font-size: 14px; font-family: var(--font);
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  color: var(--text-1); outline: none; background: white;
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B778C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center;
+}
+.fsel:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(27,110,243,.12); outline: none; }
+
+/* Step indicator */
+.steps { display: flex; align-items: center; gap: 6px; margin-bottom: 22px; }
+.sdot {
+  width: 26px; height: 26px; border-radius: 50%;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sdot-done   { background: var(--green); color: white; }
+.sdot-active { background: var(--blue-accent); color: white; }
+.sdot-idle   { background: var(--divider); color: var(--text-3); }
+.sline { flex: 1; height: 1px; background: var(--divider); }
+
+/* OTP */
+.otp-row { display: flex; gap: 8px; }
+.otp-c {
+  flex: 1; text-align: center; font-size: 22px; font-weight: 700;
+  padding: 11px 4px; border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  font-family: var(--font); color: var(--text-1); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.otp-c:focus { border-color: var(--blue-accent); box-shadow: 0 0 0 3px rgba(27,110,243,.12); }
+.otp-hint { font-size: 12px; color: var(--text-3); margin-top: 9px; }
+.otp-hint a { color: var(--blue-accent); cursor: pointer; font-weight: 600; text-decoration: none; }
+
+/* NDA */
+.nda-box {
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 14px 16px;
+  font-size: 12px; color: var(--text-3); line-height: 1.65;
+  max-height: 148px; overflow-y: auto; margin-bottom: 14px;
+}
+.chk-row { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 14px; }
+.chk-row input { margin-top: 3px; accent-color: var(--blue-accent); flex-shrink: 0; cursor: pointer; }
+.chk-row label { font-size: 13px; color: var(--text-3); line-height: 1.4; cursor: pointer; }
+.chk-row label a { color: var(--blue-accent); }
+
+/* Approval */
+.app-list { display: flex; flex-direction: column; gap: 10px; }
+.app-card {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: var(--r-sm); padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.app-name { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.app-meta { font-size: 11.5px; color: var(--text-3); margin-top: 2px; line-height: 1.5; }
+.app-res-tag {
+  display: inline-block; margin-top: 4px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .04em; background: #EBF2FF; color: #1747A6;
+  padding: 2px 8px; border-radius: var(--r-pill);
+}
+.app-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.b-approve { background: var(--green-bg); color: var(--green-dark); border: 1px solid #ABF5D1; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: var(--r-pill); cursor: pointer; font-family: var(--font); }
+.b-reject  { background: var(--red-bg);   color: var(--red);        border: 1px solid #FFBDAD; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: var(--r-pill); cursor: pointer; font-family: var(--font); }
+.b-approve:hover { background: #C3F4DC; }
+.b-reject:hover  { background: #FFCFC4; }
+
+/* Domain */
+.dom-list { display: flex; flex-direction: column; gap: 8px; }
+.dom-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface-2); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 14px;
+}
+.dom-name { font-size: 13px; font-weight: 600; color: var(--text-1); }
+.dom-kind { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+.dom-del { background: none; border: none; color: var(--red); font-size: 20px; cursor: pointer; line-height: 1; border-radius: var(--r-sm); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+.dom-del:hover { background: var(--red-bg); }
+
+/* Sync */
+.sync-body { padding: 44px 32px; text-align: center; }
+.sync-spin {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 3px solid var(--divider); border-top-color: var(--blue-accent);
+  animation: spin .85s linear infinite; margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.sync-title { font-size: 17px; font-weight: 700; color: var(--text-1); margin-bottom: 10px; }
+.sync-desc { font-size: 13.5px; color: var(--text-3); line-height: 1.65; margin-bottom: 22px; }
+.pbar { background: var(--divider); border-radius: 6px; height: 5px; overflow: hidden; margin-bottom: 9px; }
+.pfill { height: 100%; background: var(--blue-accent); border-radius: 6px; transition: width .9s ease; }
+.plbl { font-size: 11px; color: var(--text-3); }
+
+/* Toast */
+.toasts {
+  position: fixed; bottom: 24px; right: 24px; z-index: 600;
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.toast {
+  background: var(--navy); color: white;
+  padding: 12px 18px; border-radius: var(--r-md);
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-xl);
+  display: flex; align-items: center; gap: 9px;
+  min-width: 260px; pointer-events: all;
+  animation: tIn .24s cubic-bezier(.16,1,.3,1);
+  border-left: 3px solid var(--green);
+}
+.toast.err { border-left-color: var(--red); }
+@keyframes tIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:none} }
+
+/* Global focus */
+:focus-visible { outline: 2px solid var(--blue-accent); outline-offset: 2px; border-radius: 3px; }
+
+/* Responsive */
+@media(max-width:900px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero-card { display: none; }
+  .hdr-nav { display: none; }
+  .ctrl-grid { grid-template-columns: 1fr; }
+  .compliance-logo-grid { grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); }
+}
+@media(max-width:600px) {
+  .header-inner, .main, .hero, .footer-inner { padding-left: 16px; padding-right: 16px; }
+  .sec-nav-inner { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ ADMIN BAR ══ -->
+<div class="admin-bar" id="adminBar" role="region" aria-label="Admin panel">
+  <div style="display:flex;align-items:center;gap:6px;">
+    <span class="admin-pill">Admin</span>
+    <span>Trust Center Administration</span>
+  </div>
+  <div class="admin-actions">
+    <button class="admin-btn" onclick="openM('domModal')">Manage Domains</button>
+    <button class="admin-btn" onclick="openM('appModal')" style="position:relative;">
+      Access Requests
+      <span class="notif-bubble" id="notifBubble" aria-label="3 pending">3</span>
+    </button>
+    <button class="admin-btn" onclick="togAdmin()">Exit Admin ×</button>
+  </div>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header class="header" role="banner">
+  <div class="header-inner">
+        <a class="logo" href="#" aria-label="Darwinbox Trust Center">
+      <img src="data:image/png;base64,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" alt="Darwinbox" class="logo-img" />
+      <div class="logo-divider" aria-hidden="true"></div>
+      <span class="logo-tag">Trust Center</span>
+    </a>
+
+
+    <div class="hdr-cta">
+      <button class="btn btn-blue-pill" onclick="openM('reqModal')">Request Access</button>
+      <button class="btn btn-outline-white" onclick="togAdmin()">⚙ Admin</button>
+    </div>
+  </div>
+</header>
+
+<!-- ══ SECTION NAV ══ -->
+<nav class="sec-nav" aria-label="Trust Center sections">
+  <div class="sec-nav-inner">
+    <button class="sec-tab on"  onclick="goSec('overview',this)">Overview</button>
+    <button class="sec-tab"     onclick="goSec('compliances',this)">Compliances</button>
+    <button class="sec-tab"     onclick="goSec('trusted',this)">Trusted by</button>
+    <button class="sec-tab"     onclick="goSec('controls',this)">Controls</button>
+    <button class="sec-tab"     onclick="goSec('resources',this)">Resources</button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="overview" aria-labelledby="h1">
+  <div class="hero-inner">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-kicker"><span class="live-dot" aria-hidden="true"></span>Live · Continuously Monitored</div>
+        <h1 id="h1">Security &amp; Trust for<br><em>the World of Work</em></h1>
+        <p class="hero-desc">Darwinbox is a cloud-native, mobile-first, AI-powered Human Capital Management platform trusted by 1000+ enterprises across 130+ countries — transforming HR from hire to retire since 2015.</p>
+        <div class="hero-stats" aria-label="Key statistics">
+          <div><div class="stat-n">1000+</div><div class="stat-l">Enterprise Customers</div></div>
+          <div><div class="stat-n">130+</div><div class="stat-l">Countries</div></div>
+          <div><div class="stat-n">17+</div><div class="stat-l">Assurances &amp; Certifications</div></div>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Active certifications">
+        <div class="hc-label">Active Certifications</div>
+        <div class="cert-wrap">
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>ISO 27001:2022</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>ISO 27701</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>SOC 2</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>GDPR</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>CCPA</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>DPDP Act 2023</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>ISO 9001</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>NIST CSF</span>
+          <span class="cpill"><span class="cdot" aria-hidden="true"></span>SOC 1</span>
+          <span class="cpill cpill-soon"><span class="cdot" aria-hidden="true"></span>FedRAMP (Soon)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MAIN ══ -->
+<main class="main" id="main-content">
+
+  <!-- COMPLIANCES WITH LOGOS -->
+  <section class="section" id="compliances" aria-labelledby="comp-ttl">
+    <div class="sec-hd">
+      <h2 class="sec-title" id="comp-ttl">Compliances</h2>
+      <button class="sec-link" onclick="openM('compAllModal')">Details →</button>
+    </div>
+    <div class="compliance-logo-grid" id="compGrid" role="list" aria-label="Compliance certifications"></div>
+  </section>
+
+  <!-- TRUSTED BY -->
+  <section class="section" id="trusted" aria-labelledby="trust-ttl">
+    <div class="sec-hd">
+      <h2 class="sec-title" id="trust-ttl">Trusted by</h2>
+      <button class="sec-link">Details →</button>
+    </div>
+    <div class="trust-row" role="list">
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">PO</div>Polymerize</div>
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">NI</div>Nium</div>
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">WF</div>Whatfix</div>
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">GG</div>Giga</div>
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">HR</div>HackerRank</div>
+      <div class="trust-chip" role="listitem"><div class="trust-av" aria-hidden="true">WW</div>WeWork</div>
+      <div class="trust-chip" role="listitem" style="opacity:.55;font-style:italic;font-weight:500;">+3 more</div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section class="section" id="controls" aria-labelledby="ctrl-ttl">
+    <div class="sec-hd">
+      <h2 class="sec-title" id="ctrl-ttl">Controls</h2>
+      <button class="sec-link">Details →</button>
+    </div>
+    <div class="mon-pill" role="status"><span class="blink" aria-hidden="true">●</span> Continuously monitored</div>
+    <div class="ctrl-grid" id="ctrlGrid" role="list"></div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="section" id="resources" aria-labelledby="res-ttl">
+    <div class="sec-hd">
+      <h2 class="sec-title" id="res-ttl">Resources</h2>
+      <button class="sec-link">Details →</button>
+    </div>
+    <div class="res-tab-bar" role="tablist">
+      <button class="rtab on" role="tab" aria-selected="true"  onclick="filterRes('all',this)">All</button>
+      <button class="rtab"    role="tab" aria-selected="false" onclick="filterRes('policy',this)">Policies</button>
+      <button class="rtab"    role="tab" aria-selected="false" onclick="filterRes('document',this)">Documents</button>
+    </div>
+    <div class="res-grid" id="resGrid" role="list"></div>
+  </section>
+
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a><span class="footer-sep">|</span>
+      <a href="#">Terms of Service</a><span class="footer-sep">|</span>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="footer-pw">Create your own Trust Center · Powered by <span style="color:rgba(255,255,255,.55);font-weight:700;">darwin</span><span style="color:var(--blue-accent);font-weight:700;">box</span></div>
+  </div>
+</footer>
+
+<!-- ══════════════════════
+     MODALS
+══════════════════════ -->
+
+<!-- REQUEST ACCESS -->
+<div class="overlay" id="reqModal" role="dialog" aria-modal="true" aria-labelledby="req-ttl">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title" id="req-ttl">Request Access</span>
+      <button class="modal-x" onclick="closeM('reqModal')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body" id="reqBody"></div>
+    <div class="modal-foot" id="reqFoot"></div>
+  </div>
+</div>
+
+<!-- RESOURCE VERIFY -->
+<div class="overlay" id="rvModal" role="dialog" aria-modal="true" aria-labelledby="rv-ttl">
+  <div class="modal">
+    <div class="modal-hd">
+      <span class="modal-title" id="rv-ttl">Verify email to view restricted item</span>
+      <button class="modal-x" onclick="closeM('rvModal')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert a-blue" id="rvAlert" role="status">ℹ️ Darwinbox has restricted access for this item.</div>
+      <div class="fg">
+        <label class="fl" for="rvEmail">Work email <em>*</em></label>
+        <input class="fi" type="email" id="rvEmail" placeholder="you@company.com" aria-required="true" autocomplete="email">
+        <div class="ferr" id="rvErr" role="alert"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn mb-ghost" onclick="closeM('rvModal')">Cancel</button>
+      <button class="btn mb-primary" onclick="submitResEmail()">Verify Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLIANCE ALL -->
+<div class="overlay" id="compAllModal" role="dialog" aria-modal="true" aria-labelledby="ca-ttl">
+  <div class="modal" style="max-width:780px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="ca-ttl">All Compliance Certifications</span>
+      <button class="modal-x" onclick="closeM('compAllModal')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="compliance-logo-grid" id="compAllGrid" role="list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- APPROVAL ADMIN -->
+<div class="overlay" id="appModal" role="dialog" aria-modal="true" aria-labelledby="app-ttl">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="app-ttl">Access Requests</span>
+      <button class="modal-x" onclick="closeM('appModal')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="app-list" id="appList" role="list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DOMAIN MGMT -->
+<div class="overlay" id="domModal" role="dialog" aria-modal="true" aria-labelledby="dom-ttl">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-hd">
+      <span class="modal-title" id="dom-ttl">Trusted Domain Management</span>
+      <button class="modal-x" onclick="closeM('domModal')" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert a-blue" style="margin-bottom:16px;">
+        ℹ️ Users from trusted domains access resources without NDA. Prospects from unlisted domains must sign an NDA.
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <input class="fi" id="domInput" placeholder="e.g. acme.com" style="flex:1;" aria-label="Domain name">
+        <select class="fsel" id="domType" style="width:130px;" aria-label="Domain type">
+          <option value="customer">Customer</option>
+          <option value="partner">Partner</option>
+        </select>
+        <button class="btn mb-primary" onclick="addDomain()">Add</button>
+      </div>
+      <div class="dom-list" id="domList" role="list"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn mb-primary" onclick="closeM('domModal');toast('Domain settings saved')">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- SYNC -->
+<div class="overlay" id="syncModal" role="dialog" aria-modal="true" aria-labelledby="sync-ttl">
+  <div class="modal" style="max-width:360px;">
+    <div class="sync-body">
+      <div class="sync-spin" aria-hidden="true"></div>
+      <div class="sync-title" id="sync-ttl">Syncing your data</div>
+      <div class="sync-desc">Updating Trust Center data including watermarks, item access, and more. Sync continues in the background — you can close this and come back.</div>
+      <div class="pbar" role="progressbar" aria-label="Sync progress">
+        <div class="pfill" id="pFill" style="width:10%;"></div>
+      </div>
+      <div class="plbl" id="pLbl" aria-live="polite">Less than a minute remaining</div>
+      <button class="btn mb-ghost" onclick="closeM('syncModal')" style="margin-top:20px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT — Vanilla ES6+
+══════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── COMPLIANCE DATA with SVG logo markup ── */
+const COMPS = [
+  {
+    id:'iso27001-2022', name:'ISO 27001:2022', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#003087"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO/IEC</text>
+      <text x="40" y="30" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">27001</text>
+      <text x="40" y="43" text-anchor="middle" font-family="Arial" font-size="6.5" fill="#7FAAD4">:2022</text>
+    </svg>`
+  },
+  {
+    id:'iso27701', name:'ISO 27701', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#00437A"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO/IEC</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">27701</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#7FAAD4">Privacy Management</text>
+    </svg>`
+  },
+  {
+    id:'iso27017', name:'ISO 27017', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#003F72"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO/IEC</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">27017</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#7FAAD4">Cloud Security</text>
+    </svg>`
+  },
+  {
+    id:'iso27018', name:'ISO 27018', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#003564"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO/IEC</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">27018</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#7FAAD4">Cloud Privacy</text>
+    </svg>`
+  },
+  {
+    id:'iso9001', name:'ISO 9001', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#005B8E"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="13" fill="white">9001</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#7FAAD4">Quality Management</text>
+    </svg>`
+  },
+  {
+    id:'nist', name:'NIST CSF', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#1A237E"/>
+      <text x="40" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="13" fill="white">NIST</text>
+      <text x="40" y="35" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="10" fill="#9FA8DA">CSF</text>
+      <text x="40" y="47" text-anchor="middle" font-family="Arial" font-size="6" fill="#7986CB">Cybersecurity</text>
+    </svg>`
+  },
+  {
+    id:'soc1', name:'SOC 1', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#1B5E20"/>
+      <text x="40" y="18" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#A5D6A7">AICPA</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14" fill="white">SOC 1</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#81C784">Type II</text>
+    </svg>`
+  },
+  {
+    id:'soc2', name:'SOC 2', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#004D40"/>
+      <text x="40" y="18" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#80CBC4">AICPA</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="14" fill="white">SOC 2</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#4DB6AC">Type II</text>
+    </svg>`
+  },
+  {
+    id:'gdpr', name:'GDPR', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#003399"/>
+      <circle cx="40" cy="18" r="9" fill="none" stroke="#FFD700" stroke-width="1.5"/>
+      <text x="40" y="22" text-anchor="middle" font-family="Arial" font-size="8" fill="#FFD700">★</text>
+      <text x="40" y="36" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">GDPR</text>
+      <text x="40" y="47" text-anchor="middle" font-family="Arial" font-size="6" fill="#99AADD">EU Compliant</text>
+    </svg>`
+  },
+  {
+    id:'dpdp', name:'DPDP Act 2023', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#FF6600"/>
+      <text x="40" y="18" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="white">INDIA</text>
+      <text x="40" y="31" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9.5" fill="white">DPDP</text>
+      <text x="40" y="44" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.8)">Act 2023</text>
+    </svg>`
+  },
+  {
+    id:'pipeda', name:'PIPEDA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#D52B1E"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7.5" fill="rgba(255,255,255,.7)">CANADA</text>
+      <text x="40" y="32" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9.5" fill="white">PIPEDA</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.7)">Privacy Law</text>
+    </svg>`
+  },
+  {
+    id:'ccpa', name:'CCPA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#1565C0"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="#90CAF9">CALIFORNIA</text>
+      <text x="40" y="32" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12" fill="white">CCPA</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#90CAF9">Consumer Privacy</text>
+    </svg>`
+  },
+  {
+    id:'cpra', name:'CPRA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#0D47A1"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="#90CAF9">CALIFORNIA</text>
+      <text x="40" y="32" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="12" fill="white">CPRA</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#90CAF9">Privacy Rights</text>
+    </svg>`
+  },
+  {
+    id:'fedramp', name:'FedRAMP R5 Low', status:'s',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#37474F"/>
+      <text x="40" y="20" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9" fill="#B0BEC5">FedRAMP</text>
+      <text x="40" y="34" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8.5" fill="white">R5 Low</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#90A4AE">Coming Soon</text>
+    </svg>`
+  },
+  {
+    id:'sg-pdpa', name:'Singapore PDPA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#C8102E"/>
+      <text x="40" y="14" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="6.5" fill="rgba(255,255,255,.75)">SINGAPORE</text>
+      <text x="40" y="30" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">PDPA</text>
+      <text x="40" y="45" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.7)">Data Protection</text>
+    </svg>`
+  },
+  {
+    id:'ph-dpa', name:'Philippines DPA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="26" rx="0" fill="#0038A8"/><rect y="0" width="80" height="5" rx="5" fill="#0038A8"/>
+      <rect y="26" width="80" height="26" rx="0" fill="#CE1126"/><rect y="47" width="80" height="5" rx="5" fill="#CE1126"/>
+      <rect x="0" y="5" width="80" height="42" fill="none"/>
+      <text x="40" y="22" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="white">PHILIPPINES</text>
+      <text x="40" y="35" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9" fill="#FCD116">DPA 2012</text>
+    </svg>`
+  },
+  {
+    id:'th-pdpa', name:'PDPA Thailand', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#A51C30"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="rgba(255,255,255,.7)">THAILAND</text>
+      <text x="40" y="31" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">PDPA</text>
+      <text x="40" y="45" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.65)">Data Protection</text>
+    </svg>`
+  },
+  {
+    id:'id-data', name:'Indonesia DP', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="26" rx="5" fill="#CE1126"/>
+      <rect y="26" width="80" height="26" rx="5" fill="white"/>
+      <rect y="24" width="80" height="4" fill="#CE1126"/>
+      <text x="40" y="22" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="6.5" fill="white">INDONESIA</text>
+      <text x="40" y="38" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#CE1126">Data Privacy</text>
+    </svg>`
+  },
+  {
+    id:'my-pdpa', name:'Malaysia PDPA', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#CC0001"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="rgba(255,255,255,.7)">MALAYSIA</text>
+      <text x="40" y="31" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">PDPA</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.65)">2010</text>
+    </svg>`
+  },
+  {
+    id:'uae-dp', name:'UAE Data Protection', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#00732F"/>
+      <rect x="0" y="0" width="16" height="52" rx="5" fill="#EF3340"/>
+      <rect x="14" y="0" width="4" height="52" fill="#EF3340"/>
+      <text x="46" y="22" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="white">UAE</text>
+      <text x="46" y="34" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="7" fill="rgba(255,255,255,.85)">Data</text>
+      <text x="46" y="45" text-anchor="middle" font-family="Arial" font-size="6" fill="rgba(255,255,255,.7)">Protection</text>
+    </svg>`
+  },
+  {
+    id:'iso27001', name:'ISO 27001', status:'c',
+    svg:`<svg viewBox="0 0 80 52" xmlns="http://www.w3.org/2000/svg">
+      <rect width="80" height="52" rx="5" fill="#002D6E"/>
+      <text x="40" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="8" fill="#9BB8E0">ISO/IEC</text>
+      <text x="40" y="33" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">27001</text>
+      <text x="40" y="46" text-anchor="middle" font-family="Arial" font-size="6" fill="#7FAAD4">Info Security</text>
+    </svg>`
+  },
+];
+
+const CONTROLS = [
+  { icon:'🛡️', bg:'#EFF6FF', title:'Product security',   items:['Production System User Review','Situational Awareness For Incidents','Vulnerability Remediation Process'], more:1 },
+  { icon:'🔒', bg:'#F0FDF4', title:'Data security',       items:['Identity Validation','Termination of Employment','Production Databases Access Restriction'], more:7 },
+  { icon:'🌐', bg:'#FDF4FF', title:'Network security',    items:['Impact analysis','Limit Network Connections','External System Connections'], more:4 },
+  { icon:'📱', bg:'#FFF7ED', title:'App security',        items:['Conspicuous Link To Privacy Notice','Secure system modification','Approval of Changes'], more:0 },
+  { icon:'💻', bg:'#ECFDF5', title:'Endpoint security',   items:['Malicious Code Protection (Anti-Malware)','Full Device Encryption','Endpoint Security Validation'], more:1 },
+  { icon:'🏢', bg:'#F9FAFB', title:'Corporate security',  items:['Code of Business Conduct','Organizational Structure','Roles & Responsibilities'], more:27 },
+];
+
+const RESOURCES = [
+  { id:1, name:'Darwinbox Privacy Policy', type:'policy',   icon:'📋', locked:true  },
+  { id:2, name:'Darwinbox Test Policy',    type:'policy',   icon:'📋', locked:false },
+  { id:3, name:'Privacy Policy',           type:'document', icon:'📄', locked:false },
+  { id:4, name:'Cookie Policy',            type:'document', icon:'🍪', locked:false },
+];
+
+let DOMAINS = [
+  { d:'polymerize.io', k:'customer' },
+  { d:'nium.com',      k:'customer' },
+  { d:'whatfix.com',   k:'customer' },
+  { d:'hackerrank.com',k:'customer' },
+];
+
+let APPROVALS = [
+  { id:1, name:'Sandeep Dannapaneni', em:'sandeep@acme.com',    co:'Acme Corp',    r:'Prospective customer', res:'Darwinbox Privacy Policy', t:'2 mins ago' },
+  { id:2, name:'Priya Sharma',        em:'priya@startup.io',    co:'StartupIO',    r:'Prospective customer', res:'Darwinbox Privacy Policy', t:'15 mins ago' },
+  { id:3, name:'Mark Johnson',        em:'mark@enterprise.co',  co:'Enterprise Co',r:'Existing customer',    res:'Darwinbox Test Policy',    t:'1 hr ago' },
+];
+
+/* ── STATE ── */
+let vEmail='', cResId=null, rStep=1, adminOn=false;
+
+/* ── RENDER COMPLIANCE LOGOS ── */
+function renderComps(elId, limit) {
+  const data = limit ? COMPS.slice(0, limit) : COMPS;
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = data.map(c => `
+    <div class="comp-logo-card" role="listitem" title="${c.name}">
+      <div class="logo-svg" aria-label="${c.name} logo">${c.svg}</div>
+      <div class="comp-logo-name">${c.name}</div>
+      <span class="comp-badge ${c.status==='c'?'cb-green':'cb-amber'}">
+        ${c.status==='c'?'✓ Compliant':'Coming soon'}
+      </span>
+    </div>`).join('');
+}
+
+/* ── RENDER CONTROLS ── */
+function renderCtrls() {
+  document.getElementById('ctrlGrid').innerHTML = CONTROLS.map(c => `
+    <div class="ctrl-card" role="listitem">
+      <div class="ctrl-head">
+        <div class="ctrl-icon" style="background:${c.bg}" aria-hidden="true">${c.icon}</div>
+        <div class="ctrl-name">${c.title}</div>
+      </div>
+      <div class="ctrl-items">
+        ${c.items.map(i=>`<div class="ctrl-item"><span class="ctrl-check" aria-hidden="true">✓</span><span>${i}</span></div>`).join('')}
+      </div>
+      ${c.more?`<button class="ctrl-more" aria-label="View ${c.more} more ${c.title} controls">View ${c.more} more control${c.more>1?'s':''}</button>`:''}
+    </div>`).join('');
+}
+
+/* ── RENDER RESOURCES ── */
+function renderRes(f='all') {
+  const data = f==='all' ? RESOURCES : RESOURCES.filter(r=>r.type===f);
+  document.getElementById('resGrid').innerHTML = data.map(r=>`
+    <div class="res-item" role="listitem">
+      <div class="res-left">
+        <div class="res-icon" aria-hidden="true">${r.icon}</div>
+        <div>
+          <div class="res-name">${r.name}</div>
+          <div class="res-type">${r.type==='policy'?'Policy':'Document'}</div>
+        </div>
+      </div>
+      <button class="res-btn ${r.locked?'locked':''}"
+        onclick="handleRes(${r.id})"
+        aria-label="${r.locked?'Request access to '+r.name:'View '+r.name}">
+        ${r.locked?'🔒':'👁'}
+      </button>
+    </div>`).join('');
+}
+
+function filterRes(f, btn) {
+  document.querySelectorAll('.rtab').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
+  btn.classList.add('on'); btn.setAttribute('aria-selected','true');
+  renderRes(f);
+}
+
+/* ── RESOURCE CLICK ── */
+function handleRes(id) {
+  const r = RESOURCES.find(x=>x.id===id);
+  if (!r) return;
+  if (r.locked) {
+    cResId = id;
+    document.getElementById('rvAlert').textContent = `ℹ️ Darwinbox has restricted access for '${r.name}'.`;
+    const ei = document.getElementById('rvEmail');
+    ei.value=''; ei.classList.remove('err');
+    document.getElementById('rvErr').style.display='none';
+    openM('rvModal');
+  } else {
+    toast(`Opening "${r.name}"…`);
+  }
+}
+
+function submitResEmail() {
+  const ei = document.getElementById('rvEmail');
+  const er = document.getElementById('rvErr');
+  const em = ei.value.trim();
+  if (!em || !isWork(em)) {
+    er.textContent = 'Please enter a valid work email. Personal emails are not permitted.';
+    er.style.display='block'; ei.classList.add('err'); ei.focus(); return;
+  }
+  er.style.display='none'; ei.classList.remove('err');
+  closeM('rvModal');
+  const dom = em.split('@')[1];
+  if (DOMAINS.find(d=>d.d===dom)) {
+    RESOURCES.find(x=>x.id===cResId).locked = false;
+    renderRes(); toast('Email verified — access granted!');
+  } else {
+    vEmail = em; openReqM(em);
+  }
+}
+
+/* ── REQUEST MODAL (3-step) ── */
+function openReqM(pre='') { vEmail=pre; rStep=1; renderStep(); openM('reqModal'); }
+
+function renderStep() {
+  const B = document.getElementById('reqBody');
+  const F = document.getElementById('reqFoot');
+  document.getElementById('req-ttl').textContent = ['','Verify Email','Enter Verification Code','Complete Your Request'][rStep];
+
+  const dots = `<div class="steps" role="group" aria-label="Step ${rStep} of 3">
+    <div class="sdot ${rStep>=1?'sdot-done':'sdot-idle'}">1</div><div class="sline"></div>
+    <div class="sdot ${rStep===2?'sdot-active':rStep>2?'sdot-done':'sdot-idle'}">2</div><div class="sline"></div>
+    <div class="sdot ${rStep===3?'sdot-active':'sdot-idle'}">3</div>
+  </div>`;
+
+  if (rStep===1) {
+    B.innerHTML = dots+`
+      <div class="alert a-amber">⚠️ Only work email addresses are accepted. Gmail, Yahoo and personal emails are blocked.</div>
+      <div class="fg"><label class="fl" for="rEm">Work Email <em>*</em></label>
+      <input class="fi" type="email" id="rEm" placeholder="you@company.com" value="${vEmail}" aria-required="true" autocomplete="email">
+      <div class="ferr" id="rEmErr" role="alert"></div></div>`;
+    F.innerHTML = `<button class="btn mb-ghost" onclick="closeM('reqModal')">Cancel</button>
+      <button class="btn mb-primary" onclick="s1()">Send OTP →</button>`;
+
+  } else if (rStep===2) {
+    B.innerHTML = dots+`
+      <div class="alert a-blue">ℹ️ A 6-digit code was sent to <strong>${vEmail}</strong>.
+        <a href="#" onclick="rStep=1;renderStep();return false;" style="color:var(--blue-accent);font-weight:600;margin-left:6px;">Change</a></div>
+      <div class="fg"><label class="fl" id="otp-lbl">Verification Code <em>*</em></label>
+      <div class="otp-row" role="group" aria-labelledby="otp-lbl">
+        ${[0,1,2,3,4,5].map(i=>`<input class="otp-c" type="text" inputmode="numeric" maxlength="1"
+          id="oc${i}" aria-label="Digit ${i+1} of 6"
+          oninput="oi(this,${i})" onkeydown="ok(event,${i})">`).join('')}
+      </div>
+      <div class="otp-hint">Didn't receive it? <a onclick="toast('Code resent!');return false;">Resend code</a></div></div>`;
+    F.innerHTML = `<button class="btn mb-ghost" onclick="rStep=1;renderStep()">← Back</button>
+      <button class="btn mb-primary" onclick="s2()">Verify →</button>`;
+    setTimeout(()=>document.getElementById('oc0')?.focus(), 80);
+
+  } else {
+    const isP = !DOMAINS.find(d=>d.d===vEmail.split('@')[1]);
+    B.innerHTML = dots+`
+      <div class="alert a-green">✓ Email verified. Complete the form to finalise your request.</div>
+      <div class="fg"><label class="fl" for="rN">Full Name <em>*</em></label>
+      <input class="fi" type="text" id="rN" placeholder="Your full name" aria-required="true"></div>
+      <div class="fg"><label class="fl" for="rC">Company <em>*</em></label>
+      <input class="fi" type="text" id="rC" placeholder="Your company name" aria-required="true"></div>
+      <div class="fg"><label class="fl" for="rR">Reason for Access <em>*</em></label>
+      <select class="fsel" id="rR" aria-required="true">
+        <option value="">I need access because…</option>
+        <option value="existing">I am an existing customer</option>
+        <option value="prospect">I am a prospective customer</option>
+        <option value="other">Other</option>
+      </select></div>
+      ${isP?`<div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-2);margin-bottom:8px;">Non-Disclosure Agreement</div>
+      <div class="nda-box" tabindex="0" role="document" aria-label="NDA terms">
+        <strong>NON-DISCLOSURE AGREEMENT</strong><br><br>
+        This Non-Disclosure Agreement ("Agreement") is entered into between <strong>Darwinbox Digital Solutions Pvt. Ltd.</strong> ("Company") and the undersigned party ("Recipient").<br><br>
+        <strong>1. Confidential Information</strong><br>
+        Means all non-public information disclosed by Darwinbox including security documentation, policies, compliance reports, audit results, technical data, and business processes.<br><br>
+        <strong>2. Obligations of Recipient</strong><br>
+        Recipient agrees to: (a) maintain strict confidentiality; (b) not disclose to third parties without prior written consent; (c) use information solely to evaluate a potential business relationship; (d) promptly notify Darwinbox of any breach.<br><br>
+        <strong>3. Exclusions</strong><br>
+        Does not apply to publicly available information, independently developed information, or information lawfully obtained from third parties.<br><br>
+        <strong>4. Term</strong> — Two (2) years from date of acceptance.<br><br>
+        <strong>5. Governing Law</strong> — Laws of India. Exclusive jurisdiction: Hyderabad, Telangana.<br><br>
+        <em>By submitting, you agree to all terms of this Agreement.</em>
+      </div>
+      <div class="chk-row"><input type="checkbox" id="nCk" aria-required="true">
+      <label for="nCk">I have read and agree to the <a href="#" onclick="return false;">Non-Disclosure Agreement</a> above. <em style="color:var(--blue-accent);font-style:normal;">*</em></label></div>`:''}`;
+    F.innerHTML = `<button class="btn mb-ghost" onclick="rStep=2;renderStep()">← Back</button>
+      <button class="btn mb-primary" onclick="s3(${isP})">Submit Request</button>`;
+  }
+}
+
+function isWork(e) {
+  const p=['gmail','yahoo','hotmail','outlook','icloud','protonmail','aol','zoho','ymail','live'];
+  const d=e.split('@')[1]?.split('.')[0]?.toLowerCase();
+  return e.includes('@')&&e.includes('.')&&!p.includes(d);
+}
+function s1() {
+  const ei=document.getElementById('rEm'), er=document.getElementById('rEmErr');
+  const em=ei.value.trim();
+  if(!em||!isWork(em)){er.textContent='Please enter a valid work email.';er.style.display='block';ei.classList.add('err');ei.focus();return;}
+  er.style.display='none';ei.classList.remove('err');vEmail=em;
+  openM('syncModal');
+  let p=10;
+  const iv=setInterval(()=>{
+    p=Math.min(p+22,100);
+    const f=document.getElementById('pFill'),l=document.getElementById('pLbl');
+    if(f)f.style.width=p+'%';
+    if(p>=100){clearInterval(iv);if(l)l.textContent='Done!';setTimeout(()=>{closeM('syncModal');rStep=2;renderStep();},500);}
+  },300);
+}
+function s2(){
+  const code=[0,1,2,3,4,5].map(i=>document.getElementById('oc'+i)?.value||'').join('');
+  if(code.length<6){toast('Please enter all 6 digits','err');return;}
+  rStep=3;renderStep();
+}
+function s3(isP){
+  const n=document.getElementById('rN')?.value.trim();
+  const c=document.getElementById('rC')?.value.trim();
+  const r=document.getElementById('rR')?.value;
+  if(!n||!c||!r){toast('Please complete all required fields','err');return;}
+  if(isP&&!document.getElementById('nCk')?.checked){toast('Please accept the NDA to continue','err');return;}
+  closeM('reqModal');
+  APPROVALS.unshift({id:Date.now(),name:n,em:vEmail,co:c,r:r==='existing'?'Existing customer':r==='prospect'?'Prospective customer':'Other',res:'General Access',t:'Just now'});
+  const nb=document.getElementById('notifBubble');if(nb)nb.textContent=APPROVALS.length;
+  toast('Request submitted! An admin will review and respond shortly.');
+}
+function oi(el,i){el.value=el.value.replace(/\D/g,'');if(el.value&&i<5)document.getElementById('oc'+(i+1))?.focus();}
+function ok(e,i){if(e.key==='Backspace'&&!e.target.value&&i>0)document.getElementById('oc'+(i-1))?.focus();}
+
+/* ── APPROVALS ── */
+function renderApprovals(){
+  const el=document.getElementById('appList');if(!el)return;
+  if(!APPROVALS.length){el.innerHTML='<div style="text-align:center;padding:48px;color:var(--text-3);font-size:14px;">No pending access requests ✓</div>';return;}
+  el.innerHTML=APPROVALS.map(a=>`<div class="app-card" role="listitem">
+    <div style="flex:1;min-width:0;">
+      <div class="app-name">${a.name}</div>
+      <div class="app-meta">${a.em} · ${a.co} · ${a.r}</div>
+      <span class="app-res-tag">${a.res}</span>
+      <div class="app-meta" style="margin-top:5px;">Requested ${a.t}</div>
+    </div>
+    <div class="app-btns">
+      <button class="b-approve" onclick="doApp(${a.id},'a')">✓ Approve</button>
+      <button class="b-reject"  onclick="doApp(${a.id},'r')">✗ Reject</button>
+    </div></div>`).join('');
+}
+function doApp(id,act){
+  APPROVALS=APPROVALS.filter(a=>a.id!==id);
+  const nb=document.getElementById('notifBubble');if(nb)nb.textContent=APPROVALS.length||'';
+  renderApprovals();
+  toast(act==='a'?'Request approved — notification sent.':'Request rejected.',act==='a'?'':'err');
+}
+
+/* ── DOMAINS ── */
+function renderDomains(){
+  const el=document.getElementById('domList');if(!el)return;
+  el.innerHTML=DOMAINS.map((d,i)=>`<div class="dom-row" role="listitem">
+    <div><div class="dom-name">${d.d}</div><div class="dom-kind">${d.k.charAt(0).toUpperCase()+d.k.slice(1)}</div></div>
+    <button class="dom-del" onclick="delDom(${i})" aria-label="Remove ${d.d}">×</button>
+  </div>`).join('');
+}
+function addDomain(){
+  const v=document.getElementById('domInput').value.trim().toLowerCase();
+  const k=document.getElementById('domType').value;
+  if(!v||!v.includes('.')){toast('Enter a valid domain (e.g. acme.com)','err');return;}
+  if(DOMAINS.find(d=>d.d===v)){toast('Domain already in list','err');return;}
+  DOMAINS.push({d:v,k});document.getElementById('domInput').value='';
+  renderDomains();toast(`Added ${v} as trusted ${k} domain`);
+}
+function delDom(i){const d=DOMAINS[i];DOMAINS.splice(i,1);renderDomains();toast(`Removed ${d.d}`);}
+
+/* ── ADMIN ── */
+function togAdmin(){
+  adminOn=!adminOn;
+  document.getElementById('adminBar').classList.toggle('on',adminOn);
+  toast(adminOn?'Admin mode enabled':'Admin mode disabled');
+  if(adminOn)renderApprovals();
+}
+
+/* ── MODALS ── */
+function openM(id){
+  const el=document.getElementById(id);if(!el)return;
+  el.classList.add('open');document.body.style.overflow='hidden';
+  if(id==='reqModal')renderStep();
+  if(id==='domModal')renderDomains();
+  if(id==='appModal')renderApprovals();
+  if(id==='compAllModal')renderComps('compAllGrid');
+  setTimeout(()=>{const f=el.querySelector('button,input,select');if(f)f.focus();},60);
+}
+function closeM(id){
+  document.getElementById(id)?.classList.remove('open');
+  if(!document.querySelector('.overlay.open'))document.body.style.overflow='';
+}
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeM(o.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.overlay.open').forEach(o=>closeM(o.id));});
+
+/* ── TOAST ── */
+function toast(msg,type=''){
+  const c=document.getElementById('toasts');
+  const t=document.createElement('div');
+  t.className='toast'+(type==='err'?' err':'');
+  t.textContent=(type==='err'?'✖  ':'✓  ')+msg;
+  t.setAttribute('role','alert');
+  c.appendChild(t);
+  setTimeout(()=>{t.style.transition='opacity .3s,transform .3s';t.style.opacity='0';t.style.transform='translateX(8px)';setTimeout(()=>t.remove(),320);},3400);
+}
+
+/* ── NAV ── */
+function goSec(id,btn){
+  document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.sec-tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+/* ── INIT ── */
+renderComps('compGrid', 12);
+renderCtrls();
+renderRes();
+</script>
+</body>
+</html>
