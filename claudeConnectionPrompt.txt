@@ -1,0 +1,133 @@
+🔁 LinkedIn Connection Request Automation — Full Prompt
+
+CONTEXT — Who you are sending on behalf of:
+You are acting as an assistant for Bisma Alisha Shaik (goes by "Alisha"), who is:
+
+A final-year CS student with a CGPA of 9.85
+Currently interning at Darwinbox as a Product Development Intern
+Has built backend systems using Node.js, Express.js, MongoDB & LLM pipelines (Groq API)
+Has solved 600+ DSA problems
+Has LinkedIn Premium (unlimited connection notes)
+
+
+OVERALL GOAL:
+Send personalized LinkedIn connection requests with notes to people at target companies. For each company, target 5–10 recruiters + 10–15 engineers/employees = 15–25 total per company.
+
+STEP 0 — Check the Job Portal first:
+Before working on any company, visit: aman0046.github.io/job-portal/
+Find if the company has an active job opening relevant to Alisha (software engineer / developer / SDE roles).
+
+If YES (OPEN) → use Template T1 (recruiter) and Template T3 (engineer)
+If NO opening → use Template T2 (recruiter) and Template T4 (engineer)
+
+Note the exact role name and company name from the portal to insert into templates.
+
+THE 4 MESSAGE TEMPLATES:
+T1 — Recruiter (company has OPEN role):
+
+Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. Came across the [Role] opening at [Company] — would love to connect and know if I could be a good fit!
+
+T2 — Recruiter (NO opening):
+
+Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. Would love to connect — happy to know if there are any openings where I could be a good fit at [Company]!
+
+T3 — Engineer/Employee (company has OPEN role):
+
+Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. Interested in the [Role] at [Company] — would love to connect and hear about your experience there!
+
+T4 — Engineer/Employee (NO opening):
+
+Hi [Name], I'm Alisha — final-year CS student (9.85 CGPA), interning at Darwinbox building backend systems with Node.js, Express.js, MongoDB & LLM pipelines (Groq API). 600+ DSA solved. Would love to connect — always great to know people at [Company]!
+
+
+⚠️ Note: The em dash "—" counts as 2 characters on LinkedIn.
+
+
+CHARACTER LIMIT RULES (≤300 chars):
+LinkedIn notes have a 300 character limit. Always check the counter shown in the textarea.
+Greeting rule:
+
+Use "Hi [FirstName]," if the full message stays ≤300 chars
+Use "Hi," if adding the name would push it over 300 chars
+NEVER shorten or nickname names (e.g. do NOT use "Sam" for "Samantha")
+NEVER send without a note — always click "Add a note"
+
+How to calculate: Count base template chars (without greeting) first, then add len("Hi [Name], ") = name length + 5 chars.
+
+STEP 1 — BUILD YOUR LIST FIRST (spend ~10–15 mins per company):
+Before sending any requests, build a verified list of people to target. This saves time and avoids errors.
+Go to the company's LinkedIn People page:
+linkedin.com/company/[company-slug]/people/?keywords=recruiter
+linkedin.com/company/[company-slug]/people/?keywords=software+engineer
+For each person, record:
+
+Full name
+Current title
+Current company (must match target)
+Location
+Profile URL
+Which template to use (T1/T2/T3/T4)
+Greeting: "Hi [Name]," or "Hi,"
+
+
+STEP 2 — VERIFICATION RULES (before sending each request):
+✅ Must verify:
+
+Person is currently at the target company (not ex/former)
+Person is Indian / based in India
+Priority locations: Hyderabad, Bangalore, Chennai (then other Indian cities)
+For Cognizant only: Target senior developers (5+ years) or recruiters — NOT freshers
+
+❌ SKIP if:
+
+Button shows "Pending" → already sent
+Button shows "Message" → already connected
+Person is based outside India (e.g. US, UK, Netherlands)
+Person has left the company
+Connect button is not accessible
+
+
+STEP 3 — SENDING WORKFLOW (per person):
+
+Navigate to their LinkedIn profile
+Verify: current company + India location (read the headline/about section)
+Click "Connect" button (in profile header — NOT the top nav bar)
+
+If no Connect button visible: click "More" in the profile header → then "Connect"
+If button says "Follow" instead: click profile More → Connect
+
+
+In the invite dialog: click "Add a note"
+Click inside the textarea, then type your message
+Verify character count shown at bottom right of textarea is ≤300
+Click "Send"
+Confirm: "Invitation sent to [Name]." toast appears OR button changes to "Pending"
+
+
+STEP 4 — RECRUITER SEARCH STRATEGY:
+LinkedIn's company people page limits results. To find more recruiters:
+Try these keyword searches on the company people page:
+
+recruiter
+talent acquisition
+HR
+hiring
+TA
+technical recruiter
+
+Also try LinkedIn search: "recruiter" "walmart" india or site:linkedin.com/in recruiter "walmart global tech" bangalore
+Always filter/verify India location manually since geo filters on company pages can be unreliable.
+
+TARGETS PER COMPANY:
+Role TypeCountRecruiters (T1 or T2)5–10Engineers/Employees (T3 or T4)10–15Total15–25
+
+TRACKING TABLE (fill as you go):
+#NameTitleLocationTemplateGreetingCharsStatus1
+
+IMPORTANT REMINDERS:
+
+Move fast — spend max 10–15 mins building the list per company, then batch-send
+Always prioritize Hyderabad > Bangalore > Chennai > other India
+Recruiters first, then engineers
+Never guess someone's company — verify from their LinkedIn headline or experience section
+The note MUST be typed (not pasted from clipboard if avoidable) into the LinkedIn textarea
